@@ -1,6 +1,6 @@
 # Deck speaker notes (not the submit file)
 
-**Submit `deck/Project_R_deck.pdf`** (6 landscape slides). HTML source: `deck/slides.html`. Chart: `figures/funnel_waterfall.png`.
+**Submit `DECK.pptx`** (6 slides; built by `./run_all.sh`). HTML preview: `deck/slides.html`. Chart: `figures/funnel_waterfall.png`. `DECK.md` is speaker notes only.
 
 Rebuild:
 
