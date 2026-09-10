@@ -45,7 +45,7 @@ def main() -> None:
     print(f"  C1a @ 60% show-up: {c1a_monthly(0.60):.2f}/month")
     print(f"  ARA ₹/eligible: {eco['payout_per_eligible_leg']:.2f}")
     r2a()
-    print("\nWrote: figures/funnel_waterfall.png  MEMO.docx  DECK.pptx")
+    print("\nWrote: figures/funnel_waterfall.png  figures/pie_*.png  MEMO.docx  DECK.pptx")
     print("Also: MEMO.md  deck/slides.html  deck/Project_R_deck.pdf (if Chrome printed it)")
     print("Step 9 complete.")
 

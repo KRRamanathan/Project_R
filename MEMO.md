@@ -1,6 +1,11 @@
 # Memo to the Head of Supply
 **Onboarding leak and overnight airport** · 10 Sep 2026 · extract 30 Jun 2026, 23:59 IST
 
+*Light ice background on the Word/PPTX packet; doughnut and bar charts below match those files.*
+
+![Split of ~180 extra approved / month](figures/pie_c1.png)
+![Airport unfulfilled volume by clock](figures/pie_airport_night.png)
+
 ## Page 1 — What to do this week
 
 **About 180 more approved captains a month, medium confidence — roughly 134 from an RC grace window and 50 from Insurance upload UX.** The two groups do not overlap. The 179.5–185.6 range is a sensitivity table, not a three-decimal forecast. Show-up for in-person RC is unobserved. If Legal will not let captains proceed with RC deferred, the RC piece is an upper bound.
@@ -22,6 +27,11 @@ These approvals are not hollow. Among mature approved captains, **98.7% take a f
 ---
 
 ## Page 2 — Why these two stages, what we left, what would change my mind
+
+![RC capture-only slice](figures/pie_rc_capture.png)
+![Insurance C1b slice](figures/pie_c1b.png)
+
+![Where volume is lost](figures/bar_volume_lost.png)
 
 **Why RC and Insurance, not “fix the whole funnel.”** RC loses 5,405 people — the largest stage. **1,637** failed *only* on blur / OCR / illegible; retry pass rates go **up** (65% → 74%). RC is vehicle identity, not passenger liability, so a 10-day in-person grace is scoped. Insurance loses 3,289, but **~2,530 never uploaded** after Fitness. C1b is only the **411** capture-only fails (same photo mechanism; **cannot** defer — liability). DL (1,166) is 100% uploaded-fail and **cannot** be deferred. Aadhaar / Permit / Fitness losses are real (1,540 / 2,616 / 2,653) but mostly **never-uploaded** or mixed with eligibility (expired, duplicate, name mismatch). A camera does not fix those. Rejected 409 already cleared docs — a gate.
 

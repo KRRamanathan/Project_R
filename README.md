@@ -46,7 +46,7 @@ python3 -m jupyter notebook Project_R.ipynb
 ./run_all.sh
 ```
 
-That tees every print to `0N_*_output.txt`, writes `MEMO.docx`, `DECK.pptx`, `figures/funnel_waterfall.png`, then **fails the build** if headline numbers moved.
+That tees every print to `0N_*_output.txt`, writes `MEMO.docx`, `DECK.pptx`, `figures/funnel_waterfall.png` plus light-theme pies/bars (`figures/pie_*.png`, `figures/bar_volume_lost.png`), then **fails the build** if headline numbers moved.
 
 Individual scripts (each re-derives from CSVs; none reads another script’s console):
 
