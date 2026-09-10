@@ -153,8 +153,9 @@ def build_deck() -> Path:
         6.2,
         5.2,
         "RC: 1,637 uploaded, never passed, only blur / weak OCR / not legible.\n\n"
-        "Insurance: 411, same definition. Most Insurance volume never uploaded after Fitness — C1b does not claim that pile.\n\n"
-        "Later attempts pass HIGHER. That is capture/UX. Eligibility would go the other way.",
+        "Insurance: 411, same definition. ~2,530 never uploaded after Fitness — C1b does not claim that pile.\n\n"
+        "Other stages: real loss, wrong tool. DL cannot defer. Aadhaar/Permit/Fitness mostly never-upload or eligibility.\n\n"
+        "Later attempts pass HIGHER. Capture/UX — not harder remainder.",
         16,
         False,
         NAVY,
@@ -166,7 +167,8 @@ def build_deck() -> Path:
         5.8,
         5.2,
         "Pass by attempt\n\nRC          65.3% → 68.4% → 74.1%\nInsurance   67.4% → 73.8% → 76.4%\n\n"
-        "C1a pass floor = RC att-3 74.1%\nC1a ceiling = field RC 78.4%\nC1b uses Insurance’s own ladder\n— not 85–90%.",
+        "Reuse the same camera on other docs after C1b — free rider, not in the 180.\n\n"
+        "Never-upload is not another WhatsApp (CAMP = 0pp). Next: assist RCT.",
         16,
         False,
         NAVY,
@@ -194,7 +196,7 @@ def build_deck() -> Path:
         1.4,
         5.8,
         5.5,
-        "C1b — Insurance camera UX\n411 people. Must clear before first ride.\n67→74→76% × 91% approved-if-cleared\n→ ~46–52/month.\nNo deferral sign-off. Ship without waiting on Legal.\n\nR2A: 98.7% of today’s approved take a first order (3,895/3,946).",
+        "C1b — Insurance camera UX\n411 people. Must clear before first ride.\n67→74→76% × 91% approved-if-cleared\n→ ~46–52/month.\nNo deferral sign-off. Ship this week.\n\nThen: same UX on DL/Aadhaar/Permit/Fitness — measure, do not add to 180.\nR2A: 98.7% of approved take a first order.",
         15,
         False,
         NAVY,
@@ -245,11 +247,11 @@ def build_deck() -> Path:
         1.4,
         12.4,
         5.5,
-        "Got CAMP_WA_002 vs never got it: ~29% vs ~11% approved  →  TARGETING (sent after RC).\n"
-        "Clicked vs not, among delivered: 28.3% vs 29.8% (−1.5pp, interval −3.6 to +0.6)  →  0 pp lift. Do not scale 5×.\n\n"
-        "Field vs app/paid mechanical gap: 128–256/month IF zero selection difference. Field recruits in person.\n"
-        "726 of the C1a captains sit inside that gap. Do not add ~180 to 128–256.\n"
-        "Test: randomised assist on ordinary app/paid signups (~900/arm for a 5pp approval lift).",
+        "Got CAMP_WA_002 vs never got it: ~29% vs ~11%  →  TARGETING (sent after RC).\n"
+        "Clicked vs not, delivered: −1.5pp  →  0 pp lift. Do not scale 5×. Do not use WhatsApp to harvest never-uploads.\n\n"
+        "Never-upload is the leftover (RC ~2,388; Insurance ~2,530). Fos Insurance abandon 26% vs paid 43%.\n"
+        "Field vs app 128–256/month IF zero selection. 726 of C1a already inside. Do not add to ~180.\n"
+        "Test: randomised assist on app/paid (~900/arm for 5pp approval lift).",
         16,
         False,
         NAVY,
@@ -266,10 +268,12 @@ def build_deck() -> Path:
         1.4,
         12.4,
         5.5,
-        "1  C1a 10-day RC grace + C1b Insurance UX     ~180/mo (~134+~50)     Legal/T&S + ~1 FTE on C1a. Ship C1b now.\n\n"
-        "2  ARA at ₹35.4 / eligible leg     sample ~₹69–103k/mo     4-week pilot: returns up, cancels down, run-rate FALLING. Then maybe hire.\n\n"
-        "3  Stop 5× CAMP_WA_002; send/no-send RCT     cost avoided + 4–6 week answer     Near zero. This week. Aadhaar + approved.\n\n"
-        "Do not: 5× WhatsApp · blanket airport hiring · bank 128–256 · price ARA at 30% of fare.",
+        "1  C1b camera UX this week + C1a RC grace after Legal     ~180/mo (~50+~134). Reuse camera on other docs: not in the 180.\n\n"
+        "2  ARA ₹35.4/eligible leg — DO NOT HIRE THE AIRPORT     sample ~₹69–103k/mo. Two independent penalties; mix does not shift overnight.\n"
+        "    4-week pilot: returns up, cancels down, run-rate FALLING. Hire only if nights stay unfilled after that.\n\n"
+        "3  Stop 5× CAMP_WA_002; send/no-send RCT     cost avoided + 4–6 week answer. This week.\n\n"
+        "Do not: WhatsApp for never-uploads · blanket airport hiring · bank 128–256 · ARA at 30% of fare.\n"
+        "Queue: other-doc camera → assist RCT.",
         16,
         False,
         NAVY,

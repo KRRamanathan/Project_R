@@ -68,7 +68,7 @@ Optional: run `streamlit run sensitivity_explorer.py` to explore the two assumpt
 | Brief | Question | Go here |
 |---|---|---|
 | **A1** | Build the signup→approved funnel | `02_funnel.py` / `02_funnel_output.txt` — empirical mature cut, stage rates vs signup, volume lost. Waterfall: `figures/funnel_waterfall.png`. |
-| **A2** | Biggest fixable leak, sized /month | `03_dropoff.py` (failure mix, retry pattern) then `04_channel_leaks.py` (C1 = 1,637 RC + 411 Insurance capture-only) then `08_intervention_sizing.py` §1–2 (C1a ~134/month central, C1b ~46–52/month). |
+| **A2** | Biggest fixable leak, sized /month | `03`–`04`–`08`: C1a/C1b only. Other stages: leftover queue in `MEMO.md` p.2 (reuse UX; never-upload = assist RCT, not WhatsApp). |
 | **A3** | CAMP_WA_002 5× claim | `05_campaign.py` / `05_campaign_output.txt` §4 — clicked vs not **0 pp**; naive recipient gap is targeting. Deck slide 5. |
 | **A4** | Three ranked recommendations | `MEMO.docx` page 1 table; `DECK.pptx` slide 6; working in `08` + `09`. |
 | **B1** | Airport demand–supply mismatch when/how much | `06_airport_hourly.py` — 40% unfulfilled, 84% in 21:00–03:59, ~13 vs ~37 captains. |
@@ -80,7 +80,8 @@ Optional: run `streamlit run sensitivity_explorer.py` to explore the two assumpt
 - **No ML churn model.** Time budget, and the decision is a product fix plus a campaign stop, not a scoring layer.
 - **No CAC-based channel ROI.** Spend/bid/CAC is not in the extract. Paid never-attempt is named, not priced.
 - **No city-core-parity target for ARA.** City-core net is a different geography. The matching comparison is rest-of-day suburban (₹56.5 vs ₹24.9).
-- **No blind 30/50/70%-of-fare ARA grid.** Population gap ₹31.6 ÷ eligible share 0.8931 ≈ **₹35.4** per unpaid leg. Sensitivity is 80/100/120% of that derived point.
+- **No blind 30/50/70%-of-fare ARA grid.** Population gap ₹31.6 ÷ eligible share 0.8931 ≈ **₹35.4** per unpaid leg.
+- **Did not bank DL / Aadhaar / Permit / Fitness as extra /month.** Real loss; mostly never-upload or eligibility. Same camera after C1b is a free rider, then measure. Never-upload is the assist RCT, not CAMP_WA_002.
 
 ## Known limitations
 
@@ -88,4 +89,5 @@ Optional: run `streamlit run sensitivity_explorer.py` to explore the two assumpt
 - **Field vs self-serve 128–256/month is an unproven ceiling**, not banked. fos recruits in person. It overlaps 726 C1a captains — do not add it to ~180.
 - **`airport_trips.csv` is sampled**, not a census. Rates and the ₹35.4 derivation hold; ₹69k–103k/month is sample-implied, not a city P&L line.
 - **C1a ops ₹40–60k/month** is a stated FTE assumption (12–15 checks/day), not a field in the file.
-- **No join** from `signup_zone_id` to airport zones — cannot size existing catchment headcount.
+- **Capture-only was counted only on RC and Insurance.** Aadhaar/Permit/Fitness uploaded-fails were not split the same way.
+- **Never-upload (RC ~2,388; Insurance ~2,530) is not in the 180.** WhatsApp already failed; fos has lower abandonment. Next test is assisted onboarding, not a sized add.
