@@ -1,17 +1,29 @@
 const pptxgen = require("pptxgenjs");
+const fs = require("fs");
 const path = require("path");
 
 const NAVY     = "1E2761";
-const NAVYDARK = "16193B";
-const CORAL    = "F96167";
-const TEAL     = "1C7293";
-const ICE      = "CADCFC";
-const GREY     = "8A8FA3";
-const LIGHTBG  = "FFF8E1";
-const BORDER   = "F0E0A8";
+const CORAL    = "E85D4C";
+const ORANGE   = "FF8A3D";
+const TEAL     = "C45C26";
+const ICE      = "FFE8C2";
+const GREY     = "6B4A2A";
+const LIGHTBG  = "FFC400";
+const BORDER   = "E07A2F";
 const WHITE    = "FFFFFF";
 const YELLOW   = "FFC400";
-const GREEN    = "27AE60";
+const GREEN    = "E85D4C";
+const REDBG    = "E85D4C";
+const ORANGEBG = "FF8A3D";
+
+function png(rel) {
+  return "image/png;base64," + fs.readFileSync(path.join(__dirname, rel)).toString("base64");
+}
+const PIE180 = png("figures/pie_c1.png");
+const PIEAIR = png("figures/pie_airport_night.png");
+const PIERC  = png("figures/pie_rc_capture.png");
+const PIEC1B = png("figures/pie_c1b.png");
+const BARVL  = png("figures/bar_volume_lost.png");
 
 const FOOTER_L = "Rapido Supply  ·  Captain Onboarding & Airport Supply";
 const FOOTER_R = "Ramanathan K R   ·   Rapido Data Science Assessment";
@@ -210,27 +222,27 @@ function addARAChart(slide, x, y, w, h) {
 
 {
   let s = pres.addSlide();
-  s.background = { color: NAVYDARK };
+  s.background = { color: YELLOW };
 
-  s.addShape("ellipse", { x: 10.2, y: -2.0, w: 6.0, h: 6.0, fill: { color: "1A2255" }, line: { type: "none" } });
-  s.addShape("ellipse", { x: -2.2, y: 4.8, w: 5.0, h: 5.0, fill: { color: "1A2255" }, line: { type: "none" } });
-  s.addShape("ellipse", { x: 7.8, y: 3.5, w: 2.5, h: 2.5, fill: { color: "1D2A6A" }, line: { type: "none" } });
+  s.addShape("ellipse", { x: 10.2, y: -2.0, w: 6.0, h: 6.0, fill: { color: ORANGE }, line: { type: "none" } });
+  s.addShape("ellipse", { x: -2.2, y: 4.8, w: 5.0, h: 5.0, fill: { color: CORAL }, line: { type: "none" } });
+  s.addShape("ellipse", { x: 7.8, y: 3.5, w: 2.5, h: 2.5, fill: { color: ORANGE }, line: { type: "none" } });
 
   s.addText("RAPIDO DATA SCIENCE ASSESSMENT", {
     x: 0.9, y: 1.45, w: 10.0, h: 0.38,
     fontFace: "Calibri", fontSize: 13.5, bold: true,
-    color: YELLOW, charSpacing: 3, isTextBox: true, margin: 0
+    color: NAVY, charSpacing: 3, isTextBox: true, margin: 0
   });
 
   s.addText("Captain onboarding leak\n& overnight airport supply", {
     x: 0.85, y: 1.88, w: 9.5, h: 1.7,
-    fontFace: "Cambria", fontSize: 36, bold: true, color: WHITE,
+    fontFace: "Cambria", fontSize: 36, bold: true, color: NAVY,
     align: "left", lineSpacingMultiple: 1.15, isTextBox: true, margin: 0
   });
 
   s.addText("Findings and recommendations for the Head of Supply — where the extra ~180 approved captains a month come from, and why overnight airport supply is an economics problem, not a headcount one.", {
     x: 0.9, y: 3.55, w: 8.8, h: 0.85,
-    fontFace: "Calibri", fontSize: 13.5, color: ICE,
+    fontFace: "Calibri", fontSize: 13.5, color: NAVY,
     align: "left", lineSpacingMultiple: 1.3, isTextBox: true, margin: 0
   });
 
@@ -238,7 +250,7 @@ function addARAChart(slide, x, y, w, h) {
 
   s.addText("Ramanathan K R", {
     x: 0.9, y: 4.78, w: 6, h: 0.48,
-    fontFace: "Cambria", fontSize: 20, bold: true, color: WHITE, isTextBox: true, margin: 0
+    fontFace: "Cambria", fontSize: 20, bold: true, color: NAVY, isTextBox: true, margin: 0
   });
   s.addText("Data Science Assessment  ·  10 September 2026  ·  Data extract as of 30 Jun 2026, 23:59 IST", {
     x: 0.9, y: 5.28, w: 9.5, h: 0.32,
@@ -256,29 +268,28 @@ function addARAChart(slide, x, y, w, h) {
 
 {
   let s = pres.addSlide();
-  s.background = { color: NAVYDARK };
-  kicker(s, "Captain onboarding — the headline", YELLOW);
+  s.background = { color: ORANGEBG };
+  kicker(s, "Captain onboarding — the headline", NAVY);
 
   s.addText("One broken capture step costs ~180 captains/month.", {
     x: 0.6, y: 0.72, w: 9.5, h: 0.82,
-    fontFace: "Cambria", fontSize: 26, bold: true, color: WHITE, isTextBox: true, margin: 0
+    fontFace: "Cambria", fontSize: 26, bold: true, color: NAVY, isTextBox: true, margin: 0
   });
 
   s.addText([
-    { text: "Two capture-quality fixes on RC and Insurance ", options: { color: WHITE, bold: true } },
-    { text: "— not a mix of five things — recover ", options: { color: ICE } },
-    { text: "~180 additional approved captains/month", options: { color: YELLOW, bold: true } },
-    { text: " at medium confidence.", options: { color: ICE } }
+    { text: "Two capture-quality fixes on RC and Insurance ", options: { color: NAVY, bold: true } },
+    { text: "— not a mix of five things — recover ", options: { color: "3A2208" } },
+    { text: "~180 additional approved captains/month", options: { color: NAVY, bold: true } },
+    { text: " at medium confidence.", options: { color: "3A2208" } }
   ], { x: 0.6, y: 1.5, w: 9.2, h: 0.58, fontFace: "Calibri", fontSize: 13, lineSpacingMultiple: 1.25, isTextBox: true, margin: 0 });
 
   s.addShape("roundRect", { x: 0.55, y: 2.2, w: 7.5, h: 4.35,
-    rectRadius: 0.09, fill: { color: WHITE }, line: { type: "none" },
-    shadow: { type: "outer", color: "000000", opacity: 0.25, blur: 10, offset: 4, angle: 90 } });
+    rectRadius: 0.09, fill: { color: WHITE }, line: { type: "none" } });
   s.addText("Split of the ~180  (disjoint C1a + C1b)", {
     x: 0.75, y: 2.3, w: 7.1, h: 0.32,
     fontFace: "Calibri", fontSize: 10, bold: true, color: NAVY, isTextBox: true, margin: 0
   });
-  addPie180(s, 0.65, 2.55, 7.3, 3.75);
+  s.addImage({ data: PIE180, x: 0.75, y: 2.55, w: 7.1, h: 3.8 });
 
   const statX = 8.3, statW = 4.45;
   statCard(s, statX, 2.2, statW, 1.35, "98.7%", "of mature approved captains take a first trip (3,895 / 3,946) — documents are the bottleneck, not first-order.", CORAL, true);
@@ -310,15 +321,15 @@ function addARAChart(slide, x, y, w, h) {
     x: 0.72, y: 2.1, w: 5.65, h: 0.28,
     fontFace: "Calibri", fontSize: 9.5, bold: true, color: NAVY, isTextBox: true, margin: 0
   });
-  addPieRc(s, 0.65, 2.32, 5.8, 3.7);
+  s.addImage({ data: PIERC, x: 0.7, y: 2.38, w: 5.7, h: 3.7 });
 
   s.addShape("roundRect", { x: 6.75, y: 2.0, w: 6.05, h: 4.25,
     rectRadius: 0.08, fill: { color: WHITE }, line: { color: BORDER, width: 1 } });
-  s.addText("Retry pass rates rise — capture problem, not eligibility", {
+  s.addText("Insurance leftovers — only 411 are C1b", {
     x: 6.92, y: 2.1, w: 5.7, h: 0.28,
     fontFace: "Calibri", fontSize: 9.5, bold: true, color: NAVY, isTextBox: true, margin: 0
   });
-  addRetryChart(s, 6.85, 2.32, 5.8, 3.7);
+  s.addImage({ data: PIEC1B, x: 6.9, y: 2.38, w: 5.75, h: 3.7 });
 
   s.addShape("roundRect", { x: 0.55, y: 6.42, w: 12.25, h: 0.62,
     rectRadius: 0.06, fill: { color: NAVY }, line: { type: "none" } });
@@ -400,7 +411,7 @@ function addARAChart(slide, x, y, w, h) {
 
 {
   let s = pres.addSlide();
-  s.background = { color: NAVYDARK };
+  s.background = { color: REDBG };
   kicker(s, "Airport supply", YELLOW);
 
   s.addText("Overnight airport is a compounding economics problem, not a headcount problem", {
@@ -413,7 +424,7 @@ function addARAChart(slide, x, y, w, h) {
   s.addText("When the pain sits (unfulfilled volume)", {
     x: 0.72, y: 1.72, w: 5.65, h: 0.28,
     fontFace: "Calibri", fontSize: 9, bold: true, color: NAVY, isTextBox: true, margin: 0 });
-  addPieNight(s, 0.65, 1.95, 5.8, 3.3);
+  s.addImage({ data: PIEAIR, x: 0.7, y: 1.95, w: 5.7, h: 3.35 });
 
   s.addShape("roundRect", { x: 6.75, y: 1.62, w: 6.05, h: 3.85,
     rectRadius: 0.08, fill: { color: WHITE }, line: { type: "none" } });
@@ -513,12 +524,12 @@ function addARAChart(slide, x, y, w, h) {
 
 {
   let s = pres.addSlide();
-  s.background = { color: NAVYDARK };
-  kicker(s, "Recommendations & decision points", YELLOW);
+  s.background = { color: ORANGEBG };
+  kicker(s, "Recommendations & decision points", NAVY);
 
   s.addText("Ranked by monthly impact. The campaign call is the fastest yes.", {
     x: 0.6, y: 0.72, w: 12.0, h: 0.56,
-    fontFace: "Cambria", fontSize: 22, bold: true, color: WHITE, isTextBox: true, margin: 0
+    fontFace: "Cambria", fontSize: 22, bold: true, color: NAVY, isTextBox: true, margin: 0
   });
 
   const rows = [

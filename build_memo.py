@@ -115,7 +115,7 @@ def build_memo() -> Path:
     for ri, row in enumerate(data):
         for ci, val in enumerate(row):
             cell = tbl.rows[ri + 1].cells[ci]
-            _shade(cell, "FFF8E1" if ri % 2 == 0 else "FFFDF6")
+            _shade(cell, "FFE8C2" if ri % 2 == 0 else "FFF6E8")
             r = cell.paragraphs[0].add_run(val)
             _run(r, 8.5, ci == 0, NAVY if ci == 0 else BODY)
 
