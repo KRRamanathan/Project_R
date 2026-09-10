@@ -11,5 +11,6 @@ for s in 01_data_audit.py 02_funnel.py 03_dropoff.py 04_channel_leaks.py \
 done
 "$PYTHON" make_exec_charts.py
 "$PYTHON" build_memo.py
+if command -v node >/dev/null 2>&1; then node generate_deck.js; fi
 "$PYTHON" check_regression.py
 echo "DONE. Memo: MEMO.docx  Deck: DECK.pptx"

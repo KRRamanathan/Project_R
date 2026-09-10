@@ -71,6 +71,18 @@ def _bar_lost(path: Path) -> None:
     plt.close()
 
 
+def _icon(path: Path, bg: str, label: str) -> None:
+    fig, ax = plt.subplots(figsize=(1.15, 1.15), dpi=140, facecolor=bg)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_axis_off()
+    ax.add_patch(plt.Circle((0.5, 0.5), 0.44, color="white", zorder=1))
+    ax.text(0.5, 0.5, label, ha="center", va="center", fontsize=15,
+            fontweight="bold", color=INK, zorder=2)
+    fig.savefig(path, bbox_inches="tight", pad_inches=0.04, facecolor=bg)
+    plt.close()
+
+
 def main() -> None:
     _pie(FIG / "pie_c1.png",
          ["C1a RC grace ~134/mo", "C1b Insurance UX ~50/mo"],
@@ -89,7 +101,11 @@ def main() -> None:
          [411, 3289 - 411], [ORANGE, YELLOW],
          "Insurance leftovers — only the photo slice is C1b")
     _bar_lost(FIG / "bar_volume_lost.png")
-    print("wrote figures/pie_*.png and bar_volume_lost.png")
+    _icon(FIG / "icon_rc.png", YELLOW, "RC")
+    _icon(FIG / "icon_ins.png", ORANGE, "IN")
+    _icon(FIG / "icon_air.png", CORAL, "AP")
+    _icon(FIG / "icon_wa.png", YELLOW, "WA")
+    print("wrote figures/pie_*.png, bar, and icon_*.png")
 
 
 if __name__ == "__main__":
