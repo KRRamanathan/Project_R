@@ -21,11 +21,17 @@ Same working from the shell:
 ```
 
 Rebuild the deck: `node generate_deck.js`  
-Rebuild the Word memo: `python3 build_memo.py`
+Rebuild the Word memo: `python3 build_memo.py`  
+Rebuild the clickable page: `python3 notebook_app.py` → `dashboard.html`
+
+Open without Jupyter:
+
+https://raw.githack.com/KRRamanathan/Project_R/main/dashboard.html
 
 | File | Role |
 |---|---|
 | `Project_R.ipynb` | Run-all → yellow dashboard |
+| `dashboard.html` | Same page, static (raw.githack) |
 | `01`–`08_*.py` | Same working as scripts |
 | `metrics.py` | Shared maths |
 | `MEMO.docx` | 2-page memo |
