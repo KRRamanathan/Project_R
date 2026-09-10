@@ -1,113 +1,45 @@
-# Project_R — working
+# Project_R
 
-Captain onboarding (A2O) and overnight airport supply.  
-Extract clock: **2026-06-30 23:59 IST** (naive timestamps; we do not invent a timezone offset).
+Rapido take-home: captain onboarding (A2O) and overnight airport supply.  
+Extract clock: **2026-06-30 23:59 IST**.
 
-**Submit:** `MEMO.docx` (or `MEMO.md`), `DECK.pptx`, and this repo (working = notebook and/or scripts).
+**Submit:** `MEMO.docx` · `DECK.pptx` · this repo (working = `Project_R.ipynb`).
 
-## How to run
-
-Raw inputs (repo root): `captains.csv`, `doc_events.csv`, `approvals.csv`, `activation.csv`, `nudges.csv`, `airport_hourly.csv`, `airport_trips.csv`.
-
-**Python:** 3.10+ (developed on 3.12).
-
-```bash
-python3 -m pip install -r requirements.txt
-```
-
-## The website (not GitHub, not Colab cell crumbs)
-
-GitHub is the code. Colab cells are not a website. Open this file in a browser:
-
-**https://raw.githack.com/KRRamanathan/Project_R/main/dashboard.html**
-
-Yellow cards move with the sliders. C1b, 18.8% approved, and airport % stay put on purpose. `htmlpreview.github.io` often blocks the slider script — use the link above, or open `dashboard.html` from a clone.
-
-Same page as `dashboard.html` in the repo (double-click after clone). Streamlit is optional: `python3 -m streamlit run sensitivity_explorer.py` → `http://localhost:8501`.
-
-**Notebook (easiest):** `Project_R.ipynb` → **Run all**. Colab shows **one page** in the last cell (scroll to it). Do not look at the install text above it as the product.
-
-If Colab still shows `# ── 1. Theme` / giant cartoons / `_panel`: that is the **old** notebook. Runtime → **Disconnect and delete runtime**, then open:
-
-https://colab.research.google.com/github/KRRamanathan/Project_R/blob/main/Project_R.ipynb
-
-**Google Colab:** open the notebook and **Runtime → Run all**. If the seven CSVs are not next to the file, the first cell clones `main`.
-
-[Open in Colab](https://colab.research.google.com/github/KRRamanathan/Project_R/blob/main/Project_R.ipynb)
+## Run (easiest)
 
 ```bash
 python3 -m pip install -r requirements.txt
 python3 -m jupyter notebook Project_R.ipynb
 ```
 
-**Scripts (same working, log files on disk):**
+Then **Run all**. The notebook runs steps 1–8 from the CSVs, prints the locked headlines, shows the pies, writes `MEMO.docx`, and checks the regression lock.
+
+Same working from the shell:
 
 ```bash
 ./run_all.sh
 ```
 
-That tees every print to `0N_*_output.txt`, writes `MEMO.docx`, `DECK.pptx`, `figures/funnel_waterfall.png`, then **fails the build** if headline numbers moved.
+Rebuild the deck: `node generate_deck.js`  
+Rebuild the Word memo: `python3 build_memo.py`
 
-Individual scripts (each re-derives from CSVs; none reads another script’s console):
-
-| Script | What it produces |
+| File | Role |
 |---|---|
-| `01_data_audit.py` | Schema, joins, mature-relevant flags |
-| `02_funnel.py` | Empirical 15.6-day cut; stage funnel |
-| `03_dropoff.py` | Where volume is lost; attempt-level pass rates |
-| `04_channel_leaks.py` | fos vs self-serve; C1 capture-only 1,637 / 411 |
-| `05_campaign.py` | CAMP_WA_002 0pp lift; RCT sketch |
-| `06_airport_hourly.py` | When/how much airport unfulfilled |
-| `07_airport_trips.py` | Post-trip economics; two independent penalties |
-| `08_intervention_sizing.py` | C1a/C1b/ARA sizing (derived ₹35.4) |
-| `09_deliverables.py` | Waterfall, `MEMO.docx`, `DECK.pptx`, R2A |
-| `check_regression.py` | Headline lock (called by `run_all.sh`) |
+| `Project_R.ipynb` | Run-all working |
+| `01`–`08_*.py` | Same working as scripts |
+| `metrics.py` | Shared maths |
+| `MEMO.docx` | 2-page memo |
+| `DECK.pptx` | 6-slide deck (+ title) |
+| `CANDIDATE_BRIEF.md` | The assignment |
 
-Shared maths live in `metrics.py` so Step 8, the regression check, and the Streamlit app cannot drift.
+## Answers (short)
 
-Optional sliders (not required): `python3 -m streamlit run sensitivity_explorer.py` — Airport (hourly mismatch locked; ARA 80/100/120% of ₹35.4) then Onboarding (C1a show-up).
+| Brief | Answer |
+|---|---|
+| A1 | Mature ∩ `doc_events`, n=21,024. Cut = max `in_progress` age (15.6 days). |
+| A2 | C1a RC grace ~134/mo + C1b Insurance UX ~50/mo. Bank **~180**. Do not add field 128–256. |
+| A3 | CAMP_WA_002 click lift **0 pp**. Do not scale 5×. |
+| A4 | (1) C1b then C1a (2) ARA ₹35.4/eligible night-suburban leg — do not hire (3) stop CAMP 5× |
+| B1–B3 | ~40% unfulfilled at terminals, 84% in 21:00–03:59. Mix does not shift overnight. **No catchment hiring.** |
 
-## Data-quality decisions (carried through every step)
-
-**~15.6-day censoring cutoff.** `in_progress` is unfinished, not failed. Cut = **max signup age among `in_progress` = 15.602778 days**. Mature = signup age **greater than** that. Funnel rates use mature ∩ has `doc_events` (**n = 21,024**). The 1,416 mature captains with zero document events are **never-attempted**, reported separately, never mixed into stage capture-failure stats.
-
-**`doc_events` over `approvals.csv` for which documents passed.** Stage flags are `verification_pass` in `doc_events`. `docs_cleared` disagrees with n-unique passes for 451 captains, **all immature**. Mature mismatch = 0.
-
-**Rejected is a distinct outcome.** 409 rejected captains all sit **after** required docs cleared — an eligibility gate, not a document-UX leak. Not folded into “dropped in docs.”
-
-**Nudges.** 457 rows are `clicked=1` and `delivered=0` (impossible). Dropped from campaign lift. CAMP_WA_002 is sent after RC; recipient vs non-recipient is targeting, not an experiment.
-
-**Activation.** One row per approved captain. Answers R2A (first trip), not the A2O funnel. 98.7% of mature approved have a first order.
-
-**Airport files do not mix.** `airport_hourly.csv` = when terminals fail (marketplace state). `airport_trips.csv` = sampled post-pickup economics. `signup_zone_id` does not join airport `zone_id`.
-
-**Rigor bar.** Point estimate, n, test, CI. n<100 directional. Multi-cut Bonferroni. Confound check before a univariate cut becomes a cause.
-
-## Where each brief question is answered
-
-| Brief | Question | Go here |
-|---|---|---|
-| **A1** | Build the signup→approved funnel | `Project_R.ipynb` (Run All) / `02_funnel.py` — empirical mature cut, stage rates vs signup, volume lost. Waterfall: `figures/funnel_waterfall.png`. |
-| **A2** | Biggest fixable leak, sized /month | `03`–`04`–`08`: C1a/C1b only. Other stages: leftover queue in `MEMO.md` p.2 (reuse UX; never-upload = assist RCT, not WhatsApp). |
-| **A3** | CAMP_WA_002 5× claim | `05_campaign.py` / `05_campaign_output.txt` §4 — clicked vs not **0 pp**; naive recipient gap is targeting. Deck slide 5. |
-| **A4** | Three ranked recommendations | `MEMO.docx` page 1 table; `DECK.pptx` slide 6; working in `08` + `09`. |
-| **B1** | Airport demand–supply mismatch when/how much | `06_airport_hourly.py` — 40% unfulfilled, 84% in 21:00–03:59, ~13 vs ~37 captains. |
-| **B2** | What happens after an airport trip | `07_airport_trips.py` — suburban + overnight penalties, mix does **not** shift (χ² p=0.12). |
-| **B3** | Is targeted acquisition the right intervention? | **No.** `08` §6 + memo page 1: ARA at **₹35.4/eligible leg**, not hiring. Headcount only if a 4-week payout run-rate does not fall. |
-
-## What I chose not to do, and why
-
-- **No ML churn model.** Time budget, and the decision is a product fix plus a campaign stop, not a scoring layer.
-- **No CAC-based channel ROI.** Spend/bid/CAC is not in the extract. Paid never-attempt is named, not priced.
-- **No city-core-parity target for ARA.** City-core net is a different geography. The matching comparison is rest-of-day suburban (₹56.5 vs ₹24.9).
-- **No blind 30/50/70%-of-fare ARA grid.** Population gap ₹31.6 ÷ eligible share 0.8931 ≈ **₹35.4** per unpaid leg.
-- **Did not bank DL / Aadhaar / Permit / Fitness as extra /month.** Real loss; mostly never-upload or eligibility. Same camera after C1b is a free rider, then measure. Never-upload is the assist RCT, not CAMP_WA_002.
-
-## Known limitations
-
-- **C1a show-up is unobserved** and assumed (central 60%; band 40–80%). If Legal will not treat RC as deferred activation, remaining-funnel conversion (~27% after RC) shrinks C1a toward ~36/month.
-- **Field vs self-serve 128–256/month is an unproven ceiling**, not banked. fos recruits in person. It overlaps 726 C1a captains — do not add it to ~180.
-- **`airport_trips.csv` is sampled**, not a census. Rates and the ₹35.4 derivation hold; ₹69k–103k/month is sample-implied, not a city P&L line.
-- **C1a ops ₹40–60k/month** is a stated FTE assumption (12–15 checks/day), not a field in the file.
-- **Capture-only was counted only on RC and Insurance.** Aadhaar/Permit/Fitness uploaded-fails were not split the same way.
-- **Never-upload (RC ~2,388; Insurance ~2,530) is not in the 180.** WhatsApp already failed; fos has lower abandonment. Next test is assisted onboarding, not a sized add.
+Funnel uses `verification_pass` in `doc_events`. Show-up for C1a is assumed (60%). `airport_trips.csv` is sampled.
