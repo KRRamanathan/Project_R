@@ -15,7 +15,9 @@ Raw inputs (repo root): `captains.csv`, `doc_events.csv`, `approvals.csv`, `acti
 python3 -m pip install -r requirements.txt
 ```
 
-**Notebook (easiest):** `Project_R.ipynb` → **Run all**. Rapido-yellow dashboard, folded step logs, sliders.
+**Notebook (easiest):** `Project_R.ipynb` → **Run all**. Colab shows **one page** in the last cell (scroll to it). Do not look at the install text above it as the product.
+
+If Colab still shows the old stacked cells: **Runtime → Disconnect and delete runtime**, then open the notebook from GitHub `main` again.
 
 **Google Colab:** open the notebook and **Runtime → Run all**. If the seven CSVs are not next to the file, the first cell clones `main`.
 

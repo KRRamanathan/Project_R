@@ -1,8 +1,9 @@
-"""Rapido-yellow dashboard HTML for Project_R.ipynb (local + Colab)."""
+"""One HTML page for Project_R.ipynb — Colab shows a single site, not stacked cells."""
 
 from __future__ import annotations
 
 import base64
+import html as html_lib
 from pathlib import Path
 
 from IPython.display import HTML, display
@@ -10,275 +11,222 @@ from IPython.display import HTML, display
 YELLOW = "#FFD400"
 INK = "#111111"
 CREAM = "#FFF8E7"
-CARD = "#FFFFFF"
-MUTED = "#5C5C5C"
-LEAK = "#E85D04"
-OK = "#1B7A4E"
-NAVY = "#1A1A1A"
-
 ROOT = Path(__file__).resolve().parent
 
 
-def _b64_img(path: Path) -> str:
-    raw = path.read_bytes()
-    return "data:image/png;base64," + base64.b64encode(raw).decode("ascii")
+def _b64(path: Path) -> str:
+    return "data:image/png;base64," + base64.b64encode(path.read_bytes()).decode("ascii")
 
 
-def cartoon_src(stem: str) -> str:
+def cartoon(stem: str) -> str:
     p = ROOT / "figures" / "cartoons" / f"{stem}.png"
-    if p.exists():
-        return _b64_img(p)
-    return ""
+    return _b64(p) if p.exists() else ""
 
 
-def inject_css() -> None:
+def waterfall_src() -> str:
+    p = ROOT / "figures" / "funnel_waterfall.png"
+    return _b64(p) if p.exists() else ""
+
+
+def show_app(**kwargs) -> None:
+    """One box in Colab: CSS, cartoons, sliders, waterfall, logs together."""
+    inner = app_html(**kwargs)
+    escaped = inner.replace("&", "&amp;").replace('"', "&quot;")
     display(
         HTML(
-            f"""
+            '<iframe srcdoc="'
+            + escaped
+            + '" style="width:100%;min-height:3200px;height:3200px;border:0;border-radius:16px;background:transparent;"></iframe>'
+        )
+    )
+
+
+def app_html(
+    *,
+    n: int,
+    n_appr: int,
+    months: float,
+    c1a_60: float,
+    c1a_at_1: float,
+    c1b: float,
+    airport_unf: float,
+    other_unf: float,
+    night_share: float,
+    cap_night: float,
+    cap_day: float,
+    ara_leg: float,
+    ara_mo: float,
+    mix: dict[str, int],
+    logs: dict[str, str],
+) -> str:
+    def img(stem: str, alt: str) -> str:
+        src = cartoon(stem)
+        return f'<img src="{src}" alt="{alt}"/>' if src else ""
+
+    wf = waterfall_src()
+    wf_block = (
+        f'<img class="pr-wf" src="{wf}" alt="Funnel waterfall"/>'
+        if wf
+        else "<p>Waterfall image not written.</p>"
+    )
+
+    log_bits = []
+    for title, text in logs.items():
+        safe = html_lib.escape(text[-18000:])
+        log_bits.append(
+            f"<details><summary>{html_lib.escape(title)}</summary><pre>{safe}</pre></details>"
+        )
+    logs_html = "".join(log_bits) or "<p>No step logs.</p>"
+
+    auto_n = mix.get("Auto", 0)
+    cab_n = mix.get("Cab", 0)
+    er_n = mix.get("ERickshaw", 0)
+    appr_pct = 100.0 * n_appr / n if n else 0.0
+
+    return f"""
+<div class="pr">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-.pr-wrap {{
+.pr {{
   font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   color: {INK};
   background: {CREAM};
-  padding: 8px 4px 28px;
-  border-radius: 20px;
+  padding: 18px 16px 28px;
+  border-radius: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }}
+.pr * {{ box-sizing: border-box; }}
 .pr-hero {{
-  background: linear-gradient(135deg, {YELLOW} 0%, #FFE566 55%, #FFC400 100%);
+  background: linear-gradient(135deg, {YELLOW} 0%, #FFE566 50%, #FFC400 100%);
   border: 3px solid {INK};
   border-radius: 22px;
-  padding: 28px 32px 24px;
+  padding: 26px 28px;
   box-shadow: 8px 8px 0 {INK};
-  margin-bottom: 22px;
-  position: relative;
-  overflow: hidden;
+  margin-bottom: 18px;
 }}
-.pr-hero h1 {{
-  margin: 0 0 6px;
-  font-size: 2.05rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}}
-.pr-hero p {{ margin: 0; color: {INK}; opacity: 0.82; font-size: 0.98rem; }}
 .pr-kicker {{
-  display: inline-block;
-  background: {INK};
-  color: {YELLOW};
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  padding: 4px 10px;
-  border-radius: 999px;
-  margin-bottom: 10px;
+  display: inline-block; background: {INK}; color: {YELLOW};
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+  padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
 }}
-.pr-grid {{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px;
-  margin: 14px 0 22px;
-}}
+.pr-hero h1 {{ margin: 0 0 6px; font-size: 1.85rem; font-weight: 800; letter-spacing: -0.03em; }}
+.pr-hero p {{ margin: 0; opacity: 0.82; }}
+.pr-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 12px; margin: 14px 0; }}
 .pr-card {{
-  background: {CARD};
-  border: 2px solid {INK};
-  border-radius: 16px;
-  padding: 16px 16px 14px;
-  box-shadow: 4px 4px 0 {INK};
+  background: #fff; border: 2px solid {INK}; border-radius: 16px;
+  padding: 14px; box-shadow: 4px 4px 0 {INK};
 }}
-.pr-card .lbl {{ font-size: 0.75rem; color: {MUTED}; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }}
-.pr-card .val {{ font-size: 1.65rem; font-weight: 800; margin-top: 4px; letter-spacing: -0.03em; }}
-.pr-card .sub {{ font-size: 0.78rem; color: {MUTED}; margin-top: 4px; }}
-.pr-sec {{
-  font-size: 1.15rem;
-  font-weight: 800;
-  margin: 22px 0 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}}
-.pr-chip {{
-  background: {YELLOW};
-  border: 2px solid {INK};
-  border-radius: 999px;
-  padding: 2px 10px;
-  font-size: 0.72rem;
-  font-weight: 700;
-}}
-.pr-veh {{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 14px;
-  margin: 8px 0 20px;
-}}
+.pr-card .lbl {{ font-size: 0.72rem; color: #5c5c5c; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }}
+.pr-card .val {{ font-size: 1.55rem; font-weight: 800; margin-top: 4px; letter-spacing: -0.03em; }}
+.pr-card .sub {{ font-size: 0.76rem; color: #5c5c5c; margin-top: 4px; }}
+.pr-sec {{ font-size: 1.12rem; font-weight: 800; margin: 22px 0 10px; }}
+.pr-veh {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }}
 .pr-veh .pr-card {{ text-align: center; }}
-.pr-veh img {{
-  width: 118px; height: 118px; object-fit: contain;
-  margin: 4px auto 8px;
-  display: block;
-}}
+.pr-veh img {{ width: 112px; height: 112px; object-fit: contain; margin: 0 auto 8px; display: block; }}
+.pr-ask {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }}
+.pr-ask h3 {{ margin: 0 0 6px; font-size: 1rem; }}
+.pr-ask .n {{ font-size: 0.78rem; font-weight: 800; color: #1B7A4E; }}
 .pr-warn {{
-  background: #FFF3CD;
-  border: 2px solid {INK};
-  border-radius: 14px;
-  padding: 12px 16px;
-  font-size: 0.9rem;
-  margin: 12px 0;
+  background: #FFF3CD; border: 2px solid {INK}; border-radius: 14px;
+  padding: 12px 16px; font-size: 0.9rem; margin: 14px 0;
 }}
 .pr-ok {{
-  background: #E7F6EE;
-  border: 2px solid {INK};
-  border-radius: 14px;
-  padding: 12px 16px;
-  font-size: 0.9rem;
+  background: #E7F6EE; border: 2px solid {INK}; border-radius: 14px;
+  padding: 12px 16px; font-size: 0.9rem; margin: 0 0 14px;
 }}
-.pr-progress {{
-  display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 18px;
+.pr-wf {{ width: 100%; border-radius: 12px; border: 2px solid {INK}; background: #fff; }}
+.pr input[type=range] {{ width: 100%; accent-color: {INK}; }}
+.pr-slide {{ margin: 8px 0 14px; }}
+.pr-slide label {{ font-size: 0.82rem; font-weight: 700; display: flex; justify-content: space-between; }}
+.pr details {{
+  border: 2px solid {INK}; border-radius: 12px; padding: 8px 12px; background: #fff; margin: 8px 0;
 }}
-.pr-step {{
-  border: 2px solid {INK};
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  background: #eee;
-}}
-.pr-step.done {{ background: {YELLOW}; }}
-.pr-step.run {{ background: #fff; box-shadow: 3px 3px 0 {INK}; }}
-.pr-ask {{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
-}}
-.pr-ask .pr-card h3 {{ margin: 0 0 6px; font-size: 1rem; }}
-.pr-ask .n {{ font-size: 0.8rem; font-weight: 800; color: {OK}; }}
-details.pr-log {{
-  border: 2px solid {INK};
-  border-radius: 14px;
-  padding: 8px 12px;
-  background: #fff;
-  margin: 8px 0;
-}}
-details.pr-log summary {{ cursor: pointer; font-weight: 700; }}
-details.pr-log pre {{
-  max-height: 280px; overflow: auto; font-size: 0.72rem;
-  background: #111; color: #F3F3F3; padding: 10px; border-radius: 8px;
+.pr details summary {{ cursor: pointer; font-weight: 700; }}
+.pr pre {{
+  max-height: 220px; overflow: auto; font-size: 0.7rem;
+  background: #111; color: #eee; padding: 10px; border-radius: 8px;
 }}
 </style>
-"""
-        )
-    )
 
-
-def hero() -> None:
-    display(
-        HTML(
-            """
-<div class="pr-wrap">
   <div class="pr-hero">
     <div class="pr-kicker">RAPIDO · PROJECT_R</div>
     <h1>Captain onboarding leak, sized. Airport nights, priced.</h1>
-    <p>Extract 30 Jun 2026, 23:59 IST · synthetic CSVs · Kernel → Run All (works on Google Colab)</p>
+    <p>Extract 30 Jun 2026, 23:59 IST · one page · Runtime → Run all</p>
   </div>
-</div>
-"""
-        )
-    )
+  <div class="pr-ok"><b>Pipeline finished.</b> Same maths as run_all.sh · regression lock passed if this page rendered.</div>
 
+  <div class="pr-grid">
+    <div class="pr-card"><div class="lbl">Approved | mature∩events</div><div class="val">{appr_pct:.1f}%</div><div class="sub">{n_appr:,} / {n:,} · {months:.2f} mo</div></div>
+    <div class="pr-card"><div class="lbl">C1a + C1b (disjoint)</div><div class="val" id="combo">{c1a_60 + c1b:.0f}</div><div class="sub">do not add fos 128–256</div></div>
+    <div class="pr-card"><div class="lbl">Airport unfulfilled</div><div class="val">{100 * airport_unf:.0f}%</div><div class="sub">vs {100 * other_unf:.0f}% elsewhere · {100 * night_share:.0f}% in 21:00–03:59</div></div>
+    <div class="pr-card"><div class="lbl">Captains night vs day</div><div class="val">{cap_night:.0f} vs {cap_day:.0f}</div><div class="sub">do not hire the catchment</div></div>
+  </div>
 
-def progress_html(done: list[str], current: str | None = None) -> str:
-    chips = []
-    for name in done:
-        chips.append(f'<span class="pr-step done">✓ {name}</span>')
-    if current:
-        chips.append(f'<span class="pr-step run">… {current}</span>')
-    return f'<div class="pr-progress">{"".join(chips)}</div>'
+  <div class="pr-sec">Move the two assumptions</div>
+  <div class="pr-slide">
+    <label>C1a 10-day show-up <span id="showLbl">60%</span></label>
+    <input id="show" type="range" min="0" max="100" value="60"/>
+  </div>
+  <div class="pr-slide">
+    <label>ARA as % of derived ₹{ara_leg:.1f}/leg <span id="araLbl">100%</span></label>
+    <input id="ara" type="range" min="50" max="150" step="5" value="100"/>
+  </div>
+  <div class="pr-grid">
+    <div class="pr-card"><div class="lbl">C1a / month</div><div class="val" id="c1aVal">{c1a_60:.1f}</div><div class="sub">flow × show-up × RC att-3</div></div>
+    <div class="pr-card"><div class="lbl">C1b / month</div><div class="val">{c1b:.1f}</div><div class="sub">Insurance UX · locked</div></div>
+    <div class="pr-card"><div class="lbl">₹ / eligible leg</div><div class="val" id="payVal">₹{ara_leg:.1f}</div><div class="sub">not 30% of fare</div></div>
+    <div class="pr-card"><div class="lbl">ARA sample / month</div><div class="val" id="araMo">₹{ara_mo:,.0f}</div><div class="sub">sampled trips · not city P&amp;L</div></div>
+  </div>
 
+  <div class="pr-sec">Fleet mix</div>
+  <div class="pr-veh">
+    <div class="pr-card">{img("auto","Auto")}<div class="lbl">Auto</div><div class="val" style="font-size:1.05rem">{auto_n:,} signups</div><div class="sub">In extract</div></div>
+    <div class="pr-card">{img("cab","Cab")}<div class="lbl">Cab</div><div class="val" style="font-size:1.05rem">{cab_n:,} signups</div><div class="sub">In extract</div></div>
+    <div class="pr-card">{img("scooty","Scooty")}<div class="lbl">E-rickshaw / scooty</div><div class="val" style="font-size:1.05rem">{er_n:,} signups</div><div class="sub">ERickshaw in file</div></div>
+    <div class="pr-card">{img("bike","Bike")}<div class="lbl">Bike</div><div class="val" style="font-size:1.05rem">Not in extract</div><div class="sub">Decorative only</div></div>
+  </div>
 
-def metric_cards(rows: list[tuple[str, str, str]]) -> None:
-    inner = "".join(
-        f'<div class="pr-card"><div class="lbl">{a}</div><div class="val">{b}</div><div class="sub">{c}</div></div>'
-        for a, b, c in rows
-    )
-    display(HTML(f'<div class="pr-wrap"><div class="pr-grid">{inner}</div></div>'))
-
-
-def vehicle_strip(counts: dict[str, int], note: str) -> None:
-    items = [
-        ("auto", "Auto", "In extract"),
-        ("cab", "Cab", "In extract"),
-        ("scooty", "E-rickshaw / scooty", "ERickshaw in file"),
-        ("bike", "Bike", "Not in this extract"),
-    ]
-    cards = []
-    for stem, label, sub in items:
-        src = cartoon_src(stem)
-        img = f'<img src="{src}" alt="{label}"/>' if src else ""
-        n = ""
-        if stem == "auto":
-            n = f"{counts.get('Auto', 0):,} signups"
-        elif stem == "cab":
-            n = f"{counts.get('Cab', 0):,} signups"
-        elif stem == "scooty":
-            n = f"{counts.get('ERickshaw', 0):,} signups"
-        else:
-            n = "Decorative — no Bike rows"
-        cards.append(
-            f'<div class="pr-card">{img}<div class="lbl">{label}</div>'
-            f'<div class="val" style="font-size:1.05rem">{n}</div>'
-            f'<div class="sub">{sub}</div></div>'
-        )
-    display(
-        HTML(
-            f'<div class="pr-wrap"><div class="pr-sec">Fleet mix <span class="pr-chip">{note}</span></div>'
-            f'<div class="pr-veh">{"".join(cards)}</div></div>'
-        )
-    )
-
-
-def rec_cards() -> None:
-    display(
-        HTML(
-            """
-<div class="pr-wrap">
   <div class="pr-sec">Ask — in this order</div>
   <div class="pr-ask">
-    <div class="pr-card">
-      <div class="n">1 · PRODUCT</div>
-      <h3>C1b Insurance capture UX</h3>
-      <p>Blur/OCR at upload. ~46–52 extra approved / month. No legal deferral.</p>
-    </div>
-    <div class="pr-card">
-      <div class="n">2 · LEGAL + OPS</div>
-      <h3>C1a provisional RC, 10-day grace</h3>
-      <p>Central 60% show-up × att-3 → ~133.5 / month. Show-up unobserved.</p>
-    </div>
-    <div class="pr-card">
-      <div class="n">3 · AIRPORT</div>
-      <h3>ARA ₹35.4 / unpaid night-suburban leg</h3>
-      <p>4-week run. Do not hire the catchment. Sample ~₹69–103k / month.</p>
-    </div>
-    <div class="pr-card">
-      <div class="n">STOP</div>
-      <h3>Kill CAMP_WA_002 5×</h3>
-      <p>Clicked vs not ≈ 0 pp. Naive recipient gap is targeting after RC.</p>
-    </div>
+    <div class="pr-card"><div class="n">1 · PRODUCT</div><h3>C1b Insurance capture UX</h3><p>~46–52 extra approved / month. No legal deferral.</p></div>
+    <div class="pr-card"><div class="n">2 · LEGAL + OPS</div><h3>C1a provisional RC</h3><p>~133.5 / month at 60% show-up. Show-up unobserved.</p></div>
+    <div class="pr-card"><div class="n">3 · AIRPORT</div><h3>ARA ₹{ara_leg:.1f} / unpaid night-suburban leg</h3><p>Do not hire. Sample ~₹69–103k / month.</p></div>
+    <div class="pr-card"><div class="n">STOP</div><h3>Kill CAMP_WA_002 5×</h3><p>Clicked vs not ≈ 0 pp. Targeting, not lift.</p></div>
   </div>
-  <div class="pr-warn">Do not bank fos 128–256 / month. Do not add leftover stages into ~180. Do not pay 30% of fare as ARA (₹105 overpays vs ₹35.4).</div>
+  <div class="pr-warn">Do not bank fos 128–256 / month. Do not add leftover stages into ~180. 30% of fare (₹105) overpays vs ₹{ara_leg:.1f}.</div>
+
+  <div class="pr-sec">Funnel waterfall</div>
+  {wf_block}
+
+  <div class="pr-sec">Step logs (click to open)</div>
+  {logs_html}
 </div>
+<script>
+(function () {{
+  const c1aAt1 = {c1a_at_1};
+  const c1b = {c1b};
+  const araLeg = {ara_leg};
+  const araMo = {ara_mo};
+  const show = document.getElementById('show');
+  const ara = document.getElementById('ara');
+  function rupees(x) {{
+    return '₹' + Math.round(x).toLocaleString('en-IN');
+  }}
+  function upd() {{
+    const s = +show.value;
+    const p = +ara.value;
+    const c1a = c1aAt1 * (s / 100);
+    document.getElementById('showLbl').textContent = s + '%';
+    document.getElementById('araLbl').textContent = p + '%';
+    document.getElementById('c1aVal').textContent = c1a.toFixed(1);
+    document.getElementById('combo').textContent = (c1a + c1b).toFixed(0);
+    document.getElementById('payVal').textContent = '₹' + (araLeg * p / 100).toFixed(1);
+    document.getElementById('araMo').textContent = rupees(araMo * p / 100);
+  }}
+  show.addEventListener('input', upd);
+  ara.addEventListener('input', upd);
+}})();
+</script>
 """
-        )
-    )
-
-
-def log_block(title: str, text: str) -> None:
-    safe = (
-        text.replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-    )
-    display(
-        HTML(
-            f'<details class="pr-log"><summary>{title} — click to expand print log</summary>'
-            f"<pre>{safe[-20000:]}</pre></details>"
-        )
-    )
