@@ -1,5 +1,4 @@
 const pptxgen = require("pptxgenjs");
-const fs = require("fs");
 const path = require("path");
 
 const NAVY    = "1E2761";
@@ -19,16 +18,6 @@ const FOOTER_R = "Ramanathan K R   ·   Rapido Data Science Assessment";
 const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE";
 const SW = 13.333, SH = 7.5;
-
-function png(rel) {
-  const buf = fs.readFileSync(path.join(__dirname, rel));
-  return "image/png;base64," + buf.toString("base64");
-}
-
-const SCOOTY  = png("assets/scooty.png");
-const CAB     = png("assets/cab.png");
-const BIKE    = png("assets/bike.png");
-const AUTO    = png("assets/auto.png");
 
 function footer(slide, pageNum) {
   slide.addText(FOOTER_L, {
@@ -195,10 +184,6 @@ function addPieNight(slide, x, y, w, h) {
     x: 0.7, y: 4.9, w: 10, h: 0.3,
     fontFace: "Calibri", fontSize: 12, color: GREY, margin: 0,
   });
-  s.addImage({ data: SCOOTY, x: 0.7, y: 5.55, h: 1.05, w: 1.05 });
-  s.addImage({ data: AUTO, x: 2.0, y: 5.62, h: 0.95, w: 0.95 });
-  s.addImage({ data: CAB, x: 3.25, y: 5.58, h: 1.0, w: 1.0 });
-  s.addImage({ data: BIKE, x: 4.55, y: 5.62, h: 0.95, w: 0.95 });
 }
 
 // ── 1 Headline ────────────────────────────────────────────────────────────
@@ -289,7 +274,7 @@ function addPieNight(slide, x, y, w, h) {
     fontFace: "Cambria", fontSize: 20, bold: true, color: NAVY, margin: 0,
   });
 
-  function fixCard(x, tag, title, img, rows) {
+  function fixCard(x, tag, title, rows) {
     card(s, x, 1.15, 6.1, 5.4);
     s.addShape("roundRect", {
       x: x + 0.25, y: 1.35, w: 1.55, h: 0.34, rectRadius: 0.16,
@@ -299,7 +284,6 @@ function addPieNight(slide, x, y, w, h) {
       x: x + 0.25, y: 1.35, w: 1.55, h: 0.34,
       fontFace: "Calibri", fontSize: 11, bold: true, color: WHITE, align: "center", valign: "middle", margin: 0,
     });
-    s.addImage({ data: img, x: x + 5.15, y: 1.28, h: 0.52, w: 0.52 });
     s.addText(title, {
       x: x + 0.25, y: 1.82, w: 5.55, h: 0.55,
       fontFace: "Cambria", fontSize: 15, bold: true, color: NAVY, margin: 0,
@@ -312,14 +296,14 @@ function addPieNight(slide, x, y, w, h) {
     });
   }
 
-  fixCard(0.5, "C1a  RC", "Provisional RC · 10-day in-person", SCOOTY, [
+  fixCard(0.5, "C1a  RC", "Provisional RC · 10-day in-person", [
     ["Who", "1,637 capture-only · ~300/mo flow"],
     ["Why defer", "Vehicle ID, not passenger liability"],
     ["Maths", "~300 × 60% show-up × 74% pass ≈ 134"],
     ["Risk", "Show-up unobserved. Legal must treat as activation."],
     ["Watch", "If remaining docs bind → ~36/month"],
   ]);
-  fixCard(6.8, "C1b  INS", "Guided capture UX · no deferral", CAB, [
+  fixCard(6.8, "C1b  INS", "Guided capture UX · no deferral", [
     ["Who", "411 capture-only · must clear before a ride"],
     ["Why not", "Liability document — cannot defer"],
     ["Maths", "67→76% pass × 91% approved-if-cleared"],
@@ -415,24 +399,23 @@ function addPieNight(slide, x, y, w, h) {
   });
 
   const rows = [
-    ["1", "C1b camera this week, then C1a RC grace after Legal", "~180/mo", "Legal on C1a; C1b is engineering", SCOOTY],
-    ["2", "ARA ₹35.4 / unpaid night-suburban leg · 4 weeks", "₹69–103k sample", "Do not hire. Not city-core.", CAB],
-    ["3", "Kill CAMP 5×; send/no-send RCT on RC-cleared app/paid", "Cost avoided + 4–6 wks", "Near zero", AUTO],
+    ["1", "C1b camera this week, then C1a RC grace after Legal", "~180/mo", "Legal on C1a; C1b is engineering"],
+    ["2", "ARA ₹35.4 / unpaid night-suburban leg · 4 weeks", "₹69–103k sample", "Do not hire. Not city-core."],
+    ["3", "Kill CAMP 5×; send/no-send RCT on RC-cleared app/paid", "Cost avoided + 4–6 wks", "Near zero"],
   ];
   rows.forEach((r, i) => {
     const y = 1.12 + i * 1.22;
     card(s, 0.5, y, 12.3, 1.12);
-    s.addImage({ data: r[4], x: 0.7, y: y + 0.22, h: 0.7, w: 0.7 });
     s.addShape("ellipse", {
-      x: 1.55, y: y + 0.32, w: 0.42, h: 0.42,
+      x: 0.72, y: y + 0.32, w: 0.42, h: 0.42,
       fill: { color: TEAL }, line: { type: "none" },
     });
     s.addText(r[0], {
-      x: 1.55, y: y + 0.32, w: 0.42, h: 0.42,
+      x: 0.72, y: y + 0.32, w: 0.42, h: 0.42,
       fontFace: "Cambria", fontSize: 14, bold: true, color: WHITE, align: "center", valign: "middle", margin: 0,
     });
     s.addText(r[1], {
-      x: 2.15, y: y + 0.18, w: 5.5, h: 0.78,
+      x: 1.35, y: y + 0.18, w: 6.2, h: 0.78,
       fontFace: "Calibri", fontSize: 13, bold: true, color: NAVY, valign: "middle", margin: 0,
     });
     s.addText(r[2], {
