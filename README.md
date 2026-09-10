@@ -15,9 +15,14 @@ Raw inputs (repo root): `captains.csv`, `doc_events.csv`, `approvals.csv`, `acti
 python3 -m pip install -r requirements.txt
 ```
 
-**Notebook (easiest for a reviewer):** open `Project_R.ipynb` in Jupyter / VS Code / JupyterLab → **Kernel → Run All**. That executes `01_data_audit.py` … `09_deliverables.py` in order from the raw CSVs, then prints the locked headlines and waterfall. Same maths as the scripts (`metrics.py`).
+**Notebook (easiest):** `Project_R.ipynb` → **Run all**. Rapido-yellow dashboard, folded step logs, sliders.
+
+**Google Colab:** open the notebook and **Runtime → Run all**. If the seven CSVs are not next to the file, the first cell clones this GitHub repo (branch `cursor/working-notebook-82ee` until it is on `main`).
+
+[Open in Colab](https://colab.research.google.com/github/KRRamanathan/Project_R/blob/cursor/working-notebook-82ee/Project_R.ipynb)
 
 ```bash
+python3 -m pip install -r requirements.txt
 python3 -m jupyter notebook Project_R.ipynb
 ```
 
