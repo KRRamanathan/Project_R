@@ -125,78 +125,35 @@ function addCampaignChart(slide, x, y, w, h) {
   });
 }
 
-// ── Title ────────────────────────────────────────────────────────────────
+// ── 1 Ask (title lives here so the deck is 6 slides) ────────────────────
 {
   const s = pres.addSlide();
   s.background = { color: PAPER };
-  s.addShape("ellipse", { x: 9.6, y: -2.4, w: 6.4, h: 6.4, fill: { color: PEACH }, line: { type: "none" } });
-  s.addShape("ellipse", { x: -2.6, y: 4.6, w: 5.2, h: 5.2, fill: { color: CREAM }, line: { type: "none" } });
-  s.addShape("ellipse", { x: 10.4, y: 4.9, w: 3.4, h: 3.4, fill: { color: YELLOW }, line: { type: "none" } });
+  kicker(s, "Rapido  ·  Ramanathan K R  ·  extract 30 Jun 2026, 23:59 IST");
+  s.addImage({ data: AUTO, x: 12.05, y: 0.18, w: 0.95, h: 0.95 });
 
-  s.addText("RAPIDO DATA SCIENCE ASSESSMENT", {
-    x: 0.75, y: 1.15, w: 9.5, h: 0.36,
-    fontFace: "Calibri", fontSize: 14, bold: true,
-    color: GOLD, charSpacing: 2.2, isTextBox: true, margin: 0,
-  });
-  s.addText("Captain onboarding leak\n& overnight airport supply", {
-    x: 0.7, y: 1.58, w: 8.8, h: 1.7,
-    fontFace: "Cambria", fontSize: 34, bold: true, color: INK,
-    align: "left", lineSpacingMultiple: 1.12, isTextBox: true, margin: 0,
-  });
-  s.addText("Where the extra ~180 approved captains a month come from, and why overnight airport supply is an economics problem, not a headcount one.", {
-    x: 0.75, y: 3.42, w: 8.4, h: 0.9,
-    fontFace: "Calibri", fontSize: 16, color: MUTED,
-    align: "left", lineSpacingMultiple: 1.28, isTextBox: true, margin: 0,
-  });
-  s.addShape("line", { x: 0.75, y: 4.48, w: 2.6, h: 0, line: { color: ORANGE, width: 2.5 } });
-  s.addText("Ramanathan K R", {
-    x: 0.75, y: 4.66, w: 7, h: 0.42,
+  s.addText("Ship Insurance capture this week (~50/mo). Do not 5× WhatsApp. Do not hire the airport.", {
+    x: 0.6, y: 0.64, w: 11.3, h: 0.78,
     fontFace: "Cambria", fontSize: 22, bold: true, color: INK, isTextBox: true, margin: 0,
   });
-  s.addText("10 September 2026  ·  Data extract as of 30 Jun 2026, 23:59 IST", {
-    x: 0.75, y: 5.12, w: 8.5, h: 0.32,
+  s.addText("The number I will put my name on this week is ~50 extra approved / month (C1b, no Legal). RC grace is ~134/mo only if Legal treats deferred RC as activation — otherwise ~36. 98.7% of mature approved already take a first trip (3,895 / 3,946): documents, not first-order.", {
+    x: 0.6, y: 1.42, w: 12.1, h: 0.7,
     fontFace: "Calibri", fontSize: 14, color: MUTED, isTextBox: true, margin: 0,
   });
 
-  s.addShape("roundRect", {
-    x: 9.35, y: 3.42, w: 3.5, h: 3.4, rectRadius: 0.16,
-    fill: { color: PEACH }, line: { type: "none" },
+  card(s, 0.55, 2.18, 7.55, 4.32, WHITE);
+  s.addText("If Legal says yes, C1a + C1b (disjoint) — not an unconditional bank", {
+    x: 0.75, y: 2.26, w: 7.15, h: 0.36,
+    fontFace: "Calibri", fontSize: 13, bold: true, color: INK, isTextBox: true, margin: 0,
   });
-  s.addImage({ data: AUTO,   x: 9.5, y: 3.52, w: 1.55, h: 1.55 });
-  s.addImage({ data: CAB,    x: 11.1, y: 3.52, w: 1.55, h: 1.55 });
-  s.addImage({ data: SCOOTY, x: 9.5, y: 5.15, w: 1.55, h: 1.55 });
-  s.addImage({ data: BIKE,   x: 11.1, y: 5.15, w: 1.55, h: 1.55 });
-}
+  s.addImage({ data: PIE180, x: 0.75, y: 2.58, w: 7.15, h: 3.75 });
 
-// ── 1 Headline ──────────────────────────────────────────────────────────
-{
-  const s = pres.addSlide();
-  s.background = { color: PAPER };
-  kicker(s, "Captain onboarding — the headline");
-  s.addImage({ data: AUTO, x: 12.05, y: 0.18, w: 0.95, h: 0.95 });
-
-  s.addText("One broken capture step costs ~180 captains/month.", {
-    x: 0.6, y: 0.68, w: 11.2, h: 0.7,
-    fontFace: "Cambria", fontSize: 26, bold: true, color: INK, isTextBox: true, margin: 0,
-  });
-  s.addText("Two capture-quality fixes on RC and Insurance — not a mix of five things — recover ~180 additional approved captains/month at medium confidence.", {
-    x: 0.6, y: 1.4, w: 12.1, h: 0.55,
-    fontFace: "Calibri", fontSize: 15, color: MUTED, isTextBox: true, margin: 0,
-  });
-
-  card(s, 0.55, 2.1, 7.55, 4.4, WHITE);
-  s.addText("Split of the ~180  (disjoint C1a + C1b)", {
-    x: 0.75, y: 2.2, w: 7.15, h: 0.34,
-    fontFace: "Calibri", fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0,
-  });
-  s.addImage({ data: PIE180, x: 0.75, y: 2.52, w: 7.15, h: 3.8 });
-
-  statCard(s, 8.3, 2.1, 4.45, 1.38, "98.7%", "of mature approved captains take a first trip (3,895 / 3,946). Documents are the bottleneck.");
-  statCard(s, 8.3, 3.6, 4.45, 1.38, "~134 / mo", "Recovered from an RC in-person grace window (C1a).");
-  statCard(s, 8.3, 5.1, 4.45, 1.38, "~50 / mo", "Recovered from Insurance guided capture UX (C1b).");
+  statCard(s, 8.3, 2.18, 4.45, 1.38, "~50 / mo", "C1b Insurance UX. Ship this week. Engineering only. This is the unconditional number.");
+  statCard(s, 8.3, 3.68, 4.45, 1.38, "~134 / ~36", "C1a RC grace at 60% show-up if Legal yes. If remaining docs still bind: ~36.");
+  statCard(s, 8.3, 5.18, 4.45, 1.32, "0 pp", "CAMP_WA_002 honest contrast (clicked vs not). Do not fund 5×.");
 
   footer(s, 1);
-  s.addNotes("Talk track: ~180, medium confidence (~134 RC + ~50 Insurance). 98.7% take a first trip.");
+  s.addNotes("Lead with C1b ~50. C1a is a Legal scenario. Campaign 0 pp. 98.7% R2A.");
 }
 
 // ── 2 Root cause ─────────────────────────────────────────────────────────
@@ -245,9 +202,9 @@ function addCampaignChart(slide, x, y, w, h) {
   kicker(s, "The fix");
   s.addImage({ data: SCOOTY, x: 12.05, y: 0.18, w: 0.95, h: 0.95 });
 
-  s.addText("One recommendation, two sub-actions — RC defers, Insurance doesn’t", {
+  s.addText("C1b ships this week. C1a is a Legal decision, not a bank.", {
     x: 0.6, y: 0.68, w: 11.3, h: 0.58,
-    fontFace: "Cambria", fontSize: 24, bold: true, color: INK, isTextBox: true, margin: 0,
+    fontFace: "Cambria", fontSize: 22, bold: true, color: INK, isTextBox: true, margin: 0,
   });
 
   function fixCard(x, tag, title, rows, note) {
@@ -287,21 +244,21 @@ function addCampaignChart(slide, x, y, w, h) {
     });
   }
 
-  fixCard(0.5, "C1a — RC", "Provisional activation · 10-day in-person grace", [
-    ["Who", "1,637 RC capture-only fails (~300/mo)"],
-    ["Why", "Vehicle identity — no passenger-liability exposure"],
-    ["Show-up", "40 / 60 / 80% × 74–78% pass rate"],
-    ["Central", "~134/month additional approved"],
-    ["Needs", "Legal + Trust & Safety sign-off on deferral"],
-  ], "If remaining docs still bind: ~36/month (Legal ask).");
-
-  fixCard(6.78, "C1b — Insurance", "Guided capture UX — no deferral possible", [
+  fixCard(0.5, "C1b — ship now", "Guided Insurance capture UX — no deferral", [
     ["Who", "411 Insurance capture-only fails (~75/mo)"],
-    ["Why not", "Liability document — must clear before first ride"],
+    ["Why not defer", "Liability document — must clear before first ride"],
     ["Retry", "67.4% → 73.8% → 76.4% pass on own retry"],
-    ["Central", "~46–52/month additional approved"],
-    ["Needs", "Engineering UX only — no sign-off required"],
-  ], "Ship C1b this week. Start Legal on C1a in parallel.");
+    ["Bank", "~46–52/month additional approved"],
+    ["Needs", "Engineering UX only — no Legal sign-off"],
+  ], "This is the number I would put in a deck with my name on it this week.");
+
+  fixCard(6.78, "C1a — if Legal", "Provisional RC · 10-day in-person grace", [
+    ["Who", "1,637 RC capture-only fails (~300/mo)"],
+    ["Why defer", "Vehicle identity — no passenger-liability exposure"],
+    ["Show-up", "Unobserved. 40 / 60 / 80% × 74–78% pass"],
+    ["If Legal yes", "~134/month at 60% show-up"],
+    ["If docs still bind", "~36/month (27% approved | passed RC)"],
+  ], "Do not add C1a to ~50 until Legal/T&S treat deferred RC as activation.");
 
   footer(s, 3);
 }
@@ -313,38 +270,44 @@ function addCampaignChart(slide, x, y, w, h) {
   kicker(s, "Airport supply");
   s.addImage({ data: BIKE, x: 12.05, y: 0.18, w: 0.95, h: 0.95 });
 
-  s.addText("Overnight airport is compounding economics, not a headcount problem", {
-    x: 0.6, y: 0.68, w: 11.3, h: 0.62,
+  s.addText("Do not hire the catchment. After the trip, the night still loses money.", {
+    x: 0.6, y: 0.66, w: 11.3, h: 0.5,
     fontFace: "Cambria", fontSize: 22, bold: true, color: INK, isTextBox: true, margin: 0,
   });
 
-  card(s, 0.55, 1.42, 6.0, 3.55, WHITE);
-  s.addText("When the pain sits (unfulfilled volume)", {
-    x: 0.75, y: 1.5, w: 5.6, h: 0.32,
+  card(s, 0.55, 1.22, 6.0, 3.22, WHITE);
+  s.addText("B1 — when the pain sits", {
+    x: 0.75, y: 1.28, w: 5.6, h: 0.28,
     fontFace: "Calibri", fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0,
   });
-  s.addImage({ data: PIEAIR, x: 0.7, y: 1.82, w: 5.7, h: 3.05 });
+  s.addImage({ data: PIEAIR, x: 0.7, y: 1.54, w: 5.7, h: 2.8 });
 
-  card(s, 6.75, 1.42, 6.05, 3.55, WHITE);
-  s.addText("ARA monthly payout (₹k/month) at ₹35.4/leg", {
-    x: 6.95, y: 1.5, w: 5.7, h: 0.32,
+  card(s, 6.75, 1.22, 6.05, 3.22, WHITE);
+  s.addText("B3 — price the deadhead (₹k/mo at ₹35.4/leg)", {
+    x: 6.95, y: 1.28, w: 5.7, h: 0.28,
     fontFace: "Calibri", fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0,
   });
-  addARAChart(s, 6.85, 1.82, 5.8, 3.05);
+  addARAChart(s, 6.85, 1.54, 5.8, 2.8);
+
+  card(s, 0.55, 4.52, 12.25, 0.7, YELLOW);
+  s.addText("B2 — after the trip: suburban backhaul and overnight return-in-20min collapse compound. Mix does not shift after dark (χ² p=0.12). New hires inherit both penalties. Not 30% of fare (₹105).", {
+    x: 0.72, y: 4.52, w: 11.9, h: 0.7,
+    fontFace: "Calibri", fontSize: 14, color: INK, valign: "middle", isTextBox: true, margin: 0,
+  });
 
   [
-    ["40%", "Airport demand unfulfilled vs ~3% elsewhere"],
-    ["84%", "Of the night gap sits in 21:00–03:59 — ~13 captains vs ~37 by day"],
-    ["₹35.4", "Per eligible leg — derived ARA. Not 30% of fare (₹105)."],
+    ["40%", "Unfulfilled at terminals vs ~3% elsewhere"],
+    ["84%", "Of that gap is 21:00–03:59 — ~13 captains vs ~37 by day"],
+    ["₹35.4", "Per eligible night-suburban leg. 4-week pilot; hire only if run-rate falls."],
   ].forEach(([n, d], i) => {
     const sx = 0.55 + i * 4.1;
-    card(s, sx, 5.1, 3.95, 1.4, i === 1 ? YELLOW : PEACH);
+    card(s, sx, 5.3, 3.95, 1.18, i === 1 ? YELLOW : PEACH);
     s.addText(n, {
-      x: sx + 0.18, y: 5.18, w: 3.6, h: 0.5,
-      fontFace: "Cambria", fontSize: 26, bold: true, color: INK, isTextBox: true, margin: 0,
+      x: sx + 0.18, y: 5.34, w: 3.6, h: 0.42,
+      fontFace: "Cambria", fontSize: 24, bold: true, color: INK, isTextBox: true, margin: 0,
     });
     s.addText(d, {
-      x: sx + 0.18, y: 5.68, w: 3.6, h: 0.72,
+      x: sx + 0.18, y: 5.76, w: 3.6, h: 0.64,
       fontFace: "Calibri", fontSize: 13, color: MUTED, isTextBox: true, margin: 0,
     });
   });
@@ -418,9 +381,9 @@ function addCampaignChart(slide, x, y, w, h) {
   kicker(s, "Recommendations & decision points");
   s.addImage({ data: CAB, x: 12.05, y: 0.18, w: 0.95, h: 0.95 });
 
-  s.addText("Ranked by monthly impact. The campaign call is the fastest yes.", {
+  s.addText("Ranked by what can start Monday. C1a is not in the unconditional bank.", {
     x: 0.6, y: 0.68, w: 11.3, h: 0.5,
-    fontFace: "Cambria", fontSize: 24, bold: true, color: INK, isTextBox: true, margin: 0,
+    fontFace: "Cambria", fontSize: 22, bold: true, color: INK, isTextBox: true, margin: 0,
   });
 
   [["Action", 2.15, 4.3], ["Monthly impact", 6.55, 2.45], ["Cost / risk", 9.1, 3.4]].forEach(([t, x, w]) => {
@@ -434,20 +397,20 @@ function addCampaignChart(slide, x, y, w, h) {
   const rows = [
     {
       num: "1",
-      what: "C1a: 10-day RC in-person grace\nC1b: Insurance upload UX (ship this week)",
-      impact: "~180/mo approved",
-      risk: "C1a: Legal + T&S. C1b: engineering only.",
+      what: "C1b Insurance capture UX — ship this week\nThen Legal scoping on C1a RC grace (do not bank 134 yet)",
+      impact: "~50/mo now\n(+134 only if Legal)",
+      risk: "C1b: engineering. C1a: Legal/T&S. Show-up unobserved.",
     },
     {
       num: "2",
-      what: "Airport Return Assurance at ₹35.4/leg\n(derived payout — not 30% of fare)",
+      what: "Airport Return Assurance at ₹35.4/leg\nDo not hire. After-trip mix does not shift (p=0.12).",
       impact: "₹69k–103k/mo sample",
       risk: "Sampled trips ≠ city P&L. Rest-suburban only.",
     },
     {
       num: "3",
-      what: "Stop CAMP_WA_002 5× scaling. Send/no-send RCT on RC-cleared self-serve captains.",
-      impact: "Cost avoided + 4–6 week answer",
+      what: "Stop CAMP_WA_002 5×. Send/no-send RCT on RC-cleared self-serve captains.",
+      impact: "0 pp  ·  cost avoided",
       risk: "Near zero — a redirection, not new spend.",
     },
   ];
@@ -482,7 +445,7 @@ function addCampaignChart(slide, x, y, w, h) {
   });
 
   card(s, 0.55, 5.42, 12.25, 1.12, YELLOW);
-  s.addText("Ask of the room   (1) Ship Insurance capture UX — no need to wait.   (2) Legal scoping on RC deferral, this week.   (3) Kill the 5× WhatsApp paper; stand up the RCT.   (4) Four-week ARA pilot at the derived ₹35.4, not 30% of fare.", {
+  s.addText("Ask of the room   (1) Ship Insurance capture UX this week — the ~50.   (2) Legal: is deferred RC activation? If no, C1a is ~36 not ~134.   (3) Kill 5× WhatsApp; stand up the RCT.   (4) Four-week ARA at ₹35.4, not 30% of fare.", {
     x: 0.75, y: 5.42, w: 11.85, h: 1.12,
     fontFace: "Calibri", fontSize: 14, color: INK, valign: "middle", isTextBox: true, margin: 0,
   });

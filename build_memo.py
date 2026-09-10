@@ -105,16 +105,17 @@ def build_memo() -> Path:
 
     h = doc.add_paragraph()
     _tight(h, 8)
-    r = h.add_run("~180 more approved captains a month — two photo fixes, not five programmes")
-    _run(r, 18, True, INK, "Cambria")
+    r = h.add_run("Ship ~50 extra approved captains this week. Do not bank ~180.")
+    _run(r, 17, True, INK, "Cambria")
 
     _para(
         doc,
-        "Bank only two disjoint capture fixes: ~134/month from a 10-day in-person RC grace (C1a) and "
-        "~50 from Insurance upload UX (C1b). 98.7% of mature approved captains already take a first trip "
-        "(3,895 / 3,946) — documents are the bottleneck, not first-order. Show-up for RC is unobserved; "
-        "if Legal will not treat deferred RC as activation, C1a shrinks toward ~36/month. The campaign "
-        "number I would put my name on is 0 pp, not 5×.",
+        "The number I will put my name on this week is ~46–52 extra approved / month from Insurance "
+        "capture UX (C1b). It needs engineering, not Legal. A 10-day RC grace (C1a) is ~134/month only "
+        "if Legal treats deferred RC as activation and captains show up — show-up is unobserved. If remaining "
+        "docs still bind after RC, that path is ~36/month. 98.7% of mature approved already take a first trip "
+        "(3,895 / 3,946) — documents are the bottleneck, not first-order. CAMP_WA_002 is 0 pp, not 5×. "
+        "Airport: do not hire; price the night at ₹35.4 / unpaid suburban leg.",
         11.5,
         False,
         INK,
@@ -132,7 +133,7 @@ def build_memo() -> Path:
     cap = doc.add_paragraph()
     cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
     _tight(cap, 8)
-    r = cap.add_run("Left: bank C1a + C1b only. Right: 84% of airport unfulfilled volume is 21:00–03:59.")
+    r = cap.add_run("Left: C1a vs C1b if Legal says yes — not this week’s bank. Right: 84% of airport unfulfilled is 21:00–03:59.")
     _run(r, 10.5, False, MUTED)
 
     _bar(doc, "PAGE 1  ·  WHAT TO DO THIS WEEK", ORANGE, INK, 12)
@@ -144,9 +145,9 @@ def build_memo() -> Path:
     data = [
         [
             "1",
-            "C1b Insurance camera this week (411). Then C1a 10-day RC grace after Legal (1,637). Same camera on other docs: free rider, not in 180.",
-            "~180/mo (~50 + ~134)",
-            "C1b: engineering. C1a: Legal/T&S + ~1 FTE ₹40–60k (assumed).",
+            "C1b Insurance camera this week (411). Same camera on other docs: measure, not in the bank. Legal scoping on C1a RC grace (1,637) in parallel — do not add ~134 until they say yes.",
+            "~50/mo now. +~134 only if Legal; else ~36.",
+            "C1b: engineering. C1a: Legal/T&S. Show-up unobserved. FTE ₹40–60k assumed.",
             "Approved by cohort",
         ],
         [
@@ -217,12 +218,12 @@ def build_memo() -> Path:
 
     _para(
         doc,
-        "The deck shows the leaks. This page is the bound: what is C1a vs leftover, how ₹35.4 is derived, "
-        "and which piles I refuse to add to 180. RC loses 5,405 people — largest stage — but only 1,637 "
-        "failed solely on blur / OCR / illegible. Insurance loses 3,289; ~2,530 never uploaded after Fitness. "
-        "C1b is the 411 photo fails and cannot defer (liability). DL (1,166) is 100% uploaded-fail and "
-        "cannot be deferred. Aadhaar / Permit / Fitness (1,540 / 2,616 / 2,653) are mostly never-upload or "
-        "eligibility. Rejected 409 already cleared docs — a gate.",
+        "The deck shows the leaks. This page is the bound: C1b is unconditional; C1a is a Legal scenario; "
+        "₹35.4 is derived; these piles are not added to ~50. RC loses 5,405 — only 1,637 failed solely on "
+        "blur / OCR / illegible. Insurance loses 3,289; ~2,530 never uploaded after Fitness. C1b is the 411 "
+        "photo fails and cannot defer (liability). DL (1,166) is 100% uploaded-fail and cannot be deferred. "
+        "Aadhaar / Permit / Fitness (1,540 / 2,616 / 2,653) are mostly never-upload or eligibility. Rejected 409 "
+        "already cleared docs — a gate.",
         11,
         False,
         INK,
@@ -253,15 +254,15 @@ def build_memo() -> Path:
     maths = doc.add_table(rows=3, cols=4)
     maths.style = "Table Grid"
     maths.alignment = WD_TABLE_ALIGNMENT.CENTER
-    for i, htxt in enumerate(["Fix", "Flow", "Maths", "Bank"]):
+    for i, htxt in enumerate(["Fix", "Flow", "Maths", "What I bank"]):
         cell = maths.rows[0].cells[i]
         _shade(cell, YELLOW)
         r = cell.paragraphs[0].add_run(htxt)
         _run(r, 11, True, INK)
         _tight(cell.paragraphs[0], 3, 3)
     rows_m = [
-        ["C1a RC grace", "~300/mo capture-only", "× 60% show-up × 74% pass", "~134/mo"],
-        ["C1b Insurance UX", "411 capture-only", "67→76% × 91% approved-if-cleared", "~46–52/mo"],
+        ["C1b Insurance UX", "411 capture-only", "67→76% × 91% approved-if-cleared", "~50/mo — yes"],
+        ["C1a RC grace", "~300/mo capture-only", "× 60% show-up × 74% pass", "~134 if Legal; ~36 if not"],
     ]
     for ri, row in enumerate(rows_m):
         for ci, val in enumerate(row):
@@ -275,7 +276,7 @@ def build_memo() -> Path:
 
     _para(
         doc,
-        "40–80% show-up → ~89–188. If remaining docs still bind after RC, P(approved | passed RC)=27% → ~36/month (Legal ask).",
+        "40–80% show-up → C1a ~89–188. I would not put 180 in a deck with my name on it until Legal answers.",
         11,
         False,
         INK,
@@ -291,9 +292,9 @@ def build_memo() -> Path:
         ("ASSUMPTIONS / WHAT WOULD CHANGE IT", PEACH),
     ]
     bodies = [
-        "Other-doc camera after C1b: measure, not +180. Never-upload RC ~2,388 / Insurance ~2,530: assist RCT, not WhatsApp (CAMP 0 pp). Overlaps 726 C1a. Paid never-starts 11.5% vs fos ~1% — no CAC, not sized.",
+        "Other-doc camera after C1b: measure, not +50. Never-upload RC ~2,388 / Insurance ~2,530: assist RCT, not WhatsApp (CAMP 0 pp). Overlaps 726 C1a. Paid never-starts 11.5% vs fos ~1% — no CAC, not sized.",
         "Gap ₹31.6 (₹24.9 vs ₹56.5) ÷ 0.8931 eligible ≈ ₹35.4/leg. 80/100/120% → ~₹69–103k sample. ₹105 (30% of fare) overpays. City-core ₹104.7 is geography.",
-        "~15.6-day cutoff (later capture-fails → 180 is a floor). doc_events, not docs_cleared. Field gap not banked. Re-derive ₹35.4 if night returns rise. C1a FTE ₹40–60k assumed. No CAC. Trips sampled. signup_zone_id ≠ airport zones. Capture-only counted on RC/Insurance only.",
+        "~15.6-day cutoff (eligible pool is a floor, not a bank). doc_events, not docs_cleared. Field gap not banked. C1a 60% show-up unobserved — if Legal says no, bank C1b only. Re-derive ₹35.4 if night returns rise. C1a FTE ₹40–60k assumed. No CAC. Trips sampled. signup_zone_id ≠ airport zones.",
     ]
     for i, (htxt, fill) in enumerate(heads):
         cell = close.rows[0].cells[i]
