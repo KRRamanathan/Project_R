@@ -45,7 +45,7 @@ Individual scripts (each re-derives from CSVs; none reads another script’s con
 
 Shared maths live in `metrics.py` so Step 8, the regression check, and the Streamlit app cannot drift.
 
-Optional: run `streamlit run sensitivity_explorer.py` to explore the two assumption-dependent numbers live.
+Optional: `python3 -m streamlit run sensitivity_explorer.py` — Airport (hourly mismatch locked; ARA 80/100/120% of ₹35.4) then Onboarding (C1a show-up).
 
 ## Data-quality decisions (carried through every step)
 
