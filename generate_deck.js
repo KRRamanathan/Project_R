@@ -23,7 +23,10 @@ const PIE180 = png("figures/pie_c1.png");
 const PIEAIR = png("figures/pie_airport_night.png");
 const PIERC  = png("figures/pie_rc_capture.png");
 const PIEC1B = png("figures/pie_c1b.png");
-const BARVL  = png("figures/bar_volume_lost.png");
+const ICRC   = png("figures/icon_rc.png");
+const ICINS  = png("figures/icon_ins.png");
+const ICAIR  = png("figures/icon_air.png");
+const ICWA   = png("figures/icon_wa.png");
 
 const FOOTER_L = "Rapido Supply  ·  Captain Onboarding & Airport Supply";
 const FOOTER_R = "Ramanathan K R   ·   Rapido Data Science Assessment";
@@ -257,8 +260,11 @@ function addARAChart(slide, x, y, w, h) {
     fontFace: "Calibri", fontSize: 11, color: GREY, isTextBox: true, margin: 0
   });
 
-  const iconY = 5.78, iconSz = 1.1;
-
+  const iconY = 5.78, iconSz = 0.72;
+  s.addImage({ data: ICRC,  x: 0.9,  y: iconY, h: iconSz, w: iconSz });
+  s.addImage({ data: ICINS, x: 1.85, y: iconY, h: iconSz, w: iconSz });
+  s.addImage({ data: ICAIR, x: 2.8,  y: iconY, h: iconSz, w: iconSz });
+  s.addImage({ data: ICWA,  x: 3.75, y: iconY, h: iconSz, w: iconSz });
   s.addText("25k signups  ·  RC  ·  Insurance  ·  Airport nights", {
     x: 8.3, y: iconY + 0.38, w: 4.5, h: 0.45,
     fontFace: "Calibri", fontSize: 10.5, italic: true, color: GREY,
@@ -356,7 +362,7 @@ function addARAChart(slide, x, y, w, h) {
     fontFace: "Cambria", fontSize: 22, bold: true, color: NAVY, isTextBox: true, margin: 0
   });
 
-  function fixCard(x, tag, tagColor, title, rows, footerNote) {
+  function fixCard(x, tag, tagColor, title, img, rows, footerNote) {
     s.addShape("roundRect", { x, y: 1.48, w: 6.0, h: 5.25,
       rectRadius: 0.1, fill: { color: WHITE }, line: { color: BORDER, width: 1 } });
 
@@ -365,6 +371,7 @@ function addARAChart(slide, x, y, w, h) {
     s.addText(tag, { x: x + 0.3, y: 1.7, w: 1.6, h: 0.38,
       fontFace: "Calibri", fontSize: 11.5, bold: true,
       color: tagColor, align: "center", valign: "middle", isTextBox: true, margin: 0 });
+    s.addImage({ data: img, x: x + 5.15, y: 1.58, h: 0.52, w: 0.52 });
 
     s.addText(title, { x: x + 0.3, y: 2.18, w: 5.45, h: 0.55,
       fontFace: "Cambria", fontSize: 14.5, bold: true, color: NAVY,
@@ -389,7 +396,7 @@ function addARAChart(slide, x, y, w, h) {
     }
   }
 
-  fixCard(0.55, "C1a — RC", YELLOW, "Provisional activation\n10-day in-person grace window", [
+  fixCard(0.55, "C1a — RC", YELLOW, "Provisional activation\n10-day in-person grace window", ICRC, [
     ["Who",          "1,637 RC capture-only fails (~300/mo)"],
     ["Why defer",    "Vehicle identity — no passenger-liability exposure"],
     ["Show-up",      "40 / 60 / 80% × 74–78% pass rate"],
@@ -397,7 +404,7 @@ function addARAChart(slide, x, y, w, h) {
     ["Needs",        "Legal + Trust & Safety sign-off on deferral"]
   ], "If remaining docs still bind: P(approved | passed RC) = 27% → ~36/month (Legal ask)");
 
-  fixCard(6.78, "C1b — Insurance", GREEN, "Guided capture UX\n— no deferral possible", [
+  fixCard(6.78, "C1b — Insurance", GREEN, "Guided capture UX\n— no deferral possible", ICINS, [
     ["Who",          "411 Insurance capture-only fails (~75/mo)"],
     ["Why no defer", "Liability document — must clear before first ride"],
     ["Retry rates",  "67.4% → 73.8% → 76.4% pass on own retry"],
@@ -534,21 +541,21 @@ function addARAChart(slide, x, y, w, h) {
 
   const rows = [
     {
-      num: "1", color: CORAL,
+      num: "1", color: CORAL, img: ICRC,
       what: "C1a: 10-day RC in-person grace window\nC1b: Insurance upload UX (ship this week)",
       impact: "~180/mo approved",
       risk: "C1a: Legal + T&S sign-off\nC1b: engineering only, no sign-off",
       watch: "Approved split by cohort"
     },
     {
-      num: "2", color: YELLOW,
+      num: "2", color: YELLOW, img: ICAIR,
       what: "Airport Return Assurance at ₹35.4/leg (derived payout — not 30% of fare)",
       impact: "₹69k–103k/mo payout; night gap closed",
       risk: "Sampled trips ≠ city P&L. Rest-suburban only.",
       watch: "Return-in-20min, cancel rate, 4-wk payout run-rate"
     },
     {
-      num: "3", color: GREEN,
+      num: "3", color: GREEN, img: ICWA,
       what: "Stop CAMP_WA_002 5× scaling; run send/no-send RCT on RC-cleared self-serve captains",
       impact: "Cost avoided + causal answer in 4–6 weeks",
       risk: "Near zero — a redirection, not new spend",
@@ -558,15 +565,16 @@ function addARAChart(slide, x, y, w, h) {
 
   let ry = 1.52;
   const rh = 1.2;
-  rows.forEach(({ num, color, what, impact, risk, watch }) => {
+  rows.forEach(({ num, color, img, what, impact, risk, watch }) => {
     s.addShape("roundRect", { x: 0.55, y: ry, w: 12.25, h: rh - 0.12,
       rectRadius: 0.08, fill: { color: NAVY }, line: { type: "none" } });
-    s.addShape("ellipse", { x: 0.75, y: ry + 0.32, w: 0.42, h: 0.42,
+    s.addImage({ data: img, x: 0.68, y: ry + 0.22, h: 0.62, w: 0.62 });
+    s.addShape("ellipse", { x: 1.42, y: ry + 0.32, w: 0.42, h: 0.42,
       fill: { color: color }, line: { type: "none" } });
-    s.addText(num, { x: 0.75, y: ry + 0.32, w: 0.42, h: 0.42,
+    s.addText(num, { x: 1.42, y: ry + 0.32, w: 0.42, h: 0.42,
       fontFace: "Cambria", fontSize: 15, bold: true,
       color: WHITE, align: "center", valign: "middle", isTextBox: true, margin: 0 });
-    s.addText(what, { x: 1.4, y: ry + 0.06, w: 5.05, h: rh - 0.2,
+    s.addText(what, { x: 2.0, y: ry + 0.06, w: 4.45, h: rh - 0.2,
       fontFace: "Calibri", fontSize: 10.8, bold: true,
       color: WHITE, valign: "middle", lineSpacingMultiple: 1.1, isTextBox: true, margin: 0 });
     s.addText(impact, { x: 6.6, y: ry + 0.06, w: 2.35, h: rh - 0.2,
