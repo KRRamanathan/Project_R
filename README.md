@@ -3,30 +3,50 @@
 Captain onboarding (A2O) and overnight airport supply.  
 Extract clock: **2026-06-30 23:59 IST** (naive timestamps; we do not invent a timezone offset).
 
-**Submit:** `MEMO.docx` (or `MEMO.md`), `DECK.pptx`, and this repo.
+**Submit:** `MEMO.docx` (or `MEMO.md`), `DECK.pptx`, and this repo (working = notebook and/or scripts).
 
-## Setup
+## How to run
 
-- **Python:** 3.10 or newer (developed on 3.12).
-- **Install:**
+Raw inputs (repo root): `captains.csv`, `doc_events.csv`, `approvals.csv`, `activation.csv`, `nudges.csv`, `airport_hourly.csv`, `airport_trips.csv`.
+
+**Python:** 3.10+ (developed on 3.12).
 
 ```bash
 python3 -m pip install -r requirements.txt
 ```
 
-`requirements.txt`: pandas, numpy, scipy, statsmodels, matplotlib, python-docx, python-pptx, streamlit.
+## The website (not GitHub, not Colab cell crumbs)
 
-Raw inputs (must be in the repo root): `captains.csv`, `doc_events.csv`, `approvals.csv`, `activation.csv`, `nudges.csv`, `airport_hourly.csv`, `airport_trips.csv`.
+GitHub is the code. Colab cells are not a website. Open this file in a browser:
 
-## Run order
+**https://raw.githack.com/KRRamanathan/Project_R/main/dashboard.html**
 
-From a clean clone, one command:
+Yellow cards move with the sliders. C1b, 18.8% approved, and airport % stay put on purpose. `htmlpreview.github.io` often blocks the slider script — use the link above, or open `dashboard.html` from a clone.
+
+Same page as `dashboard.html` in the repo (double-click after clone). Streamlit is optional: `python3 -m streamlit run sensitivity_explorer.py` → `http://localhost:8501`.
+
+**Notebook (easiest):** `Project_R.ipynb` → **Run all**. Colab shows **one page** in the last cell (scroll to it). Do not look at the install text above it as the product.
+
+If Colab still shows `# ── 1. Theme` / giant cartoons / `_panel`: that is the **old** notebook. Runtime → **Disconnect and delete runtime**, then open:
+
+https://colab.research.google.com/github/KRRamanathan/Project_R/blob/main/Project_R.ipynb
+
+**Google Colab:** open the notebook and **Runtime → Run all**. If the seven CSVs are not next to the file, the first cell clones `main`.
+
+[Open in Colab](https://colab.research.google.com/github/KRRamanathan/Project_R/blob/main/Project_R.ipynb)
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 -m jupyter notebook Project_R.ipynb
+```
+
+**Scripts (same working, log files on disk):**
 
 ```bash
 ./run_all.sh
 ```
 
-That runs `01_data_audit.py` → `09_deliverables.py` in order, tees every print to `0N_*_output.txt`, writes `MEMO.docx`, `DECK.pptx`, `figures/funnel_waterfall.png`, then **fails the build** if headline numbers moved.
+That tees every print to `0N_*_output.txt`, writes `MEMO.docx`, `DECK.pptx`, `figures/funnel_waterfall.png`, then **fails the build** if headline numbers moved.
 
 Individual scripts (each re-derives from CSVs; none reads another script’s console):
 
@@ -45,7 +65,7 @@ Individual scripts (each re-derives from CSVs; none reads another script’s con
 
 Shared maths live in `metrics.py` so Step 8, the regression check, and the Streamlit app cannot drift.
 
-Optional: `python3 -m streamlit run sensitivity_explorer.py` — Airport (hourly mismatch locked; ARA 80/100/120% of ₹35.4) then Onboarding (C1a show-up).
+Optional sliders (not required): `python3 -m streamlit run sensitivity_explorer.py` — Airport (hourly mismatch locked; ARA 80/100/120% of ₹35.4) then Onboarding (C1a show-up).
 
 ## Data-quality decisions (carried through every step)
 
@@ -67,7 +87,7 @@ Optional: `python3 -m streamlit run sensitivity_explorer.py` — Airport (hourly
 
 | Brief | Question | Go here |
 |---|---|---|
-| **A1** | Build the signup→approved funnel | `02_funnel.py` / `02_funnel_output.txt` — empirical mature cut, stage rates vs signup, volume lost. Waterfall: `figures/funnel_waterfall.png`. |
+| **A1** | Build the signup→approved funnel | `Project_R.ipynb` (Run All) / `02_funnel.py` — empirical mature cut, stage rates vs signup, volume lost. Waterfall: `figures/funnel_waterfall.png`. |
 | **A2** | Biggest fixable leak, sized /month | `03`–`04`–`08`: C1a/C1b only. Other stages: leftover queue in `MEMO.md` p.2 (reuse UX; never-upload = assist RCT, not WhatsApp). |
 | **A3** | CAMP_WA_002 5× claim | `05_campaign.py` / `05_campaign_output.txt` §4 — clicked vs not **0 pp**; naive recipient gap is targeting. Deck slide 5. |
 | **A4** | Three ranked recommendations | `MEMO.docx` page 1 table; `DECK.pptx` slide 6; working in `08` + `09`. |
