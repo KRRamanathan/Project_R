@@ -15,9 +15,19 @@ Raw inputs (repo root): `captains.csv`, `doc_events.csv`, `approvals.csv`, `acti
 python3 -m pip install -r requirements.txt
 ```
 
+## The website (not GitHub, not Colab cell crumbs)
+
+GitHub is the code. Colab cells are not a website. Open this file in a browser:
+
+**https://htmlpreview.github.io/?https://github.com/KRRamanathan/Project_R/blob/main/dashboard.html**
+
+Same page as `dashboard.html` in the repo (double-click after clone). Streamlit is optional: `python3 -m streamlit run sensitivity_explorer.py` → `http://localhost:8501`.
+
 **Notebook (easiest):** `Project_R.ipynb` → **Run all**. Colab shows **one page** in the last cell (scroll to it). Do not look at the install text above it as the product.
 
-If Colab still shows the old stacked cells: **Runtime → Disconnect and delete runtime**, then open the notebook from GitHub `main` again.
+If Colab still shows `# ── 1. Theme` / giant cartoons / `_panel`: that is the **old** notebook. Runtime → **Disconnect and delete runtime**, then open:
+
+https://colab.research.google.com/github/KRRamanathan/Project_R/blob/main/Project_R.ipynb
 
 **Google Colab:** open the notebook and **Runtime → Run all**. If the seven CSVs are not next to the file, the first cell clones `main`.
 
