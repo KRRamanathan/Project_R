@@ -188,7 +188,7 @@ def app_html(
 
   <div class="pr-grid">
     <div class="pr-card"><div class="lbl">Approved | mature∩events</div><div class="val">{appr_pct:.1f}%</div><div class="sub">{n_appr:,} / {n:,} · {months:.2f} mo</div></div>
-    <div class="pr-card pr-live"><div class="lbl">C1a + C1b (disjoint)</div><div class="val" id="combo">{c1a_60 + c1b:.0f}</div><div class="sub">do not add fos 128–256 · moves with C1a slider</div></div>
+    <div class="pr-card pr-live"><div class="lbl">C1a + C1b (if Legal)</div><div class="val" id="combo">{c1a_60 + c1b:.0f}</div><div class="sub">slider moves C1a · not this week’s bank · do not add fos</div></div>
     <div class="pr-card"><div class="lbl">Airport unfulfilled</div><div class="val">{100 * airport_unf:.0f}%</div><div class="sub">vs {100 * other_unf:.0f}% elsewhere · {100 * night_share:.0f}% in 21:00–03:59</div></div>
     <div class="pr-card"><div class="lbl">Captains night vs day</div><div class="val">{cap_night:.0f} vs {cap_day:.0f}</div><div class="sub">do not hire the catchment</div></div>
   </div>
@@ -220,12 +220,12 @@ def app_html(
 
   <div class="pr-sec">Ask — in this order</div>
   <div class="pr-ask">
-    <div class="pr-card"><div class="n">1 · PRODUCT</div><h3>C1b Insurance capture UX</h3><p>~46–52 extra approved / month. No legal deferral.</p></div>
-    <div class="pr-card"><div class="n">2 · LEGAL + OPS</div><h3>C1a provisional RC</h3><p>~133.5 / month at 60% show-up. Show-up unobserved.</p></div>
-    <div class="pr-card"><div class="n">3 · AIRPORT</div><h3>ARA ₹{ara_leg:.1f} / unpaid night-suburban leg</h3><p>Do not hire. Sample ~₹69–103k / month.</p></div>
+    <div class="pr-card"><div class="n">1 · PRODUCT · THIS WEEK</div><h3>C1b Insurance capture UX</h3><p>~46–52 extra approved / month. Engineering only. This is the unconditional number.</p></div>
+    <div class="pr-card"><div class="n">2 · LEGAL</div><h3>C1a provisional RC</h3><p>~134/mo at 60% show-up if Legal says yes. Else ~36. Show-up unobserved.</p></div>
+    <div class="pr-card"><div class="n">3 · AIRPORT</div><h3>ARA ₹{ara_leg:.1f} / unpaid night-suburban leg</h3><p>Do not hire. After-trip mix does not shift (χ² p=0.12).</p></div>
     <div class="pr-card"><div class="n">STOP</div><h3>Kill CAMP_WA_002 5×</h3><p>Clicked vs not ≈ 0 pp. Targeting, not lift.</p></div>
   </div>
-  <div class="pr-warn">Do not bank fos 128–256 / month. Do not add leftover stages into ~180. 30% of fare (₹105) overpays vs ₹{ara_leg:.1f}.</div>
+  <div class="pr-warn">Do not bank fos 128–256 / month. Do not add leftover stages into C1b. 30% of fare (₹105) overpays vs ₹{ara_leg:.1f}. C1a is a Legal scenario, not this week’s bank.</div>
 
   <div class="pr-sec">Funnel waterfall</div>
   {wf_block}
