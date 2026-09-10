@@ -214,8 +214,7 @@ def app_html(
   <div class="pr-veh">
     <div class="pr-card">{img("auto","Auto")}<div class="lbl">Auto</div><div class="val" style="font-size:1.05rem">{auto_n:,} signups</div><div class="sub">In extract</div></div>
     <div class="pr-card">{img("cab","Cab")}<div class="lbl">Cab</div><div class="val" style="font-size:1.05rem">{cab_n:,} signups</div><div class="sub">In extract</div></div>
-    <div class="pr-card">{img("scooty","Scooty")}<div class="lbl">E-rickshaw / scooty</div><div class="val" style="font-size:1.05rem">{er_n:,} signups</div><div class="sub">ERickshaw in file</div></div>
-    <div class="pr-card">{img("bike","Bike")}<div class="lbl">Bike</div><div class="val" style="font-size:1.05rem">Not in extract</div><div class="sub">Decorative only</div></div>
+    <div class="pr-card">{img("scooty","Scooty")}<div class="lbl">E-rickshaw</div><div class="val" style="font-size:1.05rem">{er_n:,} signups</div><div class="sub">ERickshaw in file</div></div>
   </div>
 
   <div class="pr-sec">Ask — in this order</div>

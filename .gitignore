@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 .DS_Store
 node_modules/
+.ipynb_checkpoints/
 *_output.txt
 *.pdf
 *.docx
