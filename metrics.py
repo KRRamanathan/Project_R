@@ -21,7 +21,9 @@ WORST_HOD = {21, 22, 23, 0, 1, 2, 3}
 DAYS_PER_MONTH = 30.437
 NET_WORST_SUBURBAN = 24.9
 NET_REST_SUBURBAN = 56.5
+NET_WORST_CITY_CORE = 104.7
 NET_GAP_VS_REST_SUB = NET_REST_SUBURBAN - NET_WORST_SUBURBAN  # 31.6
+NET_GAP_VS_WORST_CORE = NET_WORST_CITY_CORE - NET_WORST_SUBURBAN  # 79.8
 C1A_CENTRAL_SHOWUP = 0.60
 
 
@@ -224,6 +226,8 @@ def ara_economics() -> dict:
     months = span / DAYS_PER_MONTH
     elig_mo = n_elig / months
     payout = NET_GAP_VS_REST_SUB / share
+    fare = ws.loc[~ws["got_return"], "fare_inr"].dropna()
+    local_avg = float(fare.mean()) if len(fare) else float("nan")
     return {
         "n_completed_worst_sub": n_ws,
         "n_eligible": n_elig,
@@ -231,6 +235,39 @@ def ara_economics() -> dict:
         "elig_per_month": elig_mo,
         "payout_per_eligible_leg": payout,
         "months": months,
+        "local_avg_fare": local_avg,
+        "fare_30pct": 0.30 * local_avg,
+    }
+
+
+def airport_hourly_snapshot() -> dict:
+    """Marketplace census (hourly). Do not join to sampled trips."""
+    h = pd.read_csv(DATA_DIR / "airport_hourly.csv")
+    h["hour_ts"] = pd.to_datetime(h["hour_ts"], errors="coerce")
+    h["hod"] = h["hour_ts"].dt.hour
+    h["worst"] = h["hod"].isin(WORST_HOD)
+    apt = h[h["zone_type"].eq("airport_terminal")].copy()
+    oth = h[h["zone_type"].ne("airport_terminal")]
+    apt_unf = float(apt["unfulfilled_requests"].sum() / apt["requests"].sum())
+    oth_unf = float(oth["unfulfilled_requests"].sum() / oth["requests"].sum())
+    night_share = float(
+        apt.loc[apt["worst"], "unfulfilled_requests"].sum()
+        / apt["unfulfilled_requests"].sum()
+    )
+    cap_worst = float(apt.loc[apt["worst"], "online_captains"].mean())
+    cap_rest = float(apt.loc[~apt["worst"], "online_captains"].mean())
+    span_days = (apt["hour_ts"].max().normalize() - apt["hour_ts"].min().normalize()).days + 1
+    unf_worst_mo = (
+        float(apt.loc[apt["worst"], "unfulfilled_requests"].sum()) / span_days * DAYS_PER_MONTH
+    )
+    return {
+        "airport_unf_share": apt_unf,
+        "other_unf_share": oth_unf,
+        "night_share_of_airport_unf": night_share,
+        "mean_captains_worst": cap_worst,
+        "mean_captains_rest": cap_rest,
+        "unf_worst_per_month": unf_worst_mo,
+        "n_airport_hours": int(len(apt)),
     }
 
 
