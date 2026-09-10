@@ -1,283 +1,144 @@
+wrote /workspace/figures/funnel_waterfall.png
 
 ====================================================================================================
-STEP 9 — ARA PAYOUT DERIVATION (replaces 30/50/70% of fare)
+R2A — do these approvals take a trip?
 ====================================================================================================
-  Eligible = suburban × 21:00–03:59 × completed × no return fare within 20 min.
-  ARA pays eligible legs only. The Step 7 net-₹ gap is a mean over ALL
-  completed worst-suburban trips, including those that already got a return.
+  mature approved n=3,946  (activation is 1:1 with approved overall)
+  first trip: 98.71% (3,895/3,946)  W95% [98.30,99.02]
+  A2O is the bottleneck. If C1a/C1b produce extra approved captains,
+  historically almost all of them take a first order. We did not re-estimate
+  R2A for the *stuck* capture-only cohorts (they are not yet approved).
 
-  completed worst×suburban n = 5,436
-  return within 20 min     = 581  (10.6880%)
-  eligible (no return)     = 4,855  (89.3120%)  = 1 − 10.6880%
-  trip file span 61 days ≈ 2.004 months of 30.437d
-  eligible legs / month    = 4,855 / 2.004 = 2,422.5
-  mean fare of eligible    = ₹349.9  (used only as a check, not the grid)
+====================================================================================================
+ARA PAYOUT (derived; same as corrected Step 8)
+====================================================================================================
+  eligible share 89.31%  payout ₹35.38/leg
+    80% → ₹28.3/leg  ₹68,569/mo sample
+    100% → ₹35.4/leg  ₹85,711/mo sample
+    120% → ₹42.5/leg  ₹102,854/mo sample
 
-  Population gap (Step 7 printed means):
-    rest×suburban ₹56.5 − worst×suburban ₹24.9 = ₹31.6
-  Required payout per eligible leg to restore that population mean:
-    ₹31.6 / 0.893120 = ₹35.3816  ≈ ₹35.4
-
-  Unrounded audit (same recipe, full precision of the means):
-    median yield ₹15.7344/km
-    mean net worst×sub ₹24.922  rest×sub ₹56.467  gap ₹31.545
-    ₹31.545 / 0.893120 = ₹35.3200
-    Memo uses the printed-mean path (₹31.6 / 0.8931 ≈ ₹35.4).
-    Exact path differs by < ₹0.10/leg. Not a coincidence that this is
-    ~10.1% of local eligible fare — still derived, not a fare grid.
-
-  Sensitivity around the derived point (80 / 100 / 120%), not % of fare:
-  tier                             ₹/elig    ₹/month (sample)
-  80% of derived                     28.3              68,569
-  100% of derived (gap-close)        35.4              85,711
-  120% of derived (buffer)           42.5             102,854
-
-  Corrected monthly cost band: ~₹69k–103k (sample-implied).
-  Do not use ₹254k–593k (30/50/70% of fare) in the memo or deck.
-  airport_trips.csv is sampled: rates are the estimand; ₹/month is not city P&L.
+  C1a ops ballpark (not in extract): ~180 visits/month at 60% show-up.
+  Assume 12–15 checks/day × 22 days ⇒ one FTE covers it.
+  Fully loaded centre agent ₹40–60k/month (stated assumption).
+  Per extra approved at 74% pass: ~₹300–450. Replace with Ops roster if they have one.
 
 ====================================================================================================
 DELIVERABLE 1 — MEMO
 ====================================================================================================
 # Memo to the Head of Supply
-**Captain onboarding leak and overnight airport supply**
-10 September 2026 · Extract 30 June 2026, 23:59 IST
+**Onboarding leak and overnight airport** · 10 Sep 2026 · extract 30 Jun 2026, 23:59 IST
 
-## The number
+## Page 1 — What to do this week
 
-The single biggest verified finding is a volume, not a percentage: **two capture fixes on RC and Insurance would add about 180 approved captains a month (179.5–185.6), at medium confidence.** The two groups do not overlap, so that range adds two products, not the same people twice.
+**About 180 more approved captains a month, medium confidence — roughly 134 from an RC grace window and 50 from Insurance upload UX.** The two groups do not overlap. The exact 179.5–185.6 range is a sensitivity table, not a forecast to three digits. Show-up for in-person RC is not in the data, and if Legal will not let captains proceed with RC deferred, the RC piece is an upper bound.
 
-**1,637** captains uploaded a Registration Certificate, never passed, and failed only because the photo was blurred, OCR was weak, or details were not legible — not because the document was expired, duplicated, or the wrong type. **411** others are in the same situation at Insurance. RC is a vehicle-identity check with no passenger-liability exposure; we can provisionally let those captains proceed and require an in-person RC check within **10 days**. Insurance is the liability document. It must still clear before a ride. That fix is better guided capture at upload, not a deferral.
+These approvals are not hollow. Among mature approved captains, **98.7% take a first trip** (3,895 / 3,946). Getting them through documents is the bottleneck that matters.
 
-How 180 is built. The RC group is about 300 captains a month. Additional approvals = flow × show-up in the 10-day window × in-person pass. Show-up is not in the extract (sensitivity 40–80%). Pass is grounded on what we already see: **74.12%** on a third RC attempt and **78.41%** when field teams assist RC — not an assumed 85–90%. Central cell (60% show-up × 74%): **133.5 a month**. Insurance uses its own retry pattern (67.36% → 73.82% → 76.36%) and the 90.6% chance a fully cleared captain is approved: **46.0–52.1 a month**. Combined: **179.5–185.6**. Confidence is medium because the stuck cohorts are observed; show-up and “better camera UX matches retry rates” are not experiments. Do not add the field-vs-app gap (128–256/month) on top: **726** of the RC group are the same self-serve captains that gap already counts, and field teams also recruit a different pool.
+**Stop scaling CAMP_WA_002.** Clickers complete at 0pp vs non-clickers (about −1.5pp; interval −3.6 to +0.6). Most recipients had already cleared RC. The 29% vs 11% “got the campaign” gap is targeting, not lift. Do not fund 5×. Run send vs no-send instead — zero cost, this week.
 
-**CAMP_WA_002 is cost avoidance, not a win.** The growth ask is to scale it 5× as an onboarding completion lever. Among captains who received the message, clickers completed at **0 percentage points** above non-clickers (best estimate −1.5pp; interval about −3.6 to +0.6). About 89% of recipients had already cleared RC, so we did hit a live part of the funnel and still saw no lift. The large gap between “got the campaign” and “never got it” is targeting — we message people who already cleared RC — not an effect of the WhatsApp. Do not fund 5×. Redirect to a send vs no-send test; it costs almost nothing and can start this week.
+**Ranked by monthly impact.** Item 3 is the smallest number and the **fastest yes** (no sign-off).
 
-## Airport: not a hiring problem
+| # | Do this | Impact | Cost / risk | Watch |
+|---|---|---|---|---|
+| **1** | **C1a** 10-day in-person RC for 1,637 capture-only fails, plus **C1b** Insurance camera UX for 411 (must still clear before a ride) | ~180 approved/month (~134 + ~50) | C1a: Legal/T&S on deferral, plus **~1 centre FTE (~₹40–60k/month, ~180 visits)** — assumed agent load, not a field in the file. C1b: no deferral, engineering only | Approved captains split by the two cohorts |
+| **2** | **Airport Return Assurance** at **₹35.4 per unpaid night-suburban leg** (~₹69–103k/month on the sample) | Restores rest-of-day suburban economics; does not hire | Sampled trips ≠ city P&L. Target rest-suburban, not city-core | Night suburban return-in-20m, cancels, **falling payout run-rate** over 4 weeks |
+| **3** | Kill the 5× WhatsApp paper; RCT send vs no-send among RC-cleared app/paid captains, no other campaign | Cost avoided + answer in 4–6 weeks | Near zero | Aadhaar pass and approved |
 
-Overnight airport failure is not “hire captains who live nearby.” About **40%** of airport requests go unfilled vs low-single-digits elsewhere, and **84%** of that pain is 21:00–03:59, when roughly **13** captains are online vs **37** by day. After the trip, two penalties compound and they are independent: suburban drops are a longer backhaul at every hour, **and** return fares within 20 minutes collapse overnight in every drop type. The suburban vs city-core mix does **not** change overnight. New hires would face the same two penalties as incumbents. **No blanket hiring. Airport Return Assurance first. Headcount only if a 4-week ARA pilot shows the payout run-rate is not falling.**
+**Airport in one line:** do not hire the catchment. Nights fail because suburban backhaul and overnight return-collapse **compound**, and mix does not shift after dark. New captains inherit both penalties. ARA first; headcount only if a 4-week pilot’s payout run-rate is **not** falling and unfilled demand remains.
 
-ARA pays only when a completed suburban night trip does **not** get a return within 20 minutes (**89.31%** of those trips; **2,422.5** eligible legs/month in the sample). The **₹31.6** gap (worst-suburban net **₹24.9** vs rest-suburban **₹56.5**) averages *all* completed worst-suburban trips, including the **10.69%** that already got a return and need no payout. Required payout per eligible leg is **₹31.6 ÷ 0.8931 ≈ ₹35.4**. At 80 / 100 / 120% of that derived value: **₹28.3 / ₹35.4 / ₹42.5** per leg, about **₹69k–103k a month** on sample volume — not 30/50/70% of fare (₹254k–593k), which overpays relative to rest-of-day suburban economics. Target rest-suburban parity, **not** city-core (that gap is geography). Trip rupees are sampled; **₹69k–103k** is a design price and a sample-implied run-rate, not a city P&L line.
+---
 
-**Ranking basis:** items 1–2 are ordered by monthly impact (onboarding, then airport). Item 3 is the smallest number and is flagged as the **fastest to action** — zero cost, no sign-off, actionable immediately — if sequencing by speed is the more useful lens this week.
+## Page 2 — Why, and what would change my mind
 
-**1. Onboarding — two sub-actions of one recommendation.** **C1a:** 10-day in-person RC window for the 1,637. **C1b:** Insurance capture UX for the 411, no deferral. **Impact:** 179.5–185.6 additional approved captains/month. **Risk:** C1a needs legal / trust-and-safety sign-off on deferral; C1b has none. **Metric:** monthly approved captains, split by those two cohorts.
+**RC vs Insurance.** 1,637 captains failed RC only on blur / weak OCR / illegible text. RC is vehicle identity — no passenger liability — so a 10-day in-person check is a scoped deferral. 411 failed Insurance the same way; Insurance is the liability document and **cannot** defer. Most Insurance *volume* never uploaded after Fitness; C1b does not claim that pile.
 
-**2. Airport Return Assurance at the derived payout (~₹35.4 / eligible leg, ~₹69k–103k/month sample).** Pair with rematching. **Risk:** sampled trips, not a city budget. We are buying rest-suburban parity, not city-core economics. **Metric:** night suburban return-within-20-minutes, cancel rate, and the payout run-rate. A **falling** run-rate over four weeks is the proof it is working. If it does not fall, do not hire; redesign matching. If it falls and night unfilled stays high, *then* consider catchment hiring.
+**How ~134 and ~50 are built.** RC stock is ~300/month. Additional = flow × 10-day show-up × pass. Pass is grounded: 74% on a third RC attempt, 78% when field assists RC. Central cell: 60% show-up × 74% = **~134/month**. Insurance uses its own 67% → 74% → 76% retry pattern × 91% approved-if-cleared = **~46–52/month**. **Do not add 128–256/month** from “make app signups convert like field”: 726 of the RC group are already in that gap, and field teams recruit a different pool.
 
-**3. Stop the CAMP_WA_002 5× ask; run the send/no-send test already designed.** RC-cleared app/paid captains, excluding other campaigns. Endpoints: Aadhaar pass and approved. **Impact:** spend not wasted on a 0pp lever, plus an answer in 4–6 weeks. **Cost:** near zero — a redirection. **Metric:** those endpoints at test close. **Fastest of the three to action.**
+**If remaining documents still bind.** Historical P(approved \| passed RC) is 27% (3,946 / 14,453). If Legal only defers RC *inside* the rest of the funnel, C1a shrinks toward ~36 fully-approved/month until Aadhaar→Insurance is also fixed. That is why the Legal ask is deferral-as-activation, not a photo waiver. C1b is already at Insurance; that haircut does not apply.
+
+**ARA payout is derived, not a % of fare.** Eligible = suburban × 21:00–03:59 × completed × no return in 20 min (89.31% of those trips; 2,422.5 sample legs/month). The ₹31.6 gap (₹24.9 vs ₹56.5) averages *all* completed worst-suburban trips, including the 10.69% that already got a return. Required ₹/eligible leg = **31.6 / 0.8931 ≈ 35.4**. Band 80/100/120% of that: ₹28.3 / ₹35.4 / ₹42.5 → **~₹69k–103k/month** sample. 30% of the ₹350 fare (₹105) would overpay. City-core (₹104.7 net) is geography, not this product.
 
 ### What I assumed, and what would change my answer
 
-- **~15.6-day cutoff.** Newer signups are unfinished, not failed. If they later fail in the same capture pattern, 180 is a floor. If they mostly finish on their own, it is a slight overstatement.
-- **Document events, not the approvals file, decide which docs passed.** They disagree only for unfinished captains. If production reporting must follow the approvals file, rebuild the funnel before changing a target.
-- **Field vs app is not banked.** Field looks better; field also recruits in person. What would change this: a randomised assist test on ordinary app/paid signups. Until then, 128–256/month is a ceiling, not a forecast.
-- **ARA target is rest-suburban parity, not city-core.** Paying for city-core economics would pay for distance we cannot remove. What would change this: night suburban trips becoming as short as city-core. We do not see that.
-- **Eligible-share adjustment (₹31.6 ÷ 0.8931 ≈ ₹35.4).** The ₹31.6 gap includes trips that already got a return. If night suburban returns rise, re-derive; do not freeze ₹35.4.
+- **~15.6-day cutoff.** Newer signups are unfinished, not failed. Later capture-fails → 180 is a floor; they finish alone → slight overstatement.
+- **Document events decide which docs passed**, not the approvals file (they disagree only while unfinished).
+- **Field vs app is not banked** until a randomised assist test on ordinary app/paid signups.
+- **ARA target is rest-suburban, not city-core.** Night suburban trips would have to get as short as city-core to change that. They don’t.
+- **₹31.6 / 0.8931.** If night returns rise, re-derive; do not freeze ₹35.4.
+- **C1a ops ₹40–60k/month** assumes one FTE at a typical centre-agent load (~12–15 checks/day). A wage or roster from Ops would replace this.
 
 ### Unresolved (not omitted)
 
-**No cost-per-acquisition or spend field** — I cannot cost field vs paid as media ROI. **`airport_trips.csv` is sampled** — rates are reliable; raw counts and ₹/month are illustrative. **`signup_zone_id` does not join to airport zones** — I cannot size how many existing captains already live in the airport catchment.
-
-
-====================================================================================================
-DELIVERABLE 2 — DECK
-====================================================================================================
-# Deck — 6 slides (10 minutes, expect two interruptions)
-
-Audience: Head of Supply. One number per slide. No appendix maths on the slides; derivation lives in the working.
-
----
-
-## Slide 1 — Headline: ~180 more approved captains a month
-
-**Title:** Two capture fixes recover **179.5–185.6 additional approved captains per month** (medium confidence).
-
-**Waterfall (mature captains who started documents, n = 21,024 → 3,946 approved, 18.8%):**
-
-| Stage | Lost here | Recoverable now |
-|---|---:|---|
-| Driving licence | 1,166 | Not this rec (eligibility + never-start mix) |
-| **RC** | **5,405** | **1,637** capture-only fails → C1a (central **133.5**/month) |
-| Aadhaar | 1,540 | Not sized (not a capture-only product) |
-| Permit / Fitness | 2,616 / 2,653 | Not sized |
-| **Insurance** | **3,289** | **411** capture-only fails → C1b (**46–52**/month); most of the 3,289 never uploaded — different problem |
-| Rejected after clearing | 409 | Eligibility gate, not UX |
-
-**Spoken line:** “The 180 is not ‘if we fixed all of RC.’ It is the capture-only slice, converted to a monthly flow, with a 10-day show-up sensitivity. Insurance is a smaller, separate product. They do not overlap.”
-
-**Footer:** C1a ∩ C1b = 0 captains. Do not add the 128–256 field-replication range on this slide.
-
----
-
-## Slide 2 — Root cause: photos, not eligibility
-
-**Title:** RC and Insurance are failing as **pictures**, then later attempts pass more often.
-
-**RC uploaded but never passed:** among captains with a fail reason, **54%** are *only* blur / weak OCR / not legible (1,637 people). Eligibility codes (expired, duplicate, name mismatch, wrong type) are a different pile — do not mix them into a “defer RC” product.
-
-**Insurance uploaded but never passed:** **411** people, same capture-only definition. Most Insurance *volume* is never-uploaded after Fitness (a continuation problem). C1b does not claim that pile.
-
-**Retry pattern (pass rate by attempt, among people who still have a verification outcome):**
-
-| | Attempt 1 | Attempt 2 | Attempt 3 |
-|---|---:|---:|---:|
-| RC | 65.3% | 68.4% | **74.1%** |
-| Insurance | **67.4%** | **73.8%** | **76.4%** |
-
-Later attempts go **up**, not down. That is what a capture/UX problem looks like. If the remainder were “harder documents,” later attempts would go down.
-
-**Spoken line:** “We are not asking Trust & Safety to waive expired documents. We are asking Product for a guided camera, and Legal for a 10-day RC grace — only for the 1,637.”
-
----
-
-## Slide 3 — The fix: C1a + C1b, and why RC is special
-
-**Title:** One recommendation, two sub-actions. DL and Insurance still gate. RC does not have to.
-
-**C1a — RC provisional activation**
-- Who: 1,637 capture-only RC fails (~300/month).
-- What: let them continue / provisionally activate; **in-person RC within 10 days**.
-- Why RC can defer: vehicle identity, **no pre-ride passenger liability**.
-- Sizing: 40/60/80% show-up × pass **74.1–78.4%** (third-attempt floor, field-assisted RC ceiling). Central: **133.5/month**.
-- **Needs legal / T&S sign-off.**
-
-**C1b — Insurance capture UX**
-- Who: 411 capture-only Insurance fails (~75/month).
-- What: blur/OCR feedback at upload. **Document must still clear before the first ride.**
-- Why Insurance cannot defer: it *is* the liability document.
-- Sizing: Insurance’s own 67.4 → 73.8 → 76.4% pattern × 90.6% approved-if-cleared: **46.0–52.1/month**.
-- **No deferral sign-off.**
-
-**Still gated before a ride:** driving licence (always), Insurance (always), remaining docs under current policy. RC is the scoped exception.
-
-**Metric:** monthly approved captains, split by these two cohorts.
-
----
-
-## Slide 4 — Airport: nights + compounding economics, not “hire near the airport”
-
-**Title:** Overnight airport is a **suburban backhaul + night return-collapse** problem. Derived ARA cost **~₹69k–103k/month** (sample).
-
-**When (marketplace file):** airport unfulfilled **40%** vs ~3% elsewhere; **84%** of airport unfulfilled is 21:00–03:59; ~13 captains online vs ~37 by day. Surge is already high. This is a **non-price constraint** (captains are not sitting the airport), not “raise surge.”
-
-**After the trip (sampled trips — rates, not a census):**
-- Suburban cancel **24%** vs city-core **12%**.
-- Completed return-in-20-min, overnight: suburban **10.7%** vs city-core **47%**.
-- Mix of suburban vs city-core **does not change overnight**. Two **independent** penalties, not a mix-shift.
-- Net ₹ per cycle: worst×suburban **₹24.9** vs rest×suburban **₹56.5** vs worst×city-core **₹104.7**.
-
-**ARA payout, derived (not 30/50/70% of fare):**
-- Eligible = suburban × 21:00–03:59 × completed × no return in 20 min (**89.31%** of completed worst-suburban trips).
-- Population gap ₹31.6 is averaged across *all* those trips, including the 10.69% that already got a return.
-- **₹31.6 ÷ 0.8931 ≈ ₹35.4 per eligible leg.**
-- 80 / 100 / 120% of derived: **₹28.3 / ₹35.4 / ₹42.5** → **~₹69k / ₹86k / ₹103k a month** on 2,422.5 sample-eligible legs.
-- Target: **rest-suburban parity**, not city-core (that would pay for geography).
-
-**Hiring answer on this slide:** new captains inherit both penalties. **No blanket hiring.**
-
----
-
-## Slide 5 — What does not work (and how easy it is to be fooled)
-
-**Title:** A WhatsApp campaign with a 0pp lift, and a field-vs-app gap we must not bank.
-
-**CAMP_WA_002 — naive vs real**
-
-| Contrast | Approved | What it is |
-|---|---|---|
-| Got the campaign vs never got it | ~29% vs ~11% | **Targeting.** Recipients are chosen after they already cleared RC. |
-| Clicked vs did not click, among delivered | 28.3% vs 29.8% (**−1.5pp**) | **The honest contrast.** Interval −3.6 to +0.6pp. |
-
-**Deck number with a name on it: 0 pp completion lift. Do not scale 5×.** About 30% of recipients also got another campaign; the test we *would* fund is send vs no-send among RC-cleared self-serve captains, exclusive of other campaigns.
-
-**Field onboarding vs app/paid — unproven ceiling, not a win**
-- Mechanical gap if app/paid converted like field: **128–256 approved/month**.
-- Field teams **recruit in person**. We cannot see selection vs process.
-- **726** of the C1a RC-capture captains are the same self-serve people inside that gap. **Do not add 180 to 128–256.**
-- Correct move: randomised assisted onboarding on ordinary app/paid signups (~900 per arm to detect a 5pp approval lift).
-
----
-
-## Slide 6 — Recommendations, costs, decision points
-
-**Title:** Ranked by monthly impact. Campaign is the fastest yes.
-
-*Ranking basis (say it): “I ranked 1–2 by monthly impact. Item 3 is the smallest number and the fastest to execute — zero cost, no sign-off, this week.”*
-
-| # | What | Impact | Cost / risk | Decision point |
-|---|---|---|---|---|
-| **1** | **C1a** 10-day RC grace + **C1b** Insurance upload UX | **180/month** approved (179.5–185.6) | C1a: legal/T&S. C1b: none | Split metric by cohort. Do not wait on the field-replication pilot to ship C1b. |
-| **2** | **ARA at ~₹35.4/eligible leg** | Night suburban economics → rest-suburban; sample run-rate **₹69k–103k/month** | Sampled trips ≠ city P&L. Do not target city-core parity | **4-week pilot.** Success = return-in-20m up, cancels down, **payout run-rate falling**. Hire catchment **only if** unfulfilled stays high after the run-rate falls. |
-| **3** | **Stop 5× CAMP_WA_002**; send/no-send RCT | Cost avoided + answer in 4–6 weeks | Near zero | Primary: Aadhaar pass, approved. ITT, not clicks. **Actionable immediately.** |
-
-**Do not spend next:** 5× WhatsApp; blanket airport hiring; treating 128–256 as a committed supply target.
-
-**Ask of the room:** (1) legal scoping on RC deferral this week; (2) ship Insurance capture UX without waiting; (3) kill the 5× paper and stand up the RCT; (4) four-week ARA at the derived ₹35.4, not at 30% of fare.
+No CAC/spend field — cannot price field vs paid as media ROI. `airport_trips.csv` is sampled — rates hold; ₹/month is not a city budget. `signup_zone_id` does not join airport zones — cannot size captains who already live in the catchment.
 
 
 ====================================================================================================
 DELIVERABLE 3 — README
 ====================================================================================================
-# Project_R — working README
+# Project_R — what to submit
 
-Captain onboarding (A2O) and airport supply take-home.  
-**Extract clock:** 2026-06-30 23:59 IST (timestamps are naive; we do not invent a timezone offset).
+Captain onboarding (A2O) and airport supply. Extract **2026-06-30 23:59 IST**.
+
+## Submit these three
+
+1. **`MEMO.md`** (or a PDF export of it) — Head of Supply, 2 pages.
+2. **`deck/Project_R_deck.pdf`** — 6 slides. Not `DECK.md` (those are speaker notes).
+3. **This repo** — scripts 01–09, CSVs, `requirements.txt`.
+
+Headline to say without notes: *about 180 more approved captains a month, medium confidence (~134 RC grace + ~50 Insurance UX); don’t scale the WhatsApp; don’t hire the airport — ARA at ₹35.4/leg first.*
 
 ## How to run
 
 ```bash
 pip install -r requirements.txt
-
-python 01_data_audit.py          # inventory, joins, mature-relevant flags
-python 02_funnel.py              # mature cohort, stage funnel from doc_events
-python 03_dropoff.py             # where volume is lost; attempt-level pass rates
-python 04_channel_leaks.py       # fos vs self-serve; C1 capture-only cohorts
-python 05_campaign.py            # CAMP_WA_002 — 0pp lift; RCT sketch
-python 06_airport_hourly.py      # when/how much airport unfulfilled
-python 07_airport_trips.py       # post-trip economics; two independent penalties
-python 08_intervention_sizing.py # C1a/C1b/overlap; tests not banked
-python 09_final_deliverables.py  # derived ARA payout + prints memo/deck/README
+python 01_data_audit.py
+python 02_funnel.py
+python 03_dropoff.py
+python 04_channel_leaks.py
+python 05_campaign.py
+python 06_airport_hourly.py
+python 07_airport_trips.py
+python 08_intervention_sizing.py   # ARA uses derived ₹35.4, not % of fare
+python 09_final_deliverables.py    # R2A, ARA check, waterfall, reprints memo
+python make_waterfall.py
+google-chrome --headless --disable-gpu --no-pdf-header-footer \
+  --print-to-pdf=deck/Project_R_deck.pdf file://$PWD/deck/slides.html
 ```
 
-Each step prints to stdout and is saved as `0N_*_output.txt`. Steps are designed to **print and stop**; later steps re-derive cohorts from the CSVs rather than reading a previous output as source of truth.
+Each `0N_*.py` prints to stdout; copies live in `0N_*_output.txt`. Later steps re-derive from CSVs.
 
-**Deliverables:** `MEMO.md` (Head of Supply, ≤2 pages), `DECK.md` (6 slides), this README.
+`activation.csv` is required (1:1 with approved). It was missing from the original GitHub upload.
 
-`activation.csv` is required for Step 1 (post-approval activity). It was missing from the original GitHub upload and is in this repo.
+## Data-quality summary
 
-## Data-quality summary (standing rules)
+**Censoring.** `in_progress` is not failure. Mature = signup age **> 15.602778 days** (max in-progress age). Funnel: mature ∩ has `doc_events` (n = 21,024). Zero-event mature (1,416) = never-attempted, separate.
 
-**Censoring cutoff.** `in_progress` is not failure. Empirical mature cut = max signup age among `in_progress` (**15.602778 days**). Mature = signup age **greater than** that cut. Funnel rates are mature ∩ has `doc_events` (n = 21,024). The 1,416 mature captains with zero document events are a **never-attempted** group, reported separately, never mixed into stage capture-failure stats.
+**`doc_events` over `approvals.csv` for which docs passed.** Mature mismatch = 0. Rejected (409) is after clearance — a gate, not UX.
 
-**`doc_events` over `approvals.csv` as source of truth for which documents passed.** Stage flags are `verification_pass` in `doc_events`. `docs_cleared` on the approvals file disagrees with n-unique passes for 451 captains, **all immature**. Mature mismatch count = 0. Rejected captains (409) all sit **after** required docs cleared — an eligibility gate, not a document-UX leak. **Rejected is a distinct outcome**, not “dropped in docs.”
+**Nudges.** Drop `clicked=1 & delivered=0` (457). CAMP_WA_002 is sent after RC; recipient vs non-recipient is targeting.
 
-**Nudges.** 457 rows are `clicked=1` and `delivered=0` (impossible). They are excluded from campaign lift. Do not treat “received a campaign” vs “did not” as an experiment; CAMP_WA_002 is sent after RC for almost everyone.
+**Activation / R2A.** One row per approved captain. 98.7% of mature approved have a first trip (3,895/3,946).
 
-**Activation.** One row per approved captain. It answers post-approval activity, not the A2O funnel.
+**Airport files don’t mix.** Hourly = when terminals fail. Trips = sampled post-pickup economics. `signup_zone_id` does not join airport `zone_id`.
 
-**Airport file separation.** `airport_hourly.csv` characterises **when** terminals fail (marketplace state). `airport_trips.csv` characterises **what happens after pickup** (sampled legs). Do not use trip counts as a city census. Do not join `signup_zone_id` to airport `zone_id` — they are not a key.
+**Rigor.** Point estimate, n, test, CI. n<100 directional. Multi-cut Bonferroni. Confound check before a univariate cut becomes a cause.
 
-**Rigor bar used throughout.** Point estimate, n per group, a proper test, a confidence interval. n < 100 is directional. Multi-cut families are Bonferroni-flagged. A univariate cut is not a cause until a confound check says so.
+## What I chose not to do
 
-## What I chose not to do, and why
+- No ML churn model — the decision is a product fix and a campaign stop.
+- No CAC channel ROI — spend is not in the file. C1a ops cost is an **explicit FTE assumption** (₹40–60k), not fake media math.
+- No city-core target for ARA — that pays for geography.
+- No 30/50/70%-of-fare ARA grid — derived ₹31.6 / 0.8931 ≈ ₹35.4; 80/100/120% of that.
+- No banking field vs app (128–256/month). Overlaps 726 C1a captains. Pilot, not a target.
+- No vehicle-type headline (pseudo-R² 0.0065).
 
-**No ML churn / “who will finish onboarding” model.** The time budget and the n do not justify it, and the decision on the table is a product fix (camera UX / RC grace) plus a campaign stop, not a scoring layer. A model would also train through the same censoring cutoff we already handled with a cohort rule.
-
-**No CAC-based channel ROI.** There is no spend, bid, or cost-per-acquisition field. Paid digital’s high never-attempt rate is a red flag I named and did not pretend to price.
-
-**No city-core-parity target for Airport Return Assurance.** Worst-hour city-core net ₹/cycle is a different geography (shorter trips, higher return rates). Paying captains until suburban night looks like city-core would overpay for distance we cannot remove. The comparison that matches the product is **rest-of-day suburban** (₹56.5 vs ₹24.9).
-
-**No blind 30/50/70%-of-fare grid for ARA.** That grid was arbitrary and, at 30% of the ₹350 local fare, already overshot the economic gap. The ₹31.6 gap is a **population average** across all completed worst-suburban trips; ARA only pays the **89.31%** that got no return within 20 minutes. Gap-closing payout = **₹31.6 / 0.8931 ≈ ₹35.4 per eligible leg**. Sensitivity is 80/100/120% of that derived point (~₹69k–103k/month on sample volume), not a percent-of-fare ladder.
-
-**No banking the field-vs-app conversion gap.** fos_field looks better; fos_field also recruits in person. 128–256 additional approved/month is an unproven ceiling. It overlaps 726 captains with C1a. It is a randomised assist pilot, not a supply target.
-
-**No vehicle-type / ERickshaw headline.** City-adjusted, ERickshaw vs Auto still differs, but pseudo-R² is 0.0065 — structural and not an ops lever.
-
-## Scripts vs memo
-
-If Step 8’s 30/50/70%-of-fare ARA table disagrees with the memo, **the memo is correct.** Step 9 re-derives the efficient payout and is the number to defend in the room.
 
 ====================================================================================================
-Step 9 complete. Final step.
+DELIVERABLE 2 — DECK
+====================================================================================================
+  Rendered slides: deck/slides.html
+  PDF:             deck/Project_R_deck.pdf
+  Speaker notes:   DECK.md (do not submit DECK.md as the deck)
+====================================================================================================
+Step 9 complete.
 ====================================================================================================

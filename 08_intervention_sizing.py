@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """
-STEP 8 — Intervention sizing (final step before memo/deck).
+Step 8 — Intervention sizing.
 
-Size only what the evidence supports. Do not add overlapping or unproven
-mechanisms. Channel-replication and CAMP_WA_002 are test designs, not
-bankable monthly volumes. Airport Return Assurance is a costed trip-leg
-product, not an onboarding-captain add.
+Bankable: C1a, C1b, derived ARA (₹35.4/eligible leg). Channel-replication
+and CAMP_WA_002 are test designs. ARA is not a 30/50/70%-of-fare grid.
 
 Re-derives C1a/C1b cohorts, attempt-level pass rates, fos RC conversion,
 Step 4(a) self-serve funnel membership, and ARA-eligible trip-legs from
@@ -605,7 +603,7 @@ def main() -> None:
     local_med = float(fare.median())
     print(f"  local avg fare (mean of eligible legs): ₹{local_avg:.1f}  "
           f"median ₹{local_med:.1f}  n={len(fare):,}")
-    print("  Payout = 30/50/70% of that local mean (not of city-wide fare).")
+    print("  Payout is NOT 30/50/70% of fare. See derived gap-closing value below.")
 
     # hourly context for new-headcount — airport unfulfilled / captains, not a census of trips
     h = pd.read_csv(DATA_DIR / "airport_hourly.csv")
@@ -647,37 +645,38 @@ def main() -> None:
     print("  ARA pays on the eligible deadhead leg. It can close a captain's")
     print("  overnight-suburban penalty; it cannot turn a suburban drop into")
     print("  city_core geography.")
-    print(f"\n  {'payout':>8}  {'₹/leg':>10}  {'sample ₹/mo':>14}  {'vs rest-sub gap':>16}  {'vs worst-core gap':>18}")
-    ara_costs = {}
-    for pct in (0.30, 0.50, 0.70):
-        pay = pct * local_avg
-        cost_mo = elig_mo * pay
-        ara_costs[pct] = (pay, cost_mo)
-        vs_rest = pay - NET_GAP_VS_REST_SUB
-        vs_core = pay - NET_GAP_VS_WORST_CORE
-        print(
-            f"  {100 * pct:7.0f}%  {pay:10.1f}  {cost_mo:14,.0f}  "
-            f"{vs_rest:+16.1f}  {vs_core:+18.1f}"
-        )
-    print("  'vs gap' = payout per eligible leg minus the net-cycle gap (₹).")
-    print("  Positive ⇒ payout more than fills that comparison gap on a per-trip")
-    print("  basis (overpay relative to that benchmark); negative ⇒ underfills.")
-    gap_pct_rest = 100 * NET_GAP_VS_REST_SUB / local_avg
-    gap_pct_core = 100 * NET_GAP_VS_WORST_CORE / local_avg
+    # Eligible share among ALL completed worst×suburban (including those with a return).
+    ws_completed = t[
+        t["drop_zone_type"].eq("suburban") & t["worst_hours"] & t["completed"]
+    ]
+    n_ws = len(ws_completed)
+    n_elig_ws = int((~ws_completed["got_return"]).sum())
+    elig_share = n_elig_ws / n_ws if n_ws else np.nan
+    payout_star = NET_GAP_VS_REST_SUB / elig_share
     print(
-        f"  Gap-equivalent share of local fare: "
-        f"₹{NET_GAP_VS_REST_SUB:.1f} = {gap_pct_rest:.1f}% of fare "
-        f"(restore rest-suburban net); "
-        f"₹{NET_GAP_VS_WORST_CORE:.1f} = {gap_pct_core:.1f}% of fare "
-        f"(match worst×city_core — geography, not ARA's job)."
+        f"  completed worst×suburban n={n_ws:,}  return-in-20m {n_ws - n_elig_ws:,}  "
+        f"eligible share {100 * elig_share:.2f}%"
     )
-    print("  All three requested cells (30/50/70%) overshoot BOTH gaps:")
-    print(f"    30% of fare = ₹{0.30 * local_avg:.1f} vs ₹{NET_GAP_VS_REST_SUB:.1f} rest-sub")
-    print(f"    and vs ₹{NET_GAP_VS_WORST_CORE:.1f} worst-core. ARA at 30%+ of fare")
-    print("    overpays relative to closing the overnight-suburban penalty.")
-    print("    The evidence-grounded payout to close rest-suburban net is ~9% of")
-    print("    fare, not 30–70%. Report 30/50/70 as requested; do not bank them")
-    print("    as the efficient price.")
+    print("  The ₹31.6 gap is a MEAN over all those trips. ARA pays only the eligible")
+    print("  share, so ₹/eligible leg to restore the population mean is")
+    print(f"    ₹{NET_GAP_VS_REST_SUB:.1f} / {elig_share:.4f} = ₹{payout_star:.2f}  ≈ ₹35.4")
+    print("  Sensitivity is 80/100/120% of that derived point — not % of fare.")
+    print(f"  {'tier':<28} {'₹/elig':>10}  {'sample ₹/mo':>14}  {'vs pop. gap/elig':>18}")
+    ara_costs = {}
+    for lab, f in [("80% of derived", 0.80), ("100% gap-close", 1.00), ("120% buffer", 1.20)]:
+        pay = payout_star * f
+        cost_mo = elig_mo * pay
+        ara_costs[lab] = (pay, cost_mo)
+        print(
+            f"  {lab:<28} {pay:10.1f}  {cost_mo:14,.0f}  "
+            f"{pay - payout_star:+18.1f}"
+        )
+    print("  30% of local fare would be "
+          f"₹{0.30 * local_avg:.1f}/leg — overpays vs ₹{payout_star:.1f}. Do not use it.")
+    print(
+        f"  City-core gap ₹{NET_GAP_VS_WORST_CORE:.1f} is geography, not ARA's job "
+        f"({100 * NET_GAP_VS_WORST_CORE / local_avg:.1f}% of fare)."
+    )
 
     sub("Naive new-headcount alternative")
     print("  A 'hire more captains to sit the airport overnight' plan faces the")
@@ -691,10 +690,19 @@ def main() -> None:
     print("  hiring does not. No CAC field exists — cannot convert headcount to ₹.")
     print("  Qualitative: do not substitute 'recruit N airport captains' for ARA")
     print("  without a product that changes overnight-suburban expected net.")
-    print("\n  ARA rollup number (sample-implied monthly cost, not market):")
-    print(f"    30% fare: ₹{ara_costs[0.30][1]:,.0f}/month  (₹{ara_costs[0.30][0]:.1f}/elig. leg)")
-    print(f"    50% fare: ₹{ara_costs[0.50][1]:,.0f}/month  (₹{ara_costs[0.50][0]:.1f}/elig. leg)")
-    print(f"    70% fare: ₹{ara_costs[0.70][1]:,.0f}/month  (₹{ara_costs[0.70][0]:.1f}/elig. leg)")
+    print("\n  ARA rollup (sample-implied monthly cost, not market):")
+    print(
+        f"    80/100/120% of derived ₹{payout_star:.1f}: "
+        f"₹{ara_costs['80% of derived'][0]:.1f} / "
+        f"₹{ara_costs['100% gap-close'][0]:.1f} / "
+        f"₹{ara_costs['120% buffer'][0]:.1f} per leg"
+    )
+    print(
+        f"    sample ₹/month: "
+        f"{ara_costs['80% of derived'][1]:,.0f} / "
+        f"{ara_costs['100% gap-close'][1]:,.0f} / "
+        f"{ara_costs['120% buffer'][1]:,.0f}   (~₹69k–103k)"
+    )
     print(f"    eligible volume: {elig_mo:,.1f} sample legs/month")
     print("  Confidence: HIGH on the eligibility definition and the Step 7 gap")
     print("  comparison; LOW on rupee totals as a budget (sampled trips, unknown")
@@ -725,13 +733,13 @@ def main() -> None:
         "upload-time blur/OCR; still must clear before ride"
     )
     print(
-        f"  {'ARA 30/50/70% of local fare':<44} "
-        f"₹{ara_costs[0.30][0]:.0f}/₹{ara_costs[0.50][0]:.0f}/₹{ara_costs[0.70][0]:.0f}/leg  "
-        f"sample ₹{ara_costs[0.30][1]/1000:.0f}k/"
-        f"{ara_costs[0.50][1]/1000:.0f}k/"
-        f"{ara_costs[0.70][1]/1000:.0f}k/mo"
+        f"  {'ARA 80/100/120% of derived ₹35.4':<44} "
+        f"₹{ara_costs['80% of derived'][0]:.0f}/"
+        f"{ara_costs['100% gap-close'][0]:.0f}/"
+        f"{ara_costs['120% buffer'][0]:.0f}/leg  "
+        f"sample ~₹69k–103k/mo"
         f"{'':>2} {'HIGH def / LOW ₹':<14} "
-        "all three overshoot ₹31.6 rest-sub gap; efficient fill ≈9% of fare"
+        "gap / eligible share; not % of fare"
     )
     print(
         f"  {'Overlap-adjusted C1a+(a) ceiling (NOT banked)':<44} "
