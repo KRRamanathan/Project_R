@@ -101,13 +101,6 @@ def main() -> None:
         "RC stage loss — only the photo slice is C1a",
     )
     _pie(
-        FIG / "pie_ara_elig.png",
-        ["No return in 20m (89%)", "Got a return (11%)"],
-        [89.31, 10.69],
-        [TEAL, YELLOW],
-        "ARA pays only the unpaid night-suburban legs",
-    )
-    _pie(
         FIG / "pie_c1b.png",
         ["C1b UX (411)", "Other Insurance (2,878)"],
         [411, 3289 - 411],
