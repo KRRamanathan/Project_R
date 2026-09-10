@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Project_R — Rapido dashboard</title>
+<style>html,body{margin:0;background:#FFF8E7;}</style>
+</head>
+<body style="margin:0;background:#FFF8E7">
+
+<div class="pr">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+.pr {
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  color: #111111;
+  background: #FFF8E7;
+  padding: 18px 16px 28px;
+  border-radius: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.pr * { box-sizing: border-box; }
+.pr-hero {
+  background: linear-gradient(135deg, #FFD400 0%, #FFE566 50%, #FFC400 100%);
+  border: 3px solid #111111;
+  border-radius: 22px;
+  padding: 26px 28px;
+  box-shadow: 8px 8px 0 #111111;
+  margin-bottom: 18px;
+}
+.pr-kicker {
+  display: inline-block; background: #111111; color: #FFD400;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+  padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
+}
+.pr-hero h1 { margin: 0 0 6px; font-size: 1.85rem; font-weight: 800; letter-spacing: -0.03em; }
+.pr-hero p { margin: 0; opacity: 0.82; }
+.pr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 12px; margin: 14px 0; }
+.pr-card {
+  background: #fff; border: 2px solid #111111; border-radius: 16px;
+  padding: 14px; box-shadow: 4px 4px 0 #111111;
+}
+.pr-card .lbl { font-size: 0.72rem; color: #5c5c5c; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.pr-card .val { font-size: 1.55rem; font-weight: 800; margin-top: 4px; letter-spacing: -0.03em; }
+.pr-card .sub { font-size: 0.76rem; color: #5c5c5c; margin-top: 4px; }
+.pr-sec { font-size: 1.12rem; font-weight: 800; margin: 22px 0 10px; }
+.pr-veh { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.pr-veh .pr-card { text-align: center; }
+.pr-veh img { width: 112px; height: 112px; object-fit: contain; margin: 0 auto 8px; display: block; }
+.pr-ask { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.pr-ask h3 { margin: 0 0 6px; font-size: 1rem; }
+.pr-ask .n { font-size: 0.78rem; font-weight: 800; color: #1B7A4E; }
+.pr-warn {
+  background: #FFF3CD; border: 2px solid #111111; border-radius: 14px;
+  padding: 12px 16px; font-size: 0.9rem; margin: 14px 0;
+}
+.pr-ok {
+  background: #E7F6EE; border: 2px solid #111111; border-radius: 14px;
+  padding: 12px 16px; font-size: 0.9rem; margin: 0 0 14px;
+}
+.pr-wf { width: 100%; border-radius: 12px; border: 2px solid #111111; background: #fff; }
+.pr-live { background: #FFF4B0; }
+.pr input[type=range] { width: 100%; accent-color: #111111; }
+.pr-slide { margin: 8px 0 14px; }
+.pr-slide label { font-size: 0.82rem; font-weight: 700; display: flex; justify-content: space-between; }
+.pr details {
+  border: 2px solid #111111; border-radius: 12px; padding: 8px 12px; background: #fff; margin: 8px 0;
+}
+.pr details summary { cursor: pointer; font-weight: 700; }
+.pr pre {
+  max-height: 220px; overflow: auto; font-size: 0.7rem;
+  background: #111; color: #eee; padding: 10px; border-radius: 8px;
+}
+</style>
+
+  <div class="pr-hero">
+    <div class="pr-kicker">RAPIDO · PROJECT_R</div>
+    <h1>Captain onboarding leak, sized. Airport nights, priced.</h1>
+    <p>Extract 30 Jun 2026, 23:59 IST · one page · Runtime → Run all</p>
+  </div>
+  <div class="pr-ok"><b>Pipeline finished.</b> Same maths as run_all.sh · regression lock passed if this page rendered.</div>
+
+  <div class="pr-grid">
+    <div class="pr-card"><div class="lbl">Approved | mature∩events</div><div class="val">18.8%</div><div class="sub">3,946 / 21,024 · 5.45 mo</div></div>
+    <div class="pr-card pr-live"><div class="lbl">C1a + C1b (disjoint)</div><div class="val" id="combo">184</div><div class="sub">do not add fos 128–256 · moves with C1a slider</div></div>
+    <div class="pr-card"><div class="lbl">Airport unfulfilled</div><div class="val">40%</div><div class="sub">vs 3% elsewhere · 84% in 21:00–03:59</div></div>
+    <div class="pr-card"><div class="lbl">Captains night vs day</div><div class="val">13 vs 37</div><div class="sub">do not hire the catchment</div></div>
+  </div>
+
+  <div class="pr-sec">Move the two assumptions</div>
+  <p class="sub" style="margin:0 0 10px;color:#5c5c5c">Yellow cards update. C1b, approval %, and airport figures stay locked on purpose.</p>
+  <div class="pr-slide">
+    <label>C1a 10-day show-up <span id="showLbl">60%</span></label>
+    <input id="prShow" type="range" min="0" max="100" value="60" oninput="var s=+document.getElementById('prShow').value;var p=+document.getElementById('prAra').value;var c1a=222.48389721825532*(s/100);document.getElementById('showLbl').textContent=s+'%';document.getElementById('araLbl').textContent=p+'%';document.getElementById('c1aVal').textContent=c1a.toFixed(1);document.getElementById('combo').textContent=Math.round(c1a+50.407602935105345);document.getElementById('payVal').textContent='\u20B9'+( 35.381585993820806*p/100).toFixed(1);document.getElementById('araMo').textContent='\u20B9'+Math.round(85711.390347541*p/100);" onchange="var s=+document.getElementById('prShow').value;var p=+document.getElementById('prAra').value;var c1a=222.48389721825532*(s/100);document.getElementById('showLbl').textContent=s+'%';document.getElementById('araLbl').textContent=p+'%';document.getElementById('c1aVal').textContent=c1a.toFixed(1);document.getElementById('combo').textContent=Math.round(c1a+50.407602935105345);document.getElementById('payVal').textContent='\u20B9'+( 35.381585993820806*p/100).toFixed(1);document.getElementById('araMo').textContent='\u20B9'+Math.round(85711.390347541*p/100);"/>
+  </div>
+  <div class="pr-slide">
+    <label>ARA as % of derived ₹35.4/leg <span id="araLbl">100%</span></label>
+    <input id="prAra" type="range" min="50" max="150" step="5" value="100" oninput="var s=+document.getElementById('prShow').value;var p=+document.getElementById('prAra').value;var c1a=222.48389721825532*(s/100);document.getElementById('showLbl').textContent=s+'%';document.getElementById('araLbl').textContent=p+'%';document.getElementById('c1aVal').textContent=c1a.toFixed(1);document.getElementById('combo').textContent=Math.round(c1a+50.407602935105345);document.getElementById('payVal').textContent='\u20B9'+( 35.381585993820806*p/100).toFixed(1);document.getElementById('araMo').textContent='\u20B9'+Math.round(85711.390347541*p/100);" onchange="var s=+document.getElementById('prShow').value;var p=+document.getElementById('prAra').value;var c1a=222.48389721825532*(s/100);document.getElementById('showLbl').textContent=s+'%';document.getElementById('araLbl').textContent=p+'%';document.getElementById('c1aVal').textContent=c1a.toFixed(1);document.getElementById('combo').textContent=Math.round(c1a+50.407602935105345);document.getElementById('payVal').textContent='\u20B9'+( 35.381585993820806*p/100).toFixed(1);document.getElementById('araMo').textContent='\u20B9'+Math.round(85711.390347541*p/100);"/>
+  </div>
+  <div class="pr-grid">
+    <div class="pr-card pr-live"><div class="lbl">C1a / month</div><div class="val" id="c1aVal">133.5</div><div class="sub">flow × show-up × RC att-3</div></div>
+    <div class="pr-card"><div class="lbl">C1b / month</div><div class="val">50.4</div><div class="sub">Insurance UX · locked</div></div>
+    <div class="pr-card pr-live"><div class="lbl">₹ / eligible leg</div><div class="val" id="payVal">₹35.4</div><div class="sub">not 30% of fare</div></div>
+    <div class="pr-card pr-live"><div class="lbl">ARA sample / month</div><div class="val" id="araMo">₹85,711</div><div class="sub">sampled trips · not city P&amp;L</div></div>
+  </div>
+
+  <div class="pr-sec">Fleet mix</div>
+  <div class="pr-veh">
+    <div class="pr-card"><img src="figures/vehicles/auto.png" alt="Auto"/><div class="lbl">Auto</div><div class="val" style="font-size:1.05rem">11,363 signups</div><div class="sub">In extract</div></div>
+    <div class="pr-card"><img src="figures/vehicles/cab.png" alt="Cab"/><div class="lbl">Cab</div><div class="val" style="font-size:1.05rem">8,881 signups</div><div class="sub">In extract</div></div>
+    <div class="pr-card"><img src="figures/vehicles/scooty.png" alt="Scooty"/><div class="lbl">E-rickshaw / scooty</div><div class="val" style="font-size:1.05rem">4,756 signups</div><div class="sub">ERickshaw in file</div></div>
+    <div class="pr-card"><img src="figures/vehicles/bike.png" alt="Bike"/><div class="lbl">Bike</div><div class="val" style="font-size:1.05rem">Not in extract</div><div class="sub">Decorative only</div></div>
+  </div>
+
+  <div class="pr-sec">Ask — in this order</div>
+  <div class="pr-ask">
+    <div class="pr-card"><div class="n">1 · PRODUCT</div><h3>C1b Insurance capture UX</h3><p>~46–52 extra approved / month. No legal deferral.</p></div>
+    <div class="pr-card"><div class="n">2 · LEGAL + OPS</div><h3>C1a provisional RC</h3><p>~133.5 / month at 60% show-up. Show-up unobserved.</p></div>
+    <div class="pr-card"><div class="n">3 · AIRPORT</div><h3>ARA ₹35.4 / unpaid night-suburban leg</h3><p>Do not hire. Sample ~₹69–103k / month.</p></div>
+    <div class="pr-card"><div class="n">STOP</div><h3>Kill CAMP_WA_002 5×</h3><p>Clicked vs not ≈ 0 pp. Targeting, not lift.</p></div>
+  </div>
+  <div class="pr-warn">Do not bank fos 128–256 / month. Do not add leftover stages into ~180. 30% of fare (₹105) overpays vs ₹35.4.</div>
+
+  <div class="pr-sec">Funnel waterfall</div>
+  <img class="pr-wf" src="figures/funnel_waterfall.png" alt="Funnel waterfall"/>
+
+  
+</div>
+
+</body>
+</html>

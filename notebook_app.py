@@ -18,14 +18,23 @@ def _b64(path: Path) -> str:
     return "data:image/png;base64," + base64.b64encode(path.read_bytes()).decode("ascii")
 
 
-def cartoon(stem: str) -> str:
-    p = ROOT / "figures" / "cartoons" / f"{stem}.png"
-    return _b64(p) if p.exists() else ""
+def _asset(rel: str, *, relative: bool) -> str:
+    p = ROOT / rel
+    if not p.exists():
+        return ""
+    return rel if relative else _b64(p)
 
 
-def waterfall_src() -> str:
-    p = ROOT / "figures" / "funnel_waterfall.png"
-    return _b64(p) if p.exists() else ""
+def cartoon(stem: str, *, relative: bool = False) -> str:
+    for folder in ("vehicles", "cartoons"):
+        src = _asset(f"figures/{folder}/{stem}.png", relative=relative)
+        if src:
+            return src
+    return ""
+
+
+def waterfall_src(*, relative: bool = False) -> str:
+    return _asset("figures/funnel_waterfall.png", relative=relative)
 
 
 def show_app(**kwargs) -> None:
@@ -58,12 +67,13 @@ def app_html(
     ara_mo: float,
     mix: dict[str, int],
     logs: dict[str, str],
+    relative_assets: bool = False,
 ) -> str:
     def img(stem: str, alt: str) -> str:
-        src = cartoon(stem)
+        src = cartoon(stem, relative=relative_assets)
         return f'<img src="{src}" alt="{alt}"/>' if src else ""
 
-    wf = waterfall_src()
+    wf = waterfall_src(relative=relative_assets)
     wf_block = (
         f'<img class="pr-wf" src="{wf}" alt="Funnel waterfall"/>'
         if wf
@@ -223,3 +233,65 @@ def app_html(
   {logs_section}
 </div>
 """
+
+
+def write_dashboard(path: Path | None = None) -> Path:
+    """Static page for raw.githack / local file open. Same sliders as the notebook."""
+    from metrics import (
+        C1A_CENTRAL_SHOWUP,
+        airport_hourly_snapshot,
+        ara_economics,
+        ara_monthly_cost,
+        c1a_monthly,
+        c1b_monthly,
+        event_funnel,
+        load_onboarding,
+        mature_months,
+    )
+
+    hourly = airport_hourly_snapshot()
+    eco = ara_economics()
+    months, *_ = mature_months()
+    funnel = event_funnel()
+    n = len(funnel)
+    n_appr = int(funnel["final_status"].eq("approved").sum())
+    captains, *_ = load_onboarding()
+    inner = app_html(
+        n=n,
+        n_appr=n_appr,
+        months=months,
+        c1a_60=c1a_monthly(C1A_CENTRAL_SHOWUP),
+        c1a_at_1=c1a_monthly(1.0),
+        c1b=c1b_monthly(2),
+        airport_unf=hourly["airport_unf_share"],
+        other_unf=hourly["other_unf_share"],
+        night_share=hourly["night_share_of_airport_unf"],
+        cap_night=hourly["mean_captains_worst"],
+        cap_day=hourly["mean_captains_rest"],
+        ara_leg=eco["payout_per_eligible_leg"],
+        ara_mo=ara_monthly_cost(1.0),
+        mix=captains["vehicle_type"].value_counts().to_dict(),
+        logs={},
+        relative_assets=True,
+    )
+    page = (
+        "<!doctype html>\n"
+        '<html lang="en">\n<head>\n'
+        '<meta charset="utf-8"/>\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1"/>\n'
+        "<title>Project_R — Rapido dashboard</title>\n"
+        f'<style>html,body{{margin:0;background:{CREAM};}}</style>\n'
+        "</head>\n"
+        f'<body style="margin:0;background:{CREAM}">\n'
+        f"{inner}\n"
+        "</body>\n</html>\n"
+    )
+    out = path or (ROOT / "dashboard.html")
+    out.write_text(page, encoding="utf-8")
+    print(f"wrote {out}")
+    return out
+
+
+if __name__ == "__main__":
+    write_dashboard()
+
