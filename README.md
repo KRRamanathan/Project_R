@@ -12,14 +12,15 @@ python3 -m pip install -r requirements.txt
 ./run_all.sh
 ```
 
-Rebuild the deck (optional): `node generate_deck.js`  
-Chart PNGs for the memo: `python3 make_exec_charts.py`
+Rebuild the deck (optional): `node generate_deck.js`
+
+Print the memo from `MEMO.html` (cream page, same numbers as `MEMO.md`).
 
 | File | Role |
 |---|---|
 | `01`–`08_*.py` | Working, from the seven CSVs |
 | `metrics.py` | Shared maths (also used by `check_regression.py`) |
-| `MEMO.md` | 2-page memo |
+| `MEMO.md` / `MEMO.html` | 2-page memo (html is the cream/yellow print layout) |
 | `DECK.pptx` | 6-slide deck (+ title) |
 | `CANDIDATE_BRIEF.md` | The assignment |
 
