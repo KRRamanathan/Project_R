@@ -76,7 +76,12 @@ def app_html(
         log_bits.append(
             f"<details><summary>{html_lib.escape(title)}</summary><pre>{safe}</pre></details>"
         )
-    logs_html = "".join(log_bits) or "<p>No step logs.</p>"
+    logs_html = "".join(log_bits)
+    logs_section = (
+        f'<div class="pr-sec">Step prints from 01–09 (working only)</div>{logs_html}'
+        if logs_html
+        else ""
+    )
 
     auto_n = mix.get("Auto", 0)
     cab_n = mix.get("Cab", 0)
@@ -200,8 +205,7 @@ def app_html(
   <div class="pr-sec">Funnel waterfall</div>
   {wf_block}
 
-  <div class="pr-sec">Step logs (click to open)</div>
-  {logs_html}
+  {logs_section}
 </div>
 <script>
 (function () {{
