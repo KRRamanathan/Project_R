@@ -1,8 +1,6 @@
 # Memo to the Head of Supply
 **Onboarding leak and overnight airport** · 10 Sep 2026 · extract 30 Jun 2026, 23:59 IST
 
-*Light ice background on the Word/PPTX packet; doughnut and bar charts below match those files.*
-
 ![Split of ~180 extra approved / month](figures/pie_c1.png)
 ![Airport unfulfilled volume by clock](figures/pie_airport_night.png)
 

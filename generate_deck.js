@@ -457,10 +457,7 @@ function addPieNight(slide, x, y, w, h) {
   s.addNotes("If interrupted: slides 1, 4, 5.");
 }
 
-const outPptx = path.join(__dirname, "DECK_Rapido_RamanathanKR.pptx");
+const outPptx = path.join(__dirname, "DECK.pptx");
 pres.writeFile({ fileName: outPptx })
-  .then(() => {
-    fs.copyFileSync(outPptx, path.join(__dirname, "DECK.pptx"));
-    console.log("wrote", outPptx);
-  })
+  .then(() => console.log("wrote", outPptx))
   .catch((e) => { console.error(e); process.exit(1); });

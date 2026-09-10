@@ -1,23 +1,7 @@
 {
-  "name": "workspace",
-  "version": "1.0.0",
-  "description": "Captain onboarding (A2O) and overnight airport supply.   Extract clock: **2026-06-30 23:59 IST** (naive timestamps; we do not invent a timezone offset).",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KRRamanathan/Project_R.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/KRRamanathan/Project_R/issues"
-  },
-  "homepage": "https://github.com/KRRamanathan/Project_R#readme",
-  "dependencies": {
-    "pptxgenjs": "^4.0.1"
-  }
+  "name": "project_r",
+  "private": true,
+  "description": "Rebuild DECK.pptx",
+  "scripts": { "deck": "node generate_deck.js" },
+  "dependencies": { "pptxgenjs": "^4.0.1" }
 }
