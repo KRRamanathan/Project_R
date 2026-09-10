@@ -1,24 +1,14 @@
 # Deck speaker notes (not the submit file)
 
-**Submit `DECK.pptx`** (6 slides; built by `./run_all.sh`). HTML preview: `deck/slides.html`. Chart: `figures/funnel_waterfall.png`. `DECK.md` is speaker notes only.
-
-Rebuild:
-
-```bash
-python make_waterfall.py
-google-chrome --headless --disable-gpu --no-pdf-header-footer \
-  --print-to-pdf=deck/Project_R_deck.pdf deck/slides.html
-```
-
-Open `deck/slides.html` from a local file if the chart path breaks in Chrome; generate the PDF from the repo root.
+**Submit `DECK.pptx`.** HTML: `deck/slides.html`. Chart: `figures/funnel_waterfall.png`.
 
 ## 10-minute talk track
 
-1. **180, medium confidence.** ~134 RC grace + ~50 Insurance UX. Waterfall: we are not claiming the whole RC bar. 98.7% of approved already take a first trip.
-2. **Photos, not eligibility.** Retry rates go up. 1,637 / 411 capture-only.
-3. **C1a vs C1b.** Legal on RC only. ~1 FTE for visits. If remaining docs still bind, C1a → ~36/month — that’s the Legal ask.
-4. **Airport.** Two independent penalties. ₹35.4 derived. No hire.
-5. **Trap slide.** Naive 29 vs 11 vs honest 0pp. Don’t add fos 128–256.
-6. **Ask.** Ship C1b now; Legal on C1a; 4-week ARA; kill 5× this week.
+1. **~180, medium confidence** (~134 RC + ~50 Insurance). Not the whole RC bar. 98.7% of approved take a first trip.
+2. **Photos, not eligibility.** Other stages are real loss, wrong tool. Leftover never-upload ≠ another WhatsApp. Reuse camera after C1b — not in the 180.
+3. **C1b this week; Legal on C1a.** If remaining docs still bind, C1a → ~36/month.
+4. **Airport is rec 2 because the answer is no to hiring.** Two independent penalties; mix does not shift; ₹35.4 derived. Spend 30s here even if onboarding ate the clock.
+5. **Trap:** 29 vs 11 is targeting; 0pp is the lift. 128–256 overlaps 726 of C1a.
+6. **Ask:** C1b → Legal C1a → 4-week ARA → kill 5×. Queue: other-doc camera, then assist RCT.
 
-If interrupted twice, keep slides 1, 5, and 6.
+If interrupted twice: slides **1, 4, and 5**.
