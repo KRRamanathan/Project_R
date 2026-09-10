@@ -10,5 +10,6 @@ for s in 01_data_audit.py 02_funnel.py 03_dropoff.py 04_channel_leaks.py \
   "$PYTHON" "$s"
 done
 "$PYTHON" make_exec_charts.py
+"$PYTHON" build_memo.py
 "$PYTHON" check_regression.py
-echo "DONE. Memo: MEMO.md (print MEMO.html)  Deck: DECK.pptx"
+echo "DONE. Memo: MEMO.docx  Deck: DECK.pptx"

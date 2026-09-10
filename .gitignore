@@ -5,3 +5,4 @@ node_modules/
 *_output.txt
 *.pdf
 *.docx
+!MEMO.docx
