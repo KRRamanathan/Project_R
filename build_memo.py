@@ -66,7 +66,7 @@ def _bar(doc, text: str, fill: str, color=NAVY, size=11) -> None:
     r = p.add_run(text)
     _run(r, size, True, color)
     sp = doc.add_paragraph()
-    _tight(sp, 4, 0)
+    _tight(sp, 2, 0)
 
 
 def _para(doc, text, size=10.5, bold=False, color=INK, after=6):
@@ -195,8 +195,8 @@ def build_memo() -> Path:
         "failed solely on blur / OCR / illegible. Insurance loses 3,289; ~2,530 never uploaded after Fitness. "
         "C1b is the 411 photo fails and cannot defer (liability). DL (1,166) is 100% uploaded-fail and "
         "cannot be deferred. Aadhaar / Permit / Fitness (1,540 / 2,616 / 2,653) are mostly never-upload or "
-        "eligibility. Rejected 409 already cleared docs — a gate, not a UX leak.",
-        10.5, False, INK, 6,
+        "eligibility. Rejected 409 already cleared docs — a gate.",
+        10, False, INK, 4,
     )
 
     pics2 = doc.add_paragraph()
@@ -205,11 +205,11 @@ def build_memo() -> Path:
     for fname in ("pie_rc_capture.png", "pie_c1b.png"):
         pth = ROOT / "figures" / fname
         if pth.exists():
-            pics2.add_run().add_picture(str(pth), width=Inches(3.25))
+            pics2.add_run().add_picture(str(pth), width=Inches(2.85))
             pics2.add_run("  ")
     cap2 = doc.add_paragraph()
     cap2.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    _tight(cap2, 6)
+    _tight(cap2, 3)
     r = cap2.add_run("Left: 1,637 of 5,405 RC losses are C1a. Right: 411 of 3,289 Insurance leftovers are C1b.")
     _run(r, 8.5, False, (0x6B, 0x4A, 0x2A))
 
@@ -217,8 +217,8 @@ def build_memo() -> Path:
     if bar.exists():
         bp = doc.add_paragraph()
         bp.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        _tight(bp, 4)
-        bp.add_run().add_picture(str(bar), width=Inches(6.5))
+        _tight(bp, 2)
+        bp.add_run().add_picture(str(bar), width=Inches(5.7))
 
     maths = doc.add_table(rows=3, cols=4)
     maths.style = "Table Grid"
@@ -242,43 +242,38 @@ def build_memo() -> Path:
 
     _para(
         doc,
-        "40–80% show-up → ~89–188. If remaining docs still bind after RC, historical P(approved | passed RC) "
-        "is 27% and C1a → ~36/month — that is the Legal question (deferral-as-activation).",
-        10, False, INK, 6,
+        "40–80% show-up → ~89–188. If remaining docs still bind after RC, P(approved | passed RC)=27% → ~36/month (Legal ask).",
+        9.5, False, INK, 4,
     )
 
-    _bar(doc, "NOT BANKED  ·  leftover queue (possible, not in the 180)", RED, WHITE, 11)
-    _para(
-        doc,
-        "(1) Reuse C1b’s camera on DL / Aadhaar / Permit / Fitness after C1b ships — cheap, capture-only n not "
-        "sized except RC/Insurance. (2) Never-upload RC ~2,388 and Insurance ~2,530 looks like a nudge; CAMP was "
-        "0 pp and only 13 post-Fitness nudges exist in 7,644 people. Fos abandon after Fitness 26% vs paid 43% — "
-        "assisted-onboarding RCT, unproven ceiling 128–256/month, overlaps 726 C1a captains. (3) Paid never-starts "
-        "docs at 11.5% vs fos ~1% — channel quality; no CAC, not sized.",
-        10.5, False, INK, 6,
-    )
-
-    _bar(doc, "ARA  ·  derived payout, not 30% of fare", ORANGE, WHITE, 11)
-    _para(
-        doc,
-        "Night-suburban net ₹24.9 vs rest-suburban ₹56.5 → gap ₹31.6 across all completed worst-suburban trips. "
-        "ARA pays only the 89.31% with no return in 20 min → 31.6 / 0.8931 ≈ ₹35.4 per eligible leg. "
-        "80 / 100 / 120% → sample ~₹69k / ₹86k / ₹103k a month. 30% of a ₹350 fare (₹105) overpays. "
-        "City-core ₹104.7 is geography, not the matching comparison.",
-        10.5, False, INK, 6,
-    )
-
-    _bar(doc, "WHAT I ASSUMED, AND WHAT WOULD CHANGE MY ANSWER", YELLOW, NAVY, 11)
-    _para(
-        doc,
-        "• ~15.6-day cutoff (max in_progress age). Later capture-fails still in flight → 180 is a floor; they finish alone → slight overstatement.  "
-        "• doc_events.verification_pass, not approvals.docs_cleared (they disagree only while unfinished).  "
-        "• Field vs app not banked until a randomised assist test on ordinary app/paid signups.  "
-        "• ARA matches rest-suburban, not city-core. If night returns rise, re-derive ₹35.4; do not freeze it.  "
-        "• C1a ops ₹40–60k assumes one FTE at 12–15 checks/day.  "
-        "Unresolved, not omitted: no CAC so field vs paid cannot be priced. airport_trips.csv is sampled — rates hold; ₹/month is not a city budget. signup_zone_id does not join airport zones. Capture-only was counted only on RC and Insurance.",
-        10, False, INK, 2,
-    )
+    close = doc.add_table(rows=2, cols=3)
+    close.style = "Table Grid"
+    close.alignment = WD_TABLE_ALIGNMENT.CENTER
+    heads = [
+        ("NOT BANKED", RED, WHITE),
+        ("ARA (not 30% of fare)", ORANGE, WHITE),
+        ("ASSUMPTIONS / WHAT WOULD CHANGE IT", YELLOW, NAVY),
+    ]
+    bodies = [
+        "Other-doc camera after C1b: measure, not +180. Never-upload RC ~2,388 / Insurance ~2,530: assist RCT, not WhatsApp (CAMP 0 pp). Overlaps 726 C1a. Paid never-starts 11.5% vs fos ~1% — no CAC, not sized.",
+        "Gap ₹31.6 (₹24.9 vs ₹56.5) ÷ 0.8931 eligible ≈ ₹35.4/leg. 80/100/120% → ~₹69–103k sample. ₹105 (30% of fare) overpays. City-core ₹104.7 is geography.",
+        "~15.6-day cutoff (later capture-fails → 180 is a floor). doc_events, not docs_cleared. Field gap not banked. Re-derive ₹35.4 if night returns rise. C1a FTE ₹40–60k assumed. No CAC. Trips sampled. signup_zone_id ≠ airport zones. Capture-only counted on RC/Insurance only.",
+    ]
+    for i, (htxt, fill, col) in enumerate(heads):
+        cell = close.rows[0].cells[i]
+        _shade(cell, fill)
+        p = cell.paragraphs[0]
+        _tight(p, 2, 2)
+        r = p.add_run(htxt)
+        _run(r, 8, True, col)
+    for i, txt in enumerate(bodies):
+        cell = close.rows[1].cells[i]
+        _shade(cell, CREAM)
+        p = cell.paragraphs[0]
+        _tight(p, 2, 2)
+        r = p.add_run(txt)
+        _run(r, 8, False, INK)
+    _set_widths(close, [2.4, 2.4, 2.4])
 
     out = ROOT / "MEMO.docx"
     doc.save(out)
