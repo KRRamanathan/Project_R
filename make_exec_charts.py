@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 ROOT = Path(__file__).resolve().parent
 FIG = ROOT / "figures"
@@ -83,23 +84,85 @@ def _bar_lost(path: Path) -> None:
     plt.close()
 
 
-def _blend_vehicles() -> None:
-    """Paint cream JPEG backdrops to the same paper colour so they sit on slides cleanly."""
-    from PIL import Image
-    import numpy as np
+def _waterfall() -> None:
+    labels = [
+        "Started\ndocs",
+        "Lost\nDL",
+        "Lost RC\n(1,637 C1a)",
+        "Lost\nAadhaar",
+        "Lost\nPermit",
+        "Lost\nFitness",
+        "Lost Ins.\n(411 C1b)",
+        "Rejected\nafter clear",
+        "Approved\ntoday",
+    ]
+    deltas = [21024, -1166, -5405, -1540, -2616, -2653, -3289, -409, 3946]
+    colors = [
+        "#1C1917",
+        "#C4B5A5",
+        GOLD,
+        "#C4B5A5",
+        "#C4B5A5",
+        "#C4B5A5",
+        APRICOT,
+        "#C4B5A5",
+        "#6B8F71",
+    ]
+    bottoms, heights, running = [], [], 0
+    for i, d in enumerate(deltas):
+        if i == 0 or i == len(deltas) - 1:
+            bottoms.append(0)
+            heights.append(d)
+            if i == 0:
+                running = d
+        else:
+            bottoms.append(running + d)
+            heights.append(-d)
+            running = running + d
 
-    dest = FIG / "vehicles"
-    paper = np.array([0xFA, 0xF7, 0xF2], dtype=np.int16)
-    for name in ("auto.png", "cab.png", "scooty.png", "bike.png"):
-        p = dest / name
-        if not p.exists():
-            continue
-        im = Image.open(p).convert("RGB")
-        arr = np.array(im, dtype=np.int16)
-        dist = np.abs(arr - np.array([250, 245, 235])).sum(axis=2)
-        mask = dist < 42
-        arr[mask] = paper
-        Image.fromarray(arr.astype(np.uint8)).resize((512, 512), Image.Resampling.LANCZOS).save(p, format="PNG")
+    fig, ax = plt.subplots(figsize=(13.2, 5.15), dpi=120)
+    fig.patch.set_facecolor(PAPER)
+    ax.set_facecolor(PAPER)
+    x = np.arange(len(labels))
+    ax.bar(x, heights, bottom=bottoms, color=colors, width=0.74, zorder=3)
+    y_conn = deltas[0]
+    for i in range(1, len(deltas) - 1):
+        ax.plot([i - 1 + 0.37, i - 0.37], [y_conn, y_conn], color=MUTED, lw=0.7, zorder=2)
+        y_conn = y_conn + deltas[i]
+    ax.plot(
+        [len(deltas) - 2 + 0.37, len(deltas) - 1 - 0.37],
+        [y_conn, y_conn],
+        color=MUTED,
+        lw=0.7,
+        zorder=2,
+    )
+    for i, d in enumerate(deltas):
+        ax.text(
+            i,
+            (d + 350) if i in (0, len(deltas) - 1) else bottoms[i] + heights[i] + 280,
+            f"{d:,}",
+            ha="center",
+            fontsize=9,
+            fontweight="bold",
+            color=INK,
+        )
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=8, color=INK)
+    ax.set_ylim(0, 24500)
+    ax.set_ylabel("Captains", color=MUTED)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.set_title(
+        "21,024 started documents  →  3,946 approved (18.8%)   ·   recover the coloured slices, not the whole bar",
+        loc="left",
+        fontsize=11,
+        fontweight="bold",
+        color=INK,
+        pad=8,
+    )
+    fig.tight_layout()
+    fig.savefig(FIG / "funnel_waterfall.png", bbox_inches="tight", facecolor=PAPER)
+    plt.close()
 
 
 def main() -> None:
@@ -128,8 +191,8 @@ def main() -> None:
         [GOLD, PEACH],
     )
     _bar_lost(FIG / "bar_volume_lost.png")
-    _blend_vehicles()
-    print("wrote figures/pie_*.png and bar_volume_lost.png")
+    _waterfall()
+    print("wrote figures/pie_*.png, bar_volume_lost.png, funnel_waterfall.png")
 
 
 if __name__ == "__main__":

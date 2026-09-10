@@ -21,7 +21,6 @@ function png(rel) {
 const AUTO   = png("figures/vehicles/auto.png");
 const CAB    = png("figures/vehicles/cab.png");
 const SCOOTY = png("figures/vehicles/scooty.png");
-const BIKE   = png("figures/vehicles/bike.png");
 const PIE180 = png("figures/pie_c1.png");
 const PIEAIR = png("figures/pie_airport_night.png");
 const PIERC  = png("figures/pie_rc_capture.png");
@@ -268,7 +267,7 @@ function addCampaignChart(slide, x, y, w, h) {
   const s = pres.addSlide();
   s.background = { color: PAPER };
   kicker(s, "Airport supply");
-  s.addImage({ data: BIKE, x: 12.05, y: 0.18, w: 0.95, h: 0.95 });
+  s.addImage({ data: SCOOTY, x: 12.05, y: 0.18, w: 0.95, h: 0.95 });
 
   s.addText("Do not hire the catchment. After the trip, the night still loses money.", {
     x: 0.6, y: 0.66, w: 11.3, h: 0.5,
