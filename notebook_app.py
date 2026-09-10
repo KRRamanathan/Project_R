@@ -83,6 +83,19 @@ def app_html(
         else ""
     )
 
+    # Inline handler: htmlpreview.github.io often drops <script> tags.
+    upd = (
+        f"var s=+document.getElementById('prShow').value;"
+        f"var p=+document.getElementById('prAra').value;"
+        f"var c1a={c1a_at_1}*(s/100);"
+        "document.getElementById('showLbl').textContent=s+'%';"
+        "document.getElementById('araLbl').textContent=p+'%';"
+        "document.getElementById('c1aVal').textContent=c1a.toFixed(1);"
+        f"document.getElementById('combo').textContent=Math.round(c1a+{c1b});"
+        f"document.getElementById('payVal').textContent='\\u20B9'+( {ara_leg}*p/100).toFixed(1);"
+        f"document.getElementById('araMo').textContent='\\u20B9'+Math.round({ara_mo}*p/100);"
+    )
+
     auto_n = mix.get("Auto", 0)
     cab_n = mix.get("Cab", 0)
     er_n = mix.get("ERickshaw", 0)
@@ -142,6 +155,7 @@ def app_html(
   padding: 12px 16px; font-size: 0.9rem; margin: 0 0 14px;
 }}
 .pr-wf {{ width: 100%; border-radius: 12px; border: 2px solid {INK}; background: #fff; }}
+.pr-live {{ background: #FFF4B0; }}
 .pr input[type=range] {{ width: 100%; accent-color: {INK}; }}
 .pr-slide {{ margin: 8px 0 14px; }}
 .pr-slide label {{ font-size: 0.82rem; font-weight: 700; display: flex; justify-content: space-between; }}
@@ -164,25 +178,26 @@ def app_html(
 
   <div class="pr-grid">
     <div class="pr-card"><div class="lbl">Approved | mature∩events</div><div class="val">{appr_pct:.1f}%</div><div class="sub">{n_appr:,} / {n:,} · {months:.2f} mo</div></div>
-    <div class="pr-card"><div class="lbl">C1a + C1b (disjoint)</div><div class="val" id="combo">{c1a_60 + c1b:.0f}</div><div class="sub">do not add fos 128–256</div></div>
+    <div class="pr-card pr-live"><div class="lbl">C1a + C1b (disjoint)</div><div class="val" id="combo">{c1a_60 + c1b:.0f}</div><div class="sub">do not add fos 128–256 · moves with C1a slider</div></div>
     <div class="pr-card"><div class="lbl">Airport unfulfilled</div><div class="val">{100 * airport_unf:.0f}%</div><div class="sub">vs {100 * other_unf:.0f}% elsewhere · {100 * night_share:.0f}% in 21:00–03:59</div></div>
     <div class="pr-card"><div class="lbl">Captains night vs day</div><div class="val">{cap_night:.0f} vs {cap_day:.0f}</div><div class="sub">do not hire the catchment</div></div>
   </div>
 
   <div class="pr-sec">Move the two assumptions</div>
+  <p class="sub" style="margin:0 0 10px;color:#5c5c5c">Yellow cards update. C1b, approval %, and airport figures stay locked on purpose.</p>
   <div class="pr-slide">
     <label>C1a 10-day show-up <span id="showLbl">60%</span></label>
-    <input id="show" type="range" min="0" max="100" value="60"/>
+    <input id="prShow" type="range" min="0" max="100" value="60" oninput="{upd}" onchange="{upd}"/>
   </div>
   <div class="pr-slide">
     <label>ARA as % of derived ₹{ara_leg:.1f}/leg <span id="araLbl">100%</span></label>
-    <input id="ara" type="range" min="50" max="150" step="5" value="100"/>
+    <input id="prAra" type="range" min="50" max="150" step="5" value="100" oninput="{upd}" onchange="{upd}"/>
   </div>
   <div class="pr-grid">
-    <div class="pr-card"><div class="lbl">C1a / month</div><div class="val" id="c1aVal">{c1a_60:.1f}</div><div class="sub">flow × show-up × RC att-3</div></div>
+    <div class="pr-card pr-live"><div class="lbl">C1a / month</div><div class="val" id="c1aVal">{c1a_60:.1f}</div><div class="sub">flow × show-up × RC att-3</div></div>
     <div class="pr-card"><div class="lbl">C1b / month</div><div class="val">{c1b:.1f}</div><div class="sub">Insurance UX · locked</div></div>
-    <div class="pr-card"><div class="lbl">₹ / eligible leg</div><div class="val" id="payVal">₹{ara_leg:.1f}</div><div class="sub">not 30% of fare</div></div>
-    <div class="pr-card"><div class="lbl">ARA sample / month</div><div class="val" id="araMo">₹{ara_mo:,.0f}</div><div class="sub">sampled trips · not city P&amp;L</div></div>
+    <div class="pr-card pr-live"><div class="lbl">₹ / eligible leg</div><div class="val" id="payVal">₹{ara_leg:.1f}</div><div class="sub">not 30% of fare</div></div>
+    <div class="pr-card pr-live"><div class="lbl">ARA sample / month</div><div class="val" id="araMo">₹{ara_mo:,.0f}</div><div class="sub">sampled trips · not city P&amp;L</div></div>
   </div>
 
   <div class="pr-sec">Fleet mix</div>
@@ -207,30 +222,4 @@ def app_html(
 
   {logs_section}
 </div>
-<script>
-(function () {{
-  const c1aAt1 = {c1a_at_1};
-  const c1b = {c1b};
-  const araLeg = {ara_leg};
-  const araMo = {ara_mo};
-  const show = document.getElementById('show');
-  const ara = document.getElementById('ara');
-  function rupees(x) {{
-    return '₹' + Math.round(x).toLocaleString('en-IN');
-  }}
-  function upd() {{
-    const s = +show.value;
-    const p = +ara.value;
-    const c1a = c1aAt1 * (s / 100);
-    document.getElementById('showLbl').textContent = s + '%';
-    document.getElementById('araLbl').textContent = p + '%';
-    document.getElementById('c1aVal').textContent = c1a.toFixed(1);
-    document.getElementById('combo').textContent = (c1a + c1b).toFixed(0);
-    document.getElementById('payVal').textContent = '₹' + (araLeg * p / 100).toFixed(1);
-    document.getElementById('araMo').textContent = rupees(araMo * p / 100);
-  }}
-  show.addEventListener('input', upd);
-  ara.addEventListener('input', upd);
-}})();
-</script>
 """
