@@ -12,7 +12,7 @@ python3 -m pip install -r requirements.txt
 python3 -m jupyter notebook Project_R.ipynb
 ```
 
-Then **Run all**. The notebook runs steps 1–8 from the CSVs, prints the locked headlines, shows the pies, writes `MEMO.docx`, and checks the regression lock.
+Then **Run all**. You get **one Rapido-yellow page** (KPI cards + two sliders), not eight stacked log cells. Same maths as `./run_all.sh`. Yellow cards move with the sliders; C1b, approval %, and airport stay locked.
 
 Same working from the shell:
 
@@ -25,7 +25,7 @@ Rebuild the Word memo: `python3 build_memo.py`
 
 | File | Role |
 |---|---|
-| `Project_R.ipynb` | Run-all working |
+| `Project_R.ipynb` | Run-all → yellow dashboard |
 | `01`–`08_*.py` | Same working as scripts |
 | `metrics.py` | Shared maths |
 | `MEMO.docx` | 2-page memo |
