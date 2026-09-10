@@ -9,6 +9,9 @@ Ramanathan K R · 10 Sep 2026 · extract 30 Jun 2026, 23:59 IST
 
 These approvals are not hollow: **98.7%** of mature approved captains already take a first trip (3,895 / 3,946). Documents are the bottleneck.
 
+![Split of ~180 extra approved / month](figures/pie_c1.png)
+![Airport unfulfilled volume by clock](figures/pie_airport_night.png)
+
 ---
 
 ## What to do this week
@@ -27,7 +30,14 @@ These approvals are not hollow: **98.7%** of mature approved captains already ta
 
 ## Why these two stages, and what would change my mind
 
-**RC and Insurance fail as photographs, not as papers.** RC loses 5,405 — the largest stage — but only **1,637** failed solely on blur / OCR / illegible. Retry pass rates go **up** (65% → 74%). RC is vehicle identity, so a 10-day in-person grace is scoped. Insurance loses 3,289, but ~2,530 never uploaded after Fitness; C1b is only the **411** photo fails and **cannot** defer (liability). DL (1,166) cannot be deferred. Aadhaar / Permit / Fitness losses are real (1,540 / 2,616 / 2,653) but mostly never-upload or eligibility. A camera does not fix those. Rejected 409 already cleared docs — a gate, not a UX leak.
+**RC and Insurance fail as photographs, not as papers.** RC loses 5,405 — the largest stage — but only **1,637** failed solely on blur / OCR / illegible.
+
+![RC capture-only slice](figures/pie_rc_capture.png)
+![Insurance C1b slice](figures/pie_c1b.png)
+
+![Where volume is lost](figures/bar_volume_lost.png)
+
+Retry pass rates go **up** (65% → 74%). RC is vehicle identity, so a 10-day in-person grace is scoped. Insurance loses 3,289, but ~2,530 never uploaded after Fitness; C1b is only the **411** photo fails and **cannot** defer (liability). DL (1,166) cannot be deferred. Aadhaar / Permit / Fitness losses are real (1,540 / 2,616 / 2,653) but mostly never-upload or eligibility. A camera does not fix those. Rejected 409 already cleared docs — a gate, not a UX leak.
 
 **How 134 and ~50 are built**
 

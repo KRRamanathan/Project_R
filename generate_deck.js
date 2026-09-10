@@ -46,6 +46,42 @@ function statCard(slide, x, y, w, h, num, label, color, dark) {
     lineSpacingMultiple: 1.1, isTextBox: true, margin: 0 });
 }
 
+function addPie180(slide, x, y, w, h) {
+  slide.addChart(pres.ChartType.doughnut, [
+    { name: "of ~180/mo", labels: ["C1a RC ~134", "C1b Insurance ~50"], values: [134, 50] },
+  ], {
+    x, y, w, h,
+    chartColors: [TEAL, CORAL],
+    showLegend: true, legendPos: "b", legendFontSize: 9, legendColor: "444444",
+    showPercent: true,
+    chartArea: { fill: { color: WHITE } },
+  });
+}
+
+function addPieNight(slide, x, y, w, h) {
+  slide.addChart(pres.ChartType.pie, [
+    { name: "Airport unfulfilled", labels: ["21:00–03:59", "Rest of day"], values: [84, 16] },
+  ], {
+    x, y, w, h,
+    chartColors: [CORAL, YELLOW],
+    showLegend: true, legendPos: "b", legendFontSize: 9, legendColor: "444444",
+    showPercent: true,
+    chartArea: { fill: { color: WHITE } },
+  });
+}
+
+function addPieRc(slide, x, y, w, h) {
+  slide.addChart(pres.ChartType.doughnut, [
+    { name: "RC lost", labels: ["Capture-only 1,637", "Other RC 3,768"], values: [1637, 3768] },
+  ], {
+    x, y, w, h,
+    chartColors: [CORAL, ICE],
+    showLegend: true, legendPos: "b", legendFontSize: 9, legendColor: "444444",
+    showPercent: true,
+    chartArea: { fill: { color: WHITE } },
+  });
+}
+
 function addFunnelChart(slide, x, y, w, h) {
   const data = [
     { name: "Approved", labels: ["RC","Insurance","DL","Aadhaar","Permit","Fitness"], values: [3946, 3289, 2283, 2045, 1428, 775] },
@@ -238,11 +274,11 @@ function addARAChart(slide, x, y, w, h) {
   s.addShape("roundRect", { x: 0.55, y: 2.2, w: 7.5, h: 4.35,
     rectRadius: 0.09, fill: { color: WHITE }, line: { type: "none" },
     shadow: { type: "outer", color: "000000", opacity: 0.25, blur: 10, offset: 4, angle: 90 } });
-  s.addText("Approved captain recovery by fix", {
+  s.addText("Split of the ~180  (disjoint C1a + C1b)", {
     x: 0.75, y: 2.3, w: 7.1, h: 0.32,
     fontFace: "Calibri", fontSize: 10, bold: true, color: NAVY, isTextBox: true, margin: 0
   });
-  addWaterfallChart(s, 0.65, 2.58, 7.3, 3.7);
+  addPie180(s, 0.65, 2.55, 7.3, 3.75);
 
   const statX = 8.3, statW = 4.45;
   statCard(s, statX, 2.2, statW, 1.35, "98.7%", "of mature approved captains take a first trip (3,895 / 3,946) — documents are the bottleneck, not first-order.", CORAL, true);
@@ -270,11 +306,11 @@ function addARAChart(slide, x, y, w, h) {
 
   s.addShape("roundRect", { x: 0.55, y: 2.0, w: 6.0, h: 4.25,
     rectRadius: 0.08, fill: { color: WHITE }, line: { color: BORDER, width: 1 } });
-  s.addText("Funnel: approved vs. lost by document", {
+  s.addText("RC loss: only the photo slice is C1a", {
     x: 0.72, y: 2.1, w: 5.65, h: 0.28,
     fontFace: "Calibri", fontSize: 9.5, bold: true, color: NAVY, isTextBox: true, margin: 0
   });
-  addFunnelChart(s, 0.65, 2.32, 5.8, 3.7);
+  addPieRc(s, 0.65, 2.32, 5.8, 3.7);
 
   s.addShape("roundRect", { x: 6.75, y: 2.0, w: 6.05, h: 4.25,
     rectRadius: 0.08, fill: { color: WHITE }, line: { color: BORDER, width: 1 } });
@@ -374,10 +410,10 @@ function addARAChart(slide, x, y, w, h) {
 
   s.addShape("roundRect", { x: 0.55, y: 1.62, w: 6.0, h: 3.85,
     rectRadius: 0.08, fill: { color: WHITE }, line: { type: "none" } });
-  s.addText("Captains online vs demand index by hour (18:00–05:00)", {
+  s.addText("When the pain sits (unfulfilled volume)", {
     x: 0.72, y: 1.72, w: 5.65, h: 0.28,
     fontFace: "Calibri", fontSize: 9, bold: true, color: NAVY, isTextBox: true, margin: 0 });
-  addAirportHourlyChart(s, 0.65, 1.95, 5.8, 3.3);
+  addPieNight(s, 0.65, 1.95, 5.8, 3.3);
 
   s.addShape("roundRect", { x: 6.75, y: 1.62, w: 6.05, h: 3.85,
     rectRadius: 0.08, fill: { color: WHITE }, line: { type: "none" } });
