@@ -1,0 +1,257 @@
+
+====================================================================================================
+STEP 4 FRAMING LOCK (must sit in front of any memo number)
+====================================================================================================
+These are interpretation constraints, not new calculations.
+
+1. Causal assumption under the channel ceiling
+   The 216.5 approved/month (100% close) and the 108–162/month at 50–75%
+   assume that if an organic/paid captain received the fos_field *experience*,
+   they would convert at fos_field's rate. fos_field is in-person recruitment.
+   Recruits may already differ (docs in hand, pre-vetted vehicles, agent
+   pre-screening, higher commitment). This extract cannot separate selection
+   (who fos recruits) from treatment (how they onboard).
+   Present as: IF we could fully replicate the fos_field experience with ZERO
+   selection difference, this is the CEILING. Not: we will get 216 more/month.
+
+2. Two distinct interventions — do not add them
+   C1 guided-capture / provisional activation:
+     RC+Insurance uploaded, failed only on capture reasons.
+     n=2,048 (~375/mo); self-serve slice 892 (~164/mo).
+     Mechanism isolated to blur/OCR/illegible. No fos-selection problem.
+     This is the safer lead recommendation.
+   Channel-replication (fos experience at scale):
+     Whole organic/paid conversion gap, all stages.
+     128–256 approved/month at 50–100% of the gap.
+     Larger, more interesting, unproven causal assumption — test, don't bank.
+   Do not sum 164 + 128. Different captains, different mechanisms.
+
+3. Already solid as stated: Insurance-abandonment channel pattern;
+   13 post-Fitness nudges = not a usable program; CAC cannot be computed.
+
+====================================================================================================
+STEP 5 — CAMP_WA_002 EVALUATION
+====================================================================================================
+extract: 2026-06-30 23:59 IST
+Completion = approved, mature cohort only.
+Click-lift sample = CAMP_WA_002 rows with delivered=1.
+Standing rule: clicked=1 & delivered=0 dropped from click comparisons.
+Growth claim under test: CAMP_WA_002 is a big win; scale 5x.
+
+mature cutoff: signup_age > 15.602778 days
+invalid click rows in nudges.csv: 457 (all campaigns)
+
+CAMP_WA_002 rows=8,673  unique captains=8,673
+  delivered × clicked (raw, before standing rule):
+  delivered  clicked
+  0          0           364
+             1           251
+  1          0          4740
+             1          3318
+  invalid click rows on CAMP_WA_002: 251 — excluded from click-lift
+  rows per captain: {1: 8673}
+
+----------------------------------------------------------------------------------------------------
+Who received CAMP_WA_002 (descriptive; not a causal contrast)
+----------------------------------------------------------------------------------------------------
+  recipients n=8,673
+  final_status:
+  final_status
+  dropped_in_docs    5573
+  approved           2473
+  in_progress         373
+  rejected            254
+  mature:  91.58% (7,943/8,673) W95% [90.98,92.15]
+  days signup → send: mean=2.36  p50=2.23  min=0.39  max=7.71
+  send before signup: 0
+  send after approval decision: 0 / 2,473 approved recipients
+
+  naive contrast (confounded by targeting — do not treat as campaign lift):
+    approved | received, mature:  29.16% (2,316/7,943) W95% [28.17,30.17]
+    approved | not received, mature:  11.24% (1,630/14,497) W95% [10.74,11.77]
+    Δ=+17.91pp  Wald95% [+16.79,+19.04]  z=33.71 p=4.306e-249
+    Recipients already passed RC by send (below). This gap is mostly who was
+    selected into the campaign, not what the message did.
+
+----------------------------------------------------------------------------------------------------
+Primary estimand: clicked vs not, among mature + delivered CAMP_WA_002
+----------------------------------------------------------------------------------------------------
+  delivered=1 implies the 251 invalid clicks are already out.
+  n=7,387  clicked=3,065  not=4,322
+  approved | clicked:      28.29% (867/3,065) W95% [26.72,29.91]
+  approved | not clicked:  29.80% (1,288/4,322) W95% [28.46,31.18]
+  Δ (click − no click) = -1.51pp  Wald95% [-3.61,+0.58]
+  two-proportion z=-1.41  p=0.1584
+  Result: NO statistically significant click-associated completion lift.
+  Point estimate is at or below zero. The CI includes 0 and does not include
+  a large positive effect.
+
+====================================================================================================
+1. SELECTION BIAS — are clickers a random sample of recipients?
+====================================================================================================
+  Among the same click-lift sample (mature, delivered).
+  Tests: chi-square on channel, device_tier, signup month; Mann-Whitney on
+  signup_age and days-to-send. Bonferroni α=0.05/5=0.01 for this family of 5.
+
+  acquisition_channel × clicked: χ²=6.96 dof=4 p=0.1381 min_exp=180.49
+    click rate by level:
+      organic_app         41.91% (992/2,367) W95% [39.94,43.91]
+      fos_field           39.44% (822/2,084) W95% [37.37,41.56]
+      referral            42.70% (681/1,595) W95% [40.29,45.14]
+      paid_digital        43.71% (396/906) W95% [40.51,46.96]
+      gc_telecalling      40.00% (174/435) W95% [35.50,44.67]
+    column % (composition of clickers vs non-clickers):
+    clicked                  0      1
+    acquisition_channel              
+    fos_field            29.20  26.82
+    gc_telecalling        6.04   5.68
+    organic_app          31.81  32.37
+    paid_digital         11.80  12.92
+    referral             21.15  22.22
+
+  device_tier × clicked: χ²=3.00 dof=2 p=0.2231 min_exp=504.13
+    click rate by level:
+      low                 42.64% (1,352/3,171) W95% [40.92,44.37]
+      mid                 40.65% (1,220/3,001) W95% [38.91,42.42]
+      high                40.58% (493/1,215) W95% [37.85,43.36]
+    column % (composition of clickers vs non-clickers):
+    clicked          0      1
+    device_tier              
+    high         16.71  16.08
+    low          42.09  44.11
+    mid          41.21  39.80
+
+  signup month × clicked: χ²=3.48 dof=5 p=0.6263
+    clicked        0      1
+    signup_ts              
+    2026-01    15.94  16.25
+    2026-02    16.38  15.24
+    2026-03    19.34  18.50
+    2026-04    17.98  18.27
+    2026-05    20.25  21.08
+    2026-06    10.11  10.67
+
+  signup_age_days  clickers mean=93.13 p50=90.72  non-click mean=94.28 p50=94.11
+    Mann-Whitney U p=0.2928
+  days signup→send  clickers mean=2.40 p50=2.26  non-click mean=2.34 p50=2.21
+    Mann-Whitney U p=0.09177
+
+  Read-out: if observables do not differ, that does NOT make click random.
+  Click still selects on unobserved motivation / phone-availability / literacy.
+  The click contrast is still not an experiment. We report it because that is
+  the contrast the growth claim uses.
+
+----------------------------------------------------------------------------------------------------
+Logistic: approved ~ clicked + channel + device_tier + signup month + stage-at-send (RC vs past RC)
+----------------------------------------------------------------------------------------------------
+  Checks whether a click coefficient appears after the observables above.
+  clicked OR=0.951  95%CI [0.857, 1.055]  p=0.342
+  model n=7,387  pseudo-R²=0.0260  converged=True
+  Other coefficients omitted unless needed; click is the claim coefficient.
+
+====================================================================================================
+2. CAMPAIGN OVERLAP
+====================================================================================================
+  CAMP_WA_002 recipients who also received ≥1 other campaign:  30.52% (2,647/8,673) W95% [29.56,31.50]
+  by other campaign (not mutually exclusive):
+    CAMP_WA_001       15.08% (1,308/8,673) W95% [14.34,15.85]
+    CAMP_SMS_004      10.65% (924/8,673) W95% [10.02,11.32]
+    CAMP_CALL_009      4.78% (415/8,673) W95% [ 4.36, 5.25]
+  n distinct campaigns per CAMP_WA_002 recipient:
+  campaign_id
+  1    6026
+  2    2647
+  30% overlap is material. An isolated CAMP_WA_002 effect cannot be cleanly
+  attributed from this data for those captains.
+
+----------------------------------------------------------------------------------------------------
+Click-lift among exclusive CAMP_WA_002 recipients (no other campaign)
+----------------------------------------------------------------------------------------------------
+  mature delivered exclusive n=5,151  (69.7% of click-lift sample)
+  approved | clicked:      26.63% (568/2,133) W95% [24.80,28.55]
+  approved | not clicked:  30.52% (921/3,018) W95% [28.90,32.18]
+  Δ=-3.89pp  Wald95% [-6.38,-1.39]  z=-3.03 p=0.002432
+
+====================================================================================================
+3. TIMING / STAGE AT SEND
+====================================================================================================
+  Question: is CAMP_WA_002 aimed at a stage where a WhatsApp nudge could
+  plausibly move completion, or is a null result unsurprising a priori
+  (as with the 13 post-Fitness nudges in Step 4)?
+
+  any doc_event by send: 100.00% (8,673/8,673) W95% [99.96,100.00]
+  furthest verification_pass at send (all recipients):
+    no pass yet: 0
+    ord=2 passed through RC (next = Aadhaar)                89.17% (7,734/8,673) W95% [88.50,89.81]
+    ord=3 passed through Aadhaar (next = Permit / Fitness)  10.28% (892/8,673) W95% [ 9.66,10.94]
+    ord=4 passed through Permit                              0.46% (40/8,673) W95% [ 0.34, 0.63]
+    ord=5 passed through Fitness                             0.07% (6/8,673) W95% [ 0.03, 0.15]
+    ord=6 passed through Insurance                           0.01% (1/8,673) W95% [ 0.00, 0.07]
+
+  same, mature + delivered (click-lift sample):
+    ord=2 passed through RC (next = Aadhaar)                89.21% (6,590/7,387) W95% [88.48,89.90]
+    ord=3 passed through Aadhaar (next = Permit / Fitness)  10.26% (758/7,387) W95% [ 9.59,10.97]
+    ord=4 passed through Permit                              0.45% (33/7,387) W95% [ 0.32, 0.63]
+    ord=5 passed through Fitness                             0.07% (5/7,387) W95% [ 0.03, 0.16]
+    ord=6 passed through Insurance                           0.01% (1/7,387) W95% [ 0.00, 0.08]
+
+  Read-out vs Step 4 Fitness nudges:
+  CAMP_WA_002 is sent ~2.2 days after signup. ~89% of recipients have already
+  passed RC and have not yet passed Aadhaar — i.e. it hits the post-RC
+  continuation window (Aadhaar → Permit/Fitness → Insurance), which IS a
+  plausible intervention point. A null click result is therefore informative
+  about the message/channel, not an artefact of messaging people after the
+  funnel is over. This is the opposite of the post-Fitness dead-end.
+
+----------------------------------------------------------------------------------------------------
+Progression AFTER send, click vs not (mature delivered)
+----------------------------------------------------------------------------------------------------
+  Among captains whose furthest pass at send was RC (ord=2): did they later
+  pass Aadhaar? Among ord=3: later pass Permit? Approval still the primary.
+  Bonferroni α=0.05/4=0.0125 for this mini-family.
+
+  at-send ord=2 n=6,590  next doc=AADHAAR
+    not clicked  later AADHAAR  90.10% (3,485/3,868) W95% [89.12,91.00]  approved  29.76% (1,151/3,868) W95% [28.34,31.22]
+    clicked      later AADHAAR  89.05% (2,424/2,722) W95% [87.82,90.17]  approved  27.81% (757/2,722) W95% [26.16,29.52]
+    later AADHAAR Δ=-1.05pp z=-1.37 p=0.1696  not sig
+    approved   Δ=-1.95pp z=-1.72 p=0.08625  not sig
+
+  at-send ord=3 n=758  next doc=PERMIT
+    not clicked  later PERMIT  53.85% (231/429) W95% [49.12,58.51]  approved  30.07% (129/429) W95% [25.92,34.57]
+    clicked      later PERMIT  62.31% (205/329) W95% [56.96,67.38]  approved  31.00% (102/329) W95% [26.25,36.20]
+    later PERMIT Δ=+8.46pp z=2.34 p=0.01947  raw p<0.05 only
+    approved   Δ=+0.93pp z=0.28 p=0.7821  not sig
+
+====================================================================================================
+4. DOES THE 'BIG WIN, SCALE 5×' CLAIM HOLD?
+====================================================================================================
+  Claim: CAMP_WA_002 is a big win for onboarding completion and should be scaled 5x.
+
+  What we can defend in a deck:
+    Among mature captains with a delivered CAMP_WA_002 message (n=7,387):
+    clicked  28.29% (867/3,065) W95% [26.72,29.91]
+    not      29.80% (1,288/4,322) W95% [28.46,31.18]
+    Δ=-1.51pp  Wald95% [-3.61, +0.58]  z=-1.41 p=0.1584
+
+  Number I would put in a deck with my name on it:
+    Completion lift attributable to clicking CAMP_WA_002: 0 pp.
+    Best estimate of the click contrast: -1.5pp
+    95% CI [-3.6, +0.6] pp, p=0.16.
+    Confidence in 'no large positive click-lift': HIGH (n=7,387 delivered,
+    CI rules out lifts larger than about the upper Wald bound).
+    Confidence in 'the campaign has zero effect on anyone': LOW — this is not
+    an RCT; we did not test send vs no-send among eligible captains, and 30%
+    of recipients got another campaign.
+
+  The naive recipient vs non-recipient gap (29% vs 11% approved, mature) is
+  NOT a campaign effect. Recipients are selected after they have already
+  cleared RC. Scaling 5x would either (i) message more of the same RC-cleared
+  pool, where clicking shows no completion lift, or (ii) expand to people who
+  have not cleared RC, a population this campaign has not been shown to work on.
+
+  Verdict: the 'big win, scale it 5x' claim does NOT hold for onboarding
+  completion. I would not fund a 5x scale on this evidence. A test I would
+  fund: randomized send vs no-send among RC-cleared self-serve captains,
+  exclusive of other campaigns, with Aadhaar-pass and approved as endpoints.
+
+Step 5 complete. No further sections.
