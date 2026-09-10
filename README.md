@@ -1,56 +1,91 @@
-# Project_R — what to submit
+# Project_R — working
 
-Captain onboarding (A2O) and airport supply. Extract **2026-06-30 23:59 IST**.
+Captain onboarding (A2O) and overnight airport supply.  
+Extract clock: **2026-06-30 23:59 IST** (naive timestamps; we do not invent a timezone offset).
 
-## Submit these three
+**Submit:** `MEMO.docx` (or `MEMO.md`), `DECK.pptx`, and this repo.
 
-1. **`MEMO.md`** (or a PDF export of it) — Head of Supply, 2 pages.
-2. **`deck/Project_R_deck.pdf`** — 6 slides. Not `DECK.md` (those are speaker notes).
-3. **This repo** — scripts 01–09, CSVs, `requirements.txt`.
+## Setup
 
-Headline to say without notes: *about 180 more approved captains a month, medium confidence (~134 RC grace + ~50 Insurance UX); don’t scale the WhatsApp; don’t hire the airport — ARA at ₹35.4/leg first.*
-
-## How to run
+- **Python:** 3.10 or newer (developed on 3.12).
+- **Install:**
 
 ```bash
-pip install -r requirements.txt
-python 01_data_audit.py
-python 02_funnel.py
-python 03_dropoff.py
-python 04_channel_leaks.py
-python 05_campaign.py
-python 06_airport_hourly.py
-python 07_airport_trips.py
-python 08_intervention_sizing.py   # ARA uses derived ₹35.4, not % of fare
-python 09_final_deliverables.py    # R2A, ARA check, waterfall, reprints memo
-python make_waterfall.py
-google-chrome --headless --disable-gpu --no-pdf-header-footer \
-  --print-to-pdf=deck/Project_R_deck.pdf file://$PWD/deck/slides.html
+python3 -m pip install -r requirements.txt
 ```
 
-Each `0N_*.py` prints to stdout; copies live in `0N_*_output.txt`. Later steps re-derive from CSVs.
+`requirements.txt`: pandas, numpy, scipy, statsmodels, matplotlib, python-docx, python-pptx, streamlit.
 
-`activation.csv` is required (1:1 with approved). It was missing from the original GitHub upload.
+Raw inputs (must be in the repo root): `captains.csv`, `doc_events.csv`, `approvals.csv`, `activation.csv`, `nudges.csv`, `airport_hourly.csv`, `airport_trips.csv`.
 
-## Data-quality summary
+## Run order
 
-**Censoring.** `in_progress` is not failure. Mature = signup age **> 15.602778 days** (max in-progress age). Funnel: mature ∩ has `doc_events` (n = 21,024). Zero-event mature (1,416) = never-attempted, separate.
+From a clean clone, one command:
 
-**`doc_events` over `approvals.csv` for which docs passed.** Mature mismatch = 0. Rejected (409) is after clearance — a gate, not UX.
+```bash
+./run_all.sh
+```
 
-**Nudges.** Drop `clicked=1 & delivered=0` (457). CAMP_WA_002 is sent after RC; recipient vs non-recipient is targeting.
+That runs `01_data_audit.py` → `09_deliverables.py` in order, tees every print to `0N_*_output.txt`, writes `MEMO.docx`, `DECK.pptx`, `figures/funnel_waterfall.png`, then **fails the build** if headline numbers moved.
 
-**Activation / R2A.** One row per approved captain. 98.7% of mature approved have a first trip (3,895/3,946).
+Individual scripts (each re-derives from CSVs; none reads another script’s console):
 
-**Airport files don’t mix.** Hourly = when terminals fail. Trips = sampled post-pickup economics. `signup_zone_id` does not join airport `zone_id`.
+| Script | What it produces |
+|---|---|
+| `01_data_audit.py` | Schema, joins, mature-relevant flags |
+| `02_funnel.py` | Empirical 15.6-day cut; stage funnel |
+| `03_dropoff.py` | Where volume is lost; attempt-level pass rates |
+| `04_channel_leaks.py` | fos vs self-serve; C1 capture-only 1,637 / 411 |
+| `05_campaign.py` | CAMP_WA_002 0pp lift; RCT sketch |
+| `06_airport_hourly.py` | When/how much airport unfulfilled |
+| `07_airport_trips.py` | Post-trip economics; two independent penalties |
+| `08_intervention_sizing.py` | C1a/C1b/ARA sizing (derived ₹35.4) |
+| `09_deliverables.py` | Waterfall, `MEMO.docx`, `DECK.pptx`, R2A |
+| `check_regression.py` | Headline lock (called by `run_all.sh`) |
 
-**Rigor.** Point estimate, n, test, CI. n<100 directional. Multi-cut Bonferroni. Confound check before a univariate cut becomes a cause.
+Shared maths live in `metrics.py` so Step 8, the regression check, and the Streamlit app cannot drift.
 
-## What I chose not to do
+Optional: run `streamlit run sensitivity_explorer.py` to explore the two assumption-dependent numbers live.
 
-- No ML churn model — the decision is a product fix and a campaign stop.
-- No CAC channel ROI — spend is not in the file. C1a ops cost is an **explicit FTE assumption** (₹40–60k), not fake media math.
-- No city-core target for ARA — that pays for geography.
-- No 30/50/70%-of-fare ARA grid — derived ₹31.6 / 0.8931 ≈ ₹35.4; 80/100/120% of that.
-- No banking field vs app (128–256/month). Overlaps 726 C1a captains. Pilot, not a target.
-- No vehicle-type headline (pseudo-R² 0.0065).
+## Data-quality decisions (carried through every step)
+
+**~15.6-day censoring cutoff.** `in_progress` is unfinished, not failed. Cut = **max signup age among `in_progress` = 15.602778 days**. Mature = signup age **greater than** that. Funnel rates use mature ∩ has `doc_events` (**n = 21,024**). The 1,416 mature captains with zero document events are **never-attempted**, reported separately, never mixed into stage capture-failure stats.
+
+**`doc_events` over `approvals.csv` for which documents passed.** Stage flags are `verification_pass` in `doc_events`. `docs_cleared` disagrees with n-unique passes for 451 captains, **all immature**. Mature mismatch = 0.
+
+**Rejected is a distinct outcome.** 409 rejected captains all sit **after** required docs cleared — an eligibility gate, not a document-UX leak. Not folded into “dropped in docs.”
+
+**Nudges.** 457 rows are `clicked=1` and `delivered=0` (impossible). Dropped from campaign lift. CAMP_WA_002 is sent after RC; recipient vs non-recipient is targeting, not an experiment.
+
+**Activation.** One row per approved captain. Answers R2A (first trip), not the A2O funnel. 98.7% of mature approved have a first order.
+
+**Airport files do not mix.** `airport_hourly.csv` = when terminals fail (marketplace state). `airport_trips.csv` = sampled post-pickup economics. `signup_zone_id` does not join airport `zone_id`.
+
+**Rigor bar.** Point estimate, n, test, CI. n<100 directional. Multi-cut Bonferroni. Confound check before a univariate cut becomes a cause.
+
+## Where each brief question is answered
+
+| Brief | Question | Go here |
+|---|---|---|
+| **A1** | Build the signup→approved funnel | `02_funnel.py` / `02_funnel_output.txt` — empirical mature cut, stage rates vs signup, volume lost. Waterfall: `figures/funnel_waterfall.png`. |
+| **A2** | Biggest fixable leak, sized /month | `03_dropoff.py` (failure mix, retry pattern) then `04_channel_leaks.py` (C1 = 1,637 RC + 411 Insurance capture-only) then `08_intervention_sizing.py` §1–2 (C1a ~134/month central, C1b ~46–52/month). |
+| **A3** | CAMP_WA_002 5× claim | `05_campaign.py` / `05_campaign_output.txt` §4 — clicked vs not **0 pp**; naive recipient gap is targeting. Deck slide 5. |
+| **A4** | Three ranked recommendations | `MEMO.docx` page 1 table; `DECK.pptx` slide 6; working in `08` + `09`. |
+| **B1** | Airport demand–supply mismatch when/how much | `06_airport_hourly.py` — 40% unfulfilled, 84% in 21:00–03:59, ~13 vs ~37 captains. |
+| **B2** | What happens after an airport trip | `07_airport_trips.py` — suburban + overnight penalties, mix does **not** shift (χ² p=0.12). |
+| **B3** | Is targeted acquisition the right intervention? | **No.** `08` §6 + memo page 1: ARA at **₹35.4/eligible leg**, not hiring. Headcount only if a 4-week payout run-rate does not fall. |
+
+## What I chose not to do, and why
+
+- **No ML churn model.** Time budget, and the decision is a product fix plus a campaign stop, not a scoring layer.
+- **No CAC-based channel ROI.** Spend/bid/CAC is not in the extract. Paid never-attempt is named, not priced.
+- **No city-core-parity target for ARA.** City-core net is a different geography. The matching comparison is rest-of-day suburban (₹56.5 vs ₹24.9).
+- **No blind 30/50/70%-of-fare ARA grid.** Population gap ₹31.6 ÷ eligible share 0.8931 ≈ **₹35.4** per unpaid leg. Sensitivity is 80/100/120% of that derived point.
+
+## Known limitations
+
+- **C1a show-up is unobserved** and assumed (central 60%; band 40–80%). If Legal will not treat RC as deferred activation, remaining-funnel conversion (~27% after RC) shrinks C1a toward ~36/month.
+- **Field vs self-serve 128–256/month is an unproven ceiling**, not banked. fos recruits in person. It overlaps 726 C1a captains — do not add it to ~180.
+- **`airport_trips.csv` is sampled**, not a census. Rates and the ₹35.4 derivation hold; ₹69k–103k/month is sample-implied, not a city P&L line.
+- **C1a ops ₹40–60k/month** is a stated FTE assumption (12–15 checks/day), not a field in the file.
+- **No join** from `signup_zone_id` to airport zones — cannot size existing catchment headcount.

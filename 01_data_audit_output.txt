@@ -33,7 +33,7 @@ device_tier            str
 app_language           str
 age_band               str
 
-memory (approx): 12.69 MB
+memory (approx): 3.46 MB
 
 ----------------------------------------------------------------------------------------
 nulls / emptiness / cardinality
@@ -229,7 +229,7 @@ event_type          str
 event_ts            str
 failure_reason      str
 
-memory (approx): 66.57 MB
+memory (approx): 23.60 MB
 
 ----------------------------------------------------------------------------------------
 nulls / emptiness / cardinality
@@ -422,7 +422,7 @@ final_status            str
 last_stage_reached      str
 docs_cleared          int64
 
-memory (approx): 5.48 MB
+memory (approx): 1.81 MB
 
 ----------------------------------------------------------------------------------------
 nulls / emptiness / cardinality
@@ -580,7 +580,7 @@ orders_d7           float64
 orders_d30          float64
 online_hours_d30    float64
 
-memory (approx): 0.67 MB
+memory (approx): 0.33 MB
 
 ----------------------------------------------------------------------------------------
 nulls / emptiness / cardinality
@@ -664,7 +664,7 @@ sent_ts          str
 delivered      int64
 clicked        int64
 
-memory (approx): 4.39 MB
+memory (approx): 1.71 MB
 
 ----------------------------------------------------------------------------------------
 nulls / emptiness / cardinality
@@ -828,7 +828,7 @@ online_captains           int64
 avg_eta_min             float64
 avg_surge_multiplier    float64
 
-memory (approx): 2.37 MB
+memory (approx): 1.11 MB
 
 ----------------------------------------------------------------------------------------
 nulls / emptiness / cardinality
@@ -953,7 +953,7 @@ captain_cancelled                 int64
 got_return_fare_within_20min      int64
 fare_inr                        float64
 
-memory (approx): 19.67 MB
+memory (approx): 7.37 MB
 
 ----------------------------------------------------------------------------------------
 nulls / emptiness / cardinality

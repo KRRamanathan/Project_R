@@ -12,22 +12,26 @@ source CSVs. Print and stop.
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 from scipy.stats import norm
 
-DATA_DIR = Path(__file__).resolve().parent
-EXTRACTION_TS = pd.Timestamp("2026-06-30 23:59:00")
-EXTRACTION_LABEL = "2026-06-30 23:59 IST"
+from metrics import (
+    CAPTURE_REASONS,
+    DATA_DIR,
+    DAYS_PER_MONTH,
+    EXTRACTION_LABEL,
+    EXTRACTION_TS,
+    SELF_SERVE,
+    STAGE_DOCS,
+    WORST_HOD,
+    attempt_pass_table,
+    capture_only_never_pass,
+    load_onboarding as load_onboarding_core,
+    wilson,
+)
 
-SELF_SERVE = ["organic_app", "paid_digital"]
 FOS = "fos_field"
-STAGE_DOCS = ["DL", "RC", "AADHAAR", "PERMIT", "FITNESS", "INSURANCE"]
-CAPTURE_REASONS = {"image_blurred", "ocr_low_confidence", "details_not_legible"}
-WORST_HOD = {21, 22, 23, 0, 1, 2, 3}  # 21:00–03:59 inclusive
-DAYS_PER_MONTH = 30.437
 # Step 4 combined (a)+(b) approved/month at 50/75/100% gap close — restated, not re-banked.
 CHANNEL_GAP_PER_MONTH = {0.50: 127.9, 0.75: 191.8, 1.00: 255.8}
 CHANNEL_GAP_A_PER_MONTH_100 = 216.5
@@ -39,18 +43,6 @@ NET_REST_SUBURBAN = 56.5
 NET_WORST_CITY_CORE = 104.7
 NET_GAP_VS_REST_SUB = NET_REST_SUBURBAN - NET_WORST_SUBURBAN  # 31.6
 NET_GAP_VS_WORST_CORE = NET_WORST_CITY_CORE - NET_WORST_SUBURBAN  # 79.8
-
-
-def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float, float]:
-    if n <= 0:
-        return (np.nan, np.nan, np.nan)
-    k, n = int(k), int(n)
-    p = k / n
-    z2 = z * z
-    denom = 1.0 + z2 / n
-    centre = (p + z2 / (2.0 * n)) / denom
-    half = z * np.sqrt((p * (1.0 - p) + z2 / (4.0 * n)) / n) / denom
-    return p, centre - half, centre + half
 
 
 def fmt_rate(k: int, n: int) -> str:
@@ -86,112 +78,10 @@ def n_per_arm_two_prop(
 
 
 def load_onboarding() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    captains = pd.read_csv(DATA_DIR / "captains.csv")
-    approvals = pd.read_csv(DATA_DIR / "approvals.csv")
-    docs = pd.read_csv(DATA_DIR / "doc_events.csv")
+    df, docs, captains = load_onboarding_core()
     nudges = pd.read_csv(DATA_DIR / "nudges.csv")
-    captains["signup_ts"] = pd.to_datetime(captains["signup_ts"], errors="coerce")
-    captains["signup_age_days"] = (
-        EXTRACTION_TS - captains["signup_ts"]
-    ).dt.total_seconds() / 86400.0
-    docs["event_ts"] = pd.to_datetime(docs["event_ts"], errors="coerce")
     nudges["sent_ts"] = pd.to_datetime(nudges["sent_ts"], errors="coerce")
-    passed = (
-        docs.loc[docs["event_type"] == "verification_pass", ["captain_id", "doc_type"]]
-        .drop_duplicates()
-        .assign(v=1)
-        .pivot_table(index="captain_id", columns="doc_type", values="v", aggfunc="max")
-        .fillna(0)
-        .astype(int)
-    )
-    for col in STAGE_DOCS:
-        if col not in passed.columns:
-            passed[col] = 0
-    n_events = docs.groupby("captain_id").size().rename("n_doc_events")
-    df = captains.merge(approvals, on="captain_id", how="left")
-    df = df.merge(passed, on="captain_id", how="left")
-    df = df.merge(n_events, on="captain_id", how="left")
-    for col in STAGE_DOCS:
-        df[col] = df[col].fillna(0).astype(int)
-    df["n_doc_events"] = df["n_doc_events"].fillna(0).astype(int)
-    df["has_doc_events"] = df["n_doc_events"] > 0
-    ip_max = float(df.loc[df["final_status"] == "in_progress", "signup_age_days"].max())
-    df["mature"] = df["signup_age_days"] > ip_max
-    df["_ip_max"] = ip_max
-    uploaded = (
-        docs.groupby(["captain_id", "doc_type"])
-        .size()
-        .reset_index(name="n")
-        .assign(u=1)
-        .pivot_table(index="captain_id", columns="doc_type", values="u", aggfunc="max")
-        .fillna(0)
-        .astype(int)
-        .add_prefix("upl_")
-    )
-    df = df.merge(uploaded, on="captain_id", how="left")
-    for col in STAGE_DOCS:
-        c = f"upl_{col}"
-        if c not in df.columns:
-            df[c] = 0
-        df[c] = df[c].fillna(0).astype(int)
-    ac = df["vehicle_type"].isin(["Auto", "Cab"])
-    er = df["vehicle_type"].eq("ERickshaw")
-    df["cleared_DL"] = df["DL"].eq(1)
-    df["cleared_RC"] = df["cleared_DL"] & df["RC"].eq(1)
-    df["cleared_AADHAAR"] = df["cleared_RC"] & df["AADHAAR"].eq(1)
-    df["cleared_PERMIT"] = ac & df["cleared_AADHAAR"] & df["PERMIT"].eq(1)
-    df["cleared_FITNESS"] = (ac & df["cleared_PERMIT"] & df["FITNESS"].eq(1)) | (
-        er & df["cleared_AADHAAR"] & df["FITNESS"].eq(1)
-    )
-    df["cleared_INSURANCE"] = df["cleared_FITNESS"] & df["INSURANCE"].eq(1)
-    df["atrisk_RC"] = df["cleared_DL"]
-    df["atrisk_INSURANCE"] = df["cleared_FITNESS"]
-    df["self_serve"] = df["acquisition_channel"].isin(SELF_SERVE)
     return df, docs, nudges, captains
-
-
-def capture_only_never_pass(
-    funnel: pd.DataFrame, docs: pd.DataFrame, doc: str
-) -> pd.Index:
-    """Mature event-funnel, uploaded stage, never passed, all fail reasons capture-class."""
-    at = funnel[funnel[f"atrisk_{doc}"]].copy()
-    lost_upl = at[(~at[f"cleared_{doc}"]) & (at[f"upl_{doc}"] == 1)]
-    fails = docs[
-        docs["captain_id"].isin(set(lost_upl["captain_id"]))
-        & docs["doc_type"].eq(doc)
-        & docs["event_type"].eq("verification_fail")
-    ]
-    per = (
-        fails.groupby("captain_id")["failure_reason"]
-        .agg(lambda s: set(s.dropna()))
-        .reset_index()
-    )
-    per["only_capture"] = per["failure_reason"].apply(
-        lambda s: len(s) > 0 and s <= CAPTURE_REASONS
-    )
-    return pd.Index(per.loc[per["only_capture"], "captain_id"])
-
-
-def attempt_pass_table(
-    funnel: pd.DataFrame, docs: pd.DataFrame, doc: str, mask: pd.Series | None = None
-) -> dict[int, tuple[int, int]]:
-    ids = set(funnel.loc[mask, "captain_id"] if mask is not None else funnel["captain_id"])
-    ev = docs[
-        docs["captain_id"].isin(ids)
-        & docs["doc_type"].eq(doc)
-        & docs["event_type"].isin(["verification_pass", "verification_fail"])
-    ]
-    g = (
-        ev.groupby(["captain_id", "attempt_no"])["event_type"]
-        .agg(lambda s: "verification_pass" if (s == "verification_pass").any() else "verification_fail")
-        .reset_index()
-    )
-    g["passed"] = g["event_type"].eq("verification_pass")
-    out = {}
-    for a in (1, 2, 3):
-        sl = g[g["attempt_no"] == a]
-        out[a] = (int(sl["passed"].sum()), int(len(sl)))
-    return out
 
 
 def main() -> None:

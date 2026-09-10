@@ -443,7 +443,7 @@ Dep. Variable:               approved   No. Observations:                21024
 Model:                          Logit   Df Residuals:                    21018
 Method:                           MLE   Df Model:                            5
 Date:                Thu, 10 Sep 2026   Pseudo R-squ.:                0.006541
-Time:                        07:44:04   Log-Likelihood:                -10085.
+Time:                        11:49:51   Log-Likelihood:                -10085.
 converged:                       True   LL-Null:                       -10152.
 Covariance Type:            nonrobust   LLR p-value:                 6.057e-27
 ================================================================================================
