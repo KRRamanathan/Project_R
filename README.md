@@ -3,7 +3,7 @@
 Rapido take-home: captain onboarding (A2O) and overnight airport supply.  
 Extract clock: **2026-06-30 23:59 IST**.
 
-**Submit:** `MEMO.md` · `DECK.pptx` · this repo.
+**Submit:** `MEMO.docx` · `DECK.pptx` · this repo.
 
 ## Run
 
@@ -13,13 +13,13 @@ python3 -m pip install -r requirements.txt
 ```
 
 Rebuild the deck (optional): `node generate_deck.js`  
-Pies for the memo: `python3 make_exec_charts.py`
+Rebuild the Word memo: `python3 build_memo.py`
 
 | File | Role |
 |---|---|
 | `01`–`08_*.py` | Working, from the seven CSVs |
 | `metrics.py` | Shared maths (also used by `check_regression.py`) |
-| `MEMO.md` / `MEMO.html` | 2-page memo (html is the cream/yellow print layout) |
+| `MEMO.docx` | 2-page memo (cream/yellow; `MEMO.md` is the same text) |
 | `DECK.pptx` | 6-slide deck (+ title) |
 | `CANDIDATE_BRIEF.md` | The assignment |
 
