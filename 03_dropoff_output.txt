@@ -1,0 +1,639 @@
+
+====================================================================================================
+STEP 3 — WHERE VOLUME IS LOST
+====================================================================================================
+extract: 2026-06-30 23:59 IST
+Primary cohort: mature ∩ has-doc_events from Step 2.
+Multiple-comparison note: 30 primary chi-square tests (6 stages × 5 factors). Bonferroni α = 0.05/30 = 0.00167.
+Pairwise z-tests inside a factor use a separate within-factor Bonferroni.
+Single 'leaks' that only appear in one pairwise cut still need independent confirmation.
+n<100: directional only. No 5-way city×vehicle×device×channel×language cross-cut.
+
+mature cutoff: signup_age > 15.602778 days (max in_progress age)
+funnel n=21,024 (expect 21,024)
+
+====================================================================================================
+1. STAGE-BY-STAGE DROP-OFF, SEGMENTED
+====================================================================================================
+At-risk = reached the previous required stage (vehicle-aware for PERMIT/FITNESS).
+passed  = verification_pass on this required doc (sequential prefix).
+
+----------------------------------------------------------------------------------------------------
+STAGE DL: at-risk n=21,024  passed=19,858  lost=1,166
+----------------------------------------------------------------------------------------------------
+  step conversion  94.45% (19,858/21,024) W95% [94.14,94.76]
+  among the lost, two failure modes (not mixed with the zero-doc signup cohort):
+    never uploaded this doc:       0.00% (0/1,166) W95% [ 0.00, 0.33]   share of at-risk   0.00% (0/21,024) W95% [ 0.00, 0.02]
+    uploaded but never passed:   100.00% (1,166/1,166) W95% [99.67,100.00]   share of at-risk   5.55% (1,166/21,024) W95% [ 5.24, 5.86]
+  verification_fail events on DL among at-risk drop-offs: 1,212
+  failure_reason counts:
+    failure_reason
+    name_mismatch          241
+    image_blurred          230
+    document_expired       189
+    ocr_low_confidence     187
+    wrong_document_type    141
+    details_not_legible    137
+    duplicate_document      87
+  segmentation (one factor at a time; not a full cross-cut):
+    chi-square city × passed DL: χ²=3.64 dof=3 p=0.3026 n=21,024 min_exp=254.06
+    pairwise z-tests vs largest at-risk group 'Hyderabad' (n=6,429); within-factor Bonferroni α=0.05/6=0.008333
+      Hyderabad          passed  94.28% (6,061/6,429) W95% [93.68,94.82]  lost=368  z_vs_Hyderabad=  0.00 p=1
+      Delhi              passed  94.76% (5,139/5,423) W95% [94.14,95.32]  lost=284  z_vs_Hyderabad=  1.16 p=0.2466
+      Pune               passed  94.75% (4,350/4,591) W95% [94.07,95.36]  lost=241  z_vs_Hyderabad=  1.08 p=0.2823
+      Bangalore          passed  94.04% (4,308/4,581) W95% [93.32,94.69]  lost=273  z_vs_Hyderabad= -0.52 p=0.6032
+    chi-square vehicle_type × passed DL: χ²=4.05 dof=2 p=0.1319 n=21,024 min_exp=221.95
+    pairwise z-tests vs largest at-risk group 'Auto' (n=9,521); within-factor Bonferroni α=0.05/3=0.01667
+      Auto               passed  94.69% (9,015/9,521) W95% [94.22,95.12]  lost=506  z_vs_Auto=  0.00 p=1
+      Cab                passed  94.03% (7,053/7,501) W95% [93.47,94.54]  lost=448  z_vs_Auto= -1.85 p=0.06389
+      ERickshaw          passed  94.70% (3,790/4,002) W95% [93.96,95.35]  lost=212  z_vs_Auto=  0.04 p=0.9675
+    chi-square device_tier × passed DL: χ²=13.06 dof=2 p=0.001456 n=21,024 min_exp=183.19  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'low' (n=9,680); within-factor Bonferroni α=0.05/3=0.01667
+      low                passed  94.48% (9,146/9,680) W95% [94.01,94.92]  lost=534  z_vs_low=  0.00 p=1
+      mid                passed  94.93% (7,633/8,041) W95% [94.42,95.38]  lost=408  z_vs_low=  1.31 p=0.1911
+      high               passed  93.22% (3,079/3,303) W95% [92.31,94.03]  lost=224  z_vs_low= -2.68 p=0.007411   sig vs ref (Bonferroni)
+    chi-square acquisition_channel × passed DL: χ²=5.30 dof=4 p=0.2583 n=21,024 min_exp=66.11
+    pairwise z-tests vs largest at-risk group 'organic_app' (n=6,974); within-factor Bonferroni α=0.05/10=0.005
+      organic_app        passed  94.31% (6,577/6,974) W95% [93.74,94.83]  lost=397  z_vs_organic_app=  0.00 p=1
+      fos_field          passed  94.29% (5,169/5,482) W95% [93.64,94.87]  lost=313  z_vs_organic_app= -0.04 p=0.9676
+      referral           passed  95.05% (4,380/4,608) W95% [94.39,95.64]  lost=228  z_vs_organic_app=  1.74 p=0.08256
+      paid_digital       passed  94.51% (2,616/2,768) W95% [93.60,95.30]  lost=152  z_vs_organic_app=  0.39 p=0.6977
+      gc_telecalling     passed  93.62% (1,116/1,192) W95% [92.09,94.88]  lost=76  z_vs_organic_app= -0.93 p=0.3507
+    chi-square app_language × passed DL: χ²=1.93 dof=4 p=0.7488 n=21,024 min_exp=230.16
+    pairwise z-tests vs largest at-risk group 'te' (n=4,295); within-factor Bonferroni α=0.05/10=0.005
+      te                 passed  94.20% (4,046/4,295) W95% [93.46,94.86]  lost=249  z_vs_te=  0.00 p=1
+      kn                 passed  94.74% (4,031/4,255) W95% [94.02,95.37]  lost=224  z_vs_te=  1.08 p=0.281
+      mr                 passed  94.42% (3,939/4,172) W95% [93.68,95.07]  lost=233  z_vs_te=  0.42 p=0.673
+      en                 passed  94.68% (3,931/4,152) W95% [93.95,95.32]  lost=221  z_vs_te=  0.95 p=0.3413
+      hi                 passed  94.24% (3,911/4,150) W95% [93.49,94.91]  lost=239  z_vs_te=  0.08 p=0.9397
+
+----------------------------------------------------------------------------------------------------
+STAGE RC: at-risk n=19,858  passed=14,453  lost=5,405
+----------------------------------------------------------------------------------------------------
+  step conversion  72.78% (14,453/19,858) W95% [72.16,73.40]
+  among the lost, two failure modes (not mixed with the zero-doc signup cohort):
+    never uploaded this doc:      44.18% (2,388/5,405) W95% [42.86,45.51]   share of at-risk  12.03% (2,388/19,858) W95% [11.58,12.49]
+    uploaded but never passed:    55.82% (3,017/5,405) W95% [54.49,57.14]   share of at-risk  15.19% (3,017/19,858) W95% [14.70,15.70]
+  verification_fail events on RC among at-risk drop-offs: 3,925
+  failure_reason counts:
+    failure_reason
+    image_blurred          1132
+    ocr_low_confidence      894
+    name_mismatch           507
+    document_expired        407
+    details_not_legible     399
+    wrong_document_type     369
+    duplicate_document      217
+  segmentation (one factor at a time; not a full cross-cut):
+    chi-square city × passed RC: χ²=1.76 dof=3 p=0.6245 n=19,858 min_exp=1172.56
+    pairwise z-tests vs largest at-risk group 'Hyderabad' (n=6,061); within-factor Bonferroni α=0.05/6=0.008333
+      Hyderabad          passed  72.41% (4,389/6,061) W95% [71.27,73.52]  lost=1,672  z_vs_Hyderabad=  0.00 p=1
+      Delhi              passed  73.11% (3,757/5,139) W95% [71.88,74.30]  lost=1,382  z_vs_Hyderabad=  0.82 p=0.4113
+      Pune               passed  73.33% (3,190/4,350) W95% [72.00,74.63]  lost=1,160  z_vs_Hyderabad=  1.04 p=0.2984
+      Bangalore          passed  72.35% (3,117/4,308) W95% [71.00,73.67]  lost=1,191  z_vs_Hyderabad= -0.07 p=0.9463
+    chi-square vehicle_type × passed RC: χ²=1.27 dof=2 p=0.529 n=19,858 min_exp=1031.57
+    pairwise z-tests vs largest at-risk group 'Auto' (n=9,015); within-factor Bonferroni α=0.05/3=0.01667
+      Auto               passed  72.89% (6,571/9,015) W95% [71.96,73.80]  lost=2,444  z_vs_Auto=  0.00 p=1
+      Cab                passed  72.35% (5,103/7,053) W95% [71.30,73.38]  lost=1,950  z_vs_Auto= -0.76 p=0.4482
+      ERickshaw          passed  73.32% (2,779/3,790) W95% [71.89,74.71]  lost=1,011  z_vs_Auto=  0.51 p=0.6128
+    chi-square device_tier × passed RC: χ²=268.05 dof=2 p=6.215e-59 n=19,858 min_exp=838.05  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'low' (n=9,146); within-factor Bonferroni α=0.05/3=0.01667
+      low                passed  67.30% (6,155/9,146) W95% [66.33,68.25]  lost=2,991  z_vs_low=  0.00 p=1
+      mid                passed  76.58% (5,845/7,633) W95% [75.61,77.51]  lost=1,788  z_vs_low= 13.26 p=3.936e-40   sig vs ref (Bonferroni)
+      high               passed  79.67% (2,453/3,079) W95% [78.21,81.05]  lost=626  z_vs_low= 13.01 p=1.088e-38   sig vs ref (Bonferroni)
+    chi-square acquisition_channel × passed RC: χ²=137.57 dof=4 p=9.353e-29 n=19,858 min_exp=303.76  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'organic_app' (n=6,577); within-factor Bonferroni α=0.05/10=0.005
+      organic_app        passed  71.87% (4,727/6,577) W95% [70.77,72.95]  lost=1,850  z_vs_organic_app=  0.00 p=1
+      fos_field          passed  78.41% (4,053/5,169) W95% [77.27,79.51]  lost=1,116  z_vs_organic_app=  8.10 p=5.672e-16   sig vs ref (Bonferroni)
+      referral           passed  71.35% (3,125/4,380) W95% [69.99,72.67]  lost=1,255  z_vs_organic_app= -0.60 p=0.5505
+      paid_digital       passed  66.82% (1,748/2,616) W95% [64.99,68.60]  lost=868  z_vs_organic_app= -4.79 p=1.672e-06   sig vs ref (Bonferroni)
+      gc_telecalling     passed  71.68% (800/1,116) W95% [68.97,74.25]  lost=316  z_vs_organic_app= -0.13 p=0.8978
+    chi-square app_language × passed RC: χ²=3.52 dof=4 p=0.4755 n=19,858 min_exp=1064.51
+    pairwise z-tests vs largest at-risk group 'te' (n=4,046); within-factor Bonferroni α=0.05/10=0.005
+      te                 passed  73.48% (2,973/4,046) W95% [72.10,74.82]  lost=1,073  z_vs_te=  0.00 p=1
+      kn                 passed  72.09% (2,906/4,031) W95% [70.69,73.45]  lost=1,125  z_vs_te= -1.40 p=0.1609
+      mr                 passed  72.07% (2,839/3,939) W95% [70.65,73.45]  lost=1,100  z_vs_te= -1.41 p=0.1582
+      en                 passed  73.26% (2,880/3,931) W95% [71.86,74.62]  lost=1,051  z_vs_te= -0.22 p=0.8271
+      hi                 passed  73.00% (2,855/3,911) W95% [71.59,74.37]  lost=1,056  z_vs_te= -0.48 p=0.6282
+
+----------------------------------------------------------------------------------------------------
+STAGE AADHAAR: at-risk n=14,453  passed=12,913  lost=1,540
+----------------------------------------------------------------------------------------------------
+  step conversion  89.34% (12,913/14,453) W95% [88.83,89.84]
+  among the lost, two failure modes (not mixed with the zero-doc signup cohort):
+    never uploaded this doc:      67.08% (1,033/1,540) W95% [64.69,69.38]   share of at-risk   7.15% (1,033/14,453) W95% [ 6.74, 7.58]
+    uploaded but never passed:    32.92% (507/1,540) W95% [30.62,35.31]   share of at-risk   3.51% (507/14,453) W95% [ 3.22, 3.82]
+  verification_fail events on AADHAAR among at-risk drop-offs: 510
+  failure_reason counts:
+    failure_reason
+    name_mismatch          116
+    image_blurred           92
+    document_expired        83
+    wrong_document_type     67
+    ocr_low_confidence      66
+    details_not_legible     55
+    duplicate_document      31
+  segmentation (one factor at a time; not a full cross-cut):
+    chi-square city × passed AADHAAR: χ²=7.71 dof=3 p=0.05248 n=14,453 min_exp=332.12
+    pairwise z-tests vs largest at-risk group 'Hyderabad' (n=4,389); within-factor Bonferroni α=0.05/6=0.008333
+      Hyderabad          passed  89.34% (3,921/4,389) W95% [88.39,90.22]  lost=468  z_vs_Hyderabad=  0.00 p=1
+      Delhi              passed  89.25% (3,353/3,757) W95% [88.22,90.20]  lost=404  z_vs_Hyderabad= -0.13 p=0.8955
+      Pune               passed  90.47% (2,886/3,190) W95% [89.40,91.44]  lost=304  z_vs_Hyderabad=  1.61 p=0.1073
+      Bangalore          passed  88.32% (2,753/3,117) W95% [87.15,89.40]  lost=364  z_vs_Hyderabad= -1.38 p=0.1676
+    chi-square vehicle_type × passed AADHAAR: χ²=0.55 dof=2 p=0.7612 n=14,453 min_exp=296.11
+    pairwise z-tests vs largest at-risk group 'Auto' (n=6,571); within-factor Bonferroni α=0.05/3=0.01667
+      Auto               passed  89.53% (5,883/6,571) W95% [88.77,90.25]  lost=688  z_vs_Auto=  0.00 p=1
+      Cab                passed  89.10% (4,547/5,103) W95% [88.22,89.93]  lost=556  z_vs_Auto= -0.74 p=0.4601
+      ERickshaw          passed  89.35% (2,483/2,779) W95% [88.15,90.44]  lost=296  z_vs_Auto= -0.26 p=0.7943
+    chi-square device_tier × passed AADHAAR: χ²=4.12 dof=2 p=0.1276 n=14,453 min_exp=261.37
+    pairwise z-tests vs largest at-risk group 'low' (n=6,155); within-factor Bonferroni α=0.05/3=0.01667
+      low                passed  89.94% (5,536/6,155) W95% [89.17,90.67]  lost=619  z_vs_low=  0.00 p=1
+      mid                passed  88.96% (5,200/5,845) W95% [88.14,89.74]  lost=645  z_vs_low= -1.74 p=0.08103
+      high               passed  88.75% (2,177/2,453) W95% [87.44,89.94]  lost=276  z_vs_low= -1.64 p=0.1012
+    chi-square acquisition_channel × passed AADHAAR: χ²=127.06 dof=4 p=1.659e-26 n=14,453 min_exp=85.24  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'organic_app' (n=4,727); within-factor Bonferroni α=0.05/10=0.005
+      organic_app        passed  88.58% (4,187/4,727) W95% [87.64,89.45]  lost=540  z_vs_organic_app=  0.00 p=1
+      fos_field          passed  93.46% (3,788/4,053) W95% [92.66,94.18]  lost=265  z_vs_organic_app=  7.91 p=2.617e-15   sig vs ref (Bonferroni)
+      referral           passed  88.03% (2,751/3,125) W95% [86.85,89.12]  lost=374  z_vs_organic_app= -0.74 p=0.4617
+      paid_digital       passed  84.32% (1,474/1,748) W95% [82.55,85.95]  lost=274  z_vs_organic_app= -4.58 p=4.63e-06   sig vs ref (Bonferroni)
+      gc_telecalling     passed  89.12% (713/800) W95% [86.78,91.10]  lost=87  z_vs_organic_app=  0.45 p=0.6508
+    chi-square app_language × passed AADHAAR: χ²=4.95 dof=4 p=0.292 n=14,453 min_exp=302.50
+    pairwise z-tests vs largest at-risk group 'te' (n=2,973); within-factor Bonferroni α=0.05/10=0.005
+      te                 passed  89.10% (2,649/2,973) W95% [87.93,90.17]  lost=324  z_vs_te=  0.00 p=1
+      kn                 passed  89.44% (2,599/2,906) W95% [88.27,90.50]  lost=307  z_vs_te=  0.41 p=0.6794
+      en                 passed  90.31% (2,601/2,880) W95% [89.18,91.34]  lost=279  z_vs_te=  1.52 p=0.1277
+      hi                 passed  88.55% (2,528/2,855) W95% [87.33,89.66]  lost=327  z_vs_te= -0.67 p=0.5009
+      mr                 passed  89.33% (2,536/2,839) W95% [88.14,90.41]  lost=303  z_vs_te=  0.28 p=0.782
+
+----------------------------------------------------------------------------------------------------
+STAGE PERMIT: at-risk n=10,430  passed=7,814  lost=2,616
+----------------------------------------------------------------------------------------------------
+  step conversion  74.92% (7,814/10,430) W95% [74.08,75.74]
+  among the lost, two failure modes (not mixed with the zero-doc signup cohort):
+    never uploaded this doc:      75.69% (1,980/2,616) W95% [74.01,77.29]   share of at-risk  18.98% (1,980/10,430) W95% [18.24,19.75]
+    uploaded but never passed:    24.31% (636/2,616) W95% [22.71,25.99]   share of at-risk   6.10% (636/10,430) W95% [ 5.65, 6.57]
+  verification_fail events on PERMIT among at-risk drop-offs: 732
+  failure_reason counts:
+    failure_reason
+    document_expired       186
+    name_mismatch          124
+    wrong_document_type    113
+    ocr_low_confidence      91
+    image_blurred           91
+    details_not_legible     74
+    duplicate_document      53
+  segmentation (one factor at a time; not a full cross-cut):
+    chi-square city × passed PERMIT: χ²=32.49 dof=3 p=4.126e-07 n=10,430 min_exp=453.47  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'Hyderabad' (n=3,538); within-factor Bonferroni α=0.05/6=0.008333
+      Hyderabad          passed  76.20% (2,696/3,538) W95% [74.77,77.58]  lost=842  z_vs_Hyderabad=  0.00 p=1
+      Pune               passed  70.73% (1,841/2,603) W95% [68.95,72.44]  lost=762  z_vs_Hyderabad= -4.83 p=1.388e-06   sig vs ref (Bonferroni)
+      Bangalore          passed  76.38% (1,895/2,481) W95% [74.67,78.01]  lost=586  z_vs_Hyderabad=  0.16 p=0.8722
+      Delhi              passed  76.44% (1,382/1,808) W95% [74.43,78.34]  lost=426  z_vs_Hyderabad=  0.19 p=0.8473
+    vehicle_type at PERMIT: ERickshaw not in denominator (not required). Auto vs Cab:
+    chi-square vehicle_type × passed PERMIT: χ²=0.67 dof=1 p=0.4134 n=10,430 min_exp=1140.46
+    pairwise z-tests vs largest at-risk group 'Auto' (n=5,883); within-factor Bonferroni α=0.05/1=0.05
+      Auto               passed  74.60% (4,389/5,883) W95% [73.48,75.70]  lost=1,494  z_vs_Auto=  0.00 p=1
+      Cab                passed  75.32% (3,425/4,547) W95% [74.05,76.56]  lost=1,122  z_vs_Auto=  0.84 p=0.4005
+    chi-square device_tier × passed PERMIT: χ²=2.15 dof=2 p=0.3405 n=10,430 min_exp=445.45
+    pairwise z-tests vs largest at-risk group 'low' (n=4,507); within-factor Bonferroni α=0.05/3=0.01667
+      low                passed  75.62% (3,408/4,507) W95% [74.34,76.85]  lost=1,099  z_vs_low=  0.00 p=1
+      mid                passed  74.27% (3,080/4,147) W95% [72.92,75.58]  lost=1,067  z_vs_low= -1.44 p=0.149
+      high               passed  74.66% (1,326/1,776) W95% [72.59,76.63]  lost=450  z_vs_low= -0.79 p=0.4297
+    chi-square acquisition_channel × passed PERMIT: χ²=121.29 dof=4 p=2.833e-25 n=10,430 min_exp=141.96  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'organic_app' (n=3,380); within-factor Bonferroni α=0.05/10=0.005
+      organic_app        passed  72.25% (2,442/3,380) W95% [70.71,73.73]  lost=938  z_vs_organic_app=  0.00 p=1
+      fos_field          passed  81.42% (2,538/3,117) W95% [80.02,82.75]  lost=579  z_vs_organic_app=  8.73 p=2.453e-18   sig vs ref (Bonferroni)
+      referral           passed  74.02% (1,621/2,190) W95% [72.14,75.81]  lost=569  z_vs_organic_app=  1.45 p=0.1464
+      paid_digital       passed  67.20% (791/1,177) W95% [64.47,69.83]  lost=386  z_vs_organic_app= -3.28 p=0.001029   sig vs ref (Bonferroni)
+      gc_telecalling     passed  74.56% (422/566) W95% [70.81,77.97]  lost=144  z_vs_organic_app=  1.14 p=0.2543
+    chi-square app_language × passed PERMIT: χ²=1.25 dof=4 p=0.87 n=10,430 min_exp=510.41
+    pairwise z-tests vs largest at-risk group 'te' (n=2,159); within-factor Bonferroni α=0.05/10=0.005
+      te                 passed  74.34% (1,605/2,159) W95% [72.46,76.14]  lost=554  z_vs_te=  0.00 p=1
+      kn                 passed  75.50% (1,584/2,098) W95% [73.61,77.29]  lost=514  z_vs_te=  0.87 p=0.3826
+      en                 passed  74.41% (1,544/2,075) W95% [72.49,76.24]  lost=531  z_vs_te=  0.05 p=0.9586
+      mr                 passed  75.04% (1,548/2,063) W95% [73.12,76.86]  lost=515  z_vs_te=  0.52 p=0.603
+      hi                 passed  75.33% (1,533/2,035) W95% [73.41,77.16]  lost=502  z_vs_te=  0.74 p=0.4596
+
+----------------------------------------------------------------------------------------------------
+STAGE FITNESS: at-risk n=10,297  passed=7,644  lost=2,653
+----------------------------------------------------------------------------------------------------
+  step conversion  74.24% (7,644/10,297) W95% [73.38,75.07]
+  among the lost, two failure modes (not mixed with the zero-doc signup cohort):
+    never uploaded this doc:      65.77% (1,745/2,653) W95% [63.95,67.56]   share of at-risk  16.95% (1,745/10,297) W95% [16.23,17.68]
+    uploaded but never passed:    34.23% (908/2,653) W95% [32.44,36.05]   share of at-risk   8.82% (908/10,297) W95% [ 8.29, 9.38]
+  verification_fail events on FITNESS among at-risk drop-offs: 1,089
+  failure_reason counts:
+    failure_reason
+    image_blurred          316
+    ocr_low_confidence     243
+    name_mismatch          137
+    document_expired       117
+    wrong_document_type    110
+    details_not_legible    109
+    duplicate_document      57
+  segmentation (one factor at a time; not a full cross-cut):
+    chi-square city × passed FITNESS: χ²=1.22 dof=3 p=0.7479 n=10,297 min_exp=547.24
+    pairwise z-tests vs largest at-risk group 'Hyderabad' (n=3,079); within-factor Bonferroni α=0.05/6=0.008333
+      Hyderabad          passed  73.79% (2,272/3,079) W95% [72.21,75.31]  lost=807  z_vs_Hyderabad=  0.00 p=1
+      Delhi              passed  74.68% (2,186/2,927) W95% [73.08,76.23]  lost=741  z_vs_Hyderabad=  0.79 p=0.4286
+      Bangalore          passed  74.76% (1,620/2,167) W95% [72.89,76.54]  lost=547  z_vs_Hyderabad=  0.79 p=0.4304
+      Pune               passed  73.73% (1,566/2,124) W95% [71.82,75.56]  lost=558  z_vs_Hyderabad= -0.05 p=0.9605
+    chi-square vehicle_type × passed FITNESS: χ²=3.73 dof=2 p=0.1545 n=10,297 min_exp=639.74
+    pairwise z-tests vs largest at-risk group 'Auto' (n=4,389); within-factor Bonferroni α=0.05/3=0.01667
+      Auto               passed  73.34% (3,219/4,389) W95% [72.01,74.63]  lost=1,170  z_vs_Auto=  0.00 p=1
+      Cab                passed  74.54% (2,553/3,425) W95% [73.05,75.97]  lost=872  z_vs_Auto=  1.20 p=0.2318
+      ERickshaw          passed  75.39% (1,872/2,483) W95% [73.66,77.05]  lost=611  z_vs_Auto=  1.86 p=0.06242
+    chi-square device_tier × passed FITNESS: χ²=129.66 dof=2 p=6.987e-29 n=10,297 min_exp=444.96  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'low' (n=4,437); within-factor Bonferroni α=0.05/3=0.01667
+      low                passed  68.90% (3,057/4,437) W95% [67.52,70.24]  lost=1,380  z_vs_low=  0.00 p=1
+      mid                passed  76.92% (3,179/4,133) W95% [75.61,78.18]  lost=954  z_vs_low=  8.33 p=7.863e-17   sig vs ref (Bonferroni)
+      high               passed  81.53% (1,408/1,727) W95% [79.63,83.29]  lost=319  z_vs_low=  9.97 p=2.135e-23   sig vs ref (Bonferroni)
+    chi-square acquisition_channel × passed FITNESS: χ²=116.25 dof=4 p=3.382e-24 n=10,297 min_exp=146.60  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'organic_app' (n=3,249); within-factor Bonferroni α=0.05/10=0.005
+      organic_app        passed  71.84% (2,334/3,249) W95% [70.27,73.36]  lost=915  z_vs_organic_app=  0.00 p=1
+      fos_field          passed  80.59% (2,586/3,209) W95% [79.18,81.92]  lost=623  z_vs_organic_app=  8.25 p=1.554e-16   sig vs ref (Bonferroni)
+      referral           passed  73.19% (1,597/2,182) W95% [71.29,75.01]  lost=585  z_vs_organic_app=  1.09 p=0.2745
+      paid_digital       passed  66.45% (723/1,088) W95% [63.59,69.20]  lost=365  z_vs_organic_app= -3.37 p=0.0007494   sig vs ref (Bonferroni)
+      gc_telecalling     passed  71.00% (404/569) W95% [67.14,74.58]  lost=165  z_vs_organic_app= -0.41 p=0.683
+    chi-square app_language × passed FITNESS: χ²=4.22 dof=4 p=0.3766 n=10,297 min_exp=520.71
+    pairwise z-tests vs largest at-risk group 'te' (n=2,095); within-factor Bonferroni α=0.05/10=0.005
+      te                 passed  74.70% (1,565/2,095) W95% [72.80,76.52]  lost=530  z_vs_te=  0.00 p=1
+      kn                 passed  73.62% (1,535/2,085) W95% [71.69,75.47]  lost=550  z_vs_te= -0.80 p=0.4249
+      en                 passed  75.12% (1,555/2,070) W95% [73.21,76.94]  lost=515  z_vs_te=  0.31 p=0.7551
+      hi                 passed  74.93% (1,518/2,026) W95% [72.99,76.76]  lost=508  z_vs_te=  0.17 p=0.8683
+      mr                 passed  72.79% (1,471/2,021) W95% [70.80,74.68]  lost=550  z_vs_te= -1.40 p=0.1625
+
+----------------------------------------------------------------------------------------------------
+STAGE INSURANCE: at-risk n=7,644  passed=4,355  lost=3,289
+----------------------------------------------------------------------------------------------------
+  step conversion  56.97% (4,355/7,644) W95% [55.86,58.08]
+  among the lost, two failure modes (not mixed with the zero-doc signup cohort):
+    never uploaded this doc:      76.92% (2,530/3,289) W95% [75.45,78.33]   share of at-risk  33.10% (2,530/7,644) W95% [32.05,34.16]
+    uploaded but never passed:    23.08% (759/3,289) W95% [21.67,24.55]   share of at-risk   9.93% (759/7,644) W95% [ 9.28,10.62]
+  verification_fail events on INSURANCE among at-risk drop-offs: 950
+  failure_reason counts:
+    failure_reason
+    image_blurred          270
+    ocr_low_confidence     184
+    name_mismatch          129
+    details_not_legible    121
+    document_expired       110
+    wrong_document_type     87
+    duplicate_document      49
+  segmentation (one factor at a time; not a full cross-cut):
+    chi-square city × passed INSURANCE: χ²=1.28 dof=3 p=0.7328 n=7,644 min_exp=673.81
+    pairwise z-tests vs largest at-risk group 'Hyderabad' (n=2,272); within-factor Bonferroni α=0.05/6=0.008333
+      Hyderabad          passed  57.26% (1,301/2,272) W95% [55.22,59.28]  lost=971  z_vs_Hyderabad=  0.00 p=1
+      Delhi              passed  56.40% (1,233/2,186) W95% [54.32,58.47]  lost=953  z_vs_Hyderabad= -0.58 p=0.5632
+      Bangalore          passed  57.96% (939/1,620) W95% [55.54,60.35]  lost=681  z_vs_Hyderabad=  0.44 p=0.6629
+      Pune               passed  56.32% (882/1,566) W95% [53.85,58.76]  lost=684  z_vs_Hyderabad= -0.58 p=0.5631
+    chi-square vehicle_type × passed INSURANCE: χ²=6.17 dof=2 p=0.04576 n=7,644 min_exp=805.47  (raw p<0.05 but NOT below Bonferroni; treat as exploratory)
+    pairwise z-tests vs largest at-risk group 'Auto' (n=3,219); within-factor Bonferroni α=0.05/3=0.01667
+      Auto               passed  56.45% (1,817/3,219) W95% [54.73,58.15]  lost=1,402  z_vs_Auto=  0.00 p=1
+      Cab                passed  55.86% (1,426/2,553) W95% [53.92,57.77]  lost=1,127  z_vs_Auto= -0.45 p=0.6535
+      ERickshaw          passed  59.40% (1,112/1,872) W95% [57.16,61.60]  lost=760  z_vs_Auto=  2.06 p=0.03967   raw p<0.05 only
+    chi-square device_tier × passed INSURANCE: χ²=59.54 dof=2 p=1.178e-13 n=7,644 min_exp=605.82  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'mid' (n=3,179); within-factor Bonferroni α=0.05/3=0.01667
+      mid                passed  58.95% (1,874/3,179) W95% [57.23,60.65]  lost=1,305  z_vs_mid=  0.00 p=1
+      low                passed  51.98% (1,589/3,057) W95% [50.21,53.75]  lost=1,468  z_vs_mid= -5.54 p=3.072e-08   sig vs ref (Bonferroni)
+      high               passed  63.35% (892/1,408) W95% [60.80,65.83]  lost=516  z_vs_mid=  2.81 p=0.004938   sig vs ref (Bonferroni)
+    chi-square acquisition_channel × passed INSURANCE: χ²=80.72 dof=4 p=1.228e-16 n=7,644 min_exp=173.83  ** significant vs Bonferroni α=0.00167 **
+    pairwise z-tests vs largest at-risk group 'fos_field' (n=2,586); within-factor Bonferroni α=0.05/10=0.005
+      fos_field          passed  63.15% (1,633/2,586) W95% [61.27,64.99]  lost=953  z_vs_fos_field=  0.00 p=1
+      organic_app        passed  54.24% (1,266/2,334) W95% [52.22,56.25]  lost=1,068  z_vs_fos_field= -6.34 p=2.29e-10   sig vs ref (Bonferroni)
+      referral           passed  55.42% (885/1,597) W95% [52.97,57.84]  lost=712  z_vs_fos_field= -4.96 p=6.948e-07   sig vs ref (Bonferroni)
+      paid_digital       passed  46.61% (337/723) W95% [43.00,50.26]  lost=386  z_vs_fos_field= -8.01 p=1.162e-15   sig vs ref (Bonferroni)
+      gc_telecalling     passed  57.92% (234/404) W95% [53.05,62.64]  lost=170  z_vs_fos_field= -2.02 p=0.04364   raw p<0.05 only
+    chi-square app_language × passed INSURANCE: χ²=3.55 dof=4 p=0.4699 n=7,644 min_exp=632.93
+    pairwise z-tests vs largest at-risk group 'te' (n=1,565); within-factor Bonferroni α=0.05/10=0.005
+      te                 passed  55.85% (874/1,565) W95% [53.38,58.29]  lost=691  z_vs_te=  0.00 p=1
+      en                 passed  58.46% (909/1,555) W95% [55.99,60.88]  lost=646  z_vs_te=  1.47 p=0.1408
+      kn                 passed  56.35% (865/1,535) W95% [53.86,58.81]  lost=670  z_vs_te=  0.28 p=0.7769
+      hi                 passed  58.04% (881/1,518) W95% [55.54,60.50]  lost=637  z_vs_te=  1.23 p=0.2195
+      mr                 passed  56.15% (826/1,471) W95% [53.60,58.67]  lost=645  z_vs_te=  0.17 p=0.8654
+
+====================================================================================================
+ATTEMPT-LEVEL PASS RATES FOR LARGE STAGE LOSSES
+====================================================================================================
+Step 2 volume lost: RC 5,405; Insurance 3,289; Fitness 2,653; Permit 2,616;
+Aadhaar 1,540; DL 1,166. Attempt rates run for RC, INSURANCE, FITNESS, PERMIT.
+Question: do later attempts pass higher (capture/UX) or lower (eligibility/selection)?
+
+----------------------------------------------------------------------------------------------------
+ATTEMPT-LEVEL PASS RATES — RC (mature ∩ has-doc_events captains)
+----------------------------------------------------------------------------------------------------
+  unit = (captain, attempt_no) with a verification outcome.
+  attempt 2/3 are conditional on still not having passed; this is not a randomized retry.
+    attempt 1:  65.34% (11,415/17,470) W95% [64.63,66.04]
+    attempt 2:  68.43% (2,594/3,791) W95% [66.93,69.89]
+    attempt 3:  74.12% (444/599) W95% [70.47,77.47]
+  chi-square attempt_no × passed: χ²=30.86 dof=2 p=1.993e-07 min_exp=202.96
+  pairwise two-proportion z-tests (Bonferroni α=0.05/3=0.01667):
+    attempt 1 vs 2: Δ=+3.08pp  z=-3.63 p=0.0002818  sig Bonferroni
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+    attempt 2 vs 3: Δ=+5.70pp  z=-2.81 p=0.004996  sig Bonferroni
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+    attempt 1 vs 3: Δ=+8.78pp  z=-4.45 p=8.572e-06  sig Bonferroni
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+  among attempt-1 failures n=6,055: took attempt 2:  62.61% (3,791/6,055) W95% [61.38,63.82]; passed attempt 2 | retried:  68.43% (2,594/3,791) W95% [66.93,69.89]
+
+----------------------------------------------------------------------------------------------------
+ATTEMPT-LEVEL PASS RATES — INSURANCE (mature ∩ has-doc_events captains)
+----------------------------------------------------------------------------------------------------
+  unit = (captain, attempt_no) with a verification outcome.
+  attempt 2/3 are conditional on still not having passed; this is not a randomized retry.
+    attempt 1:  67.36% (3,445/5,114) W95% [66.07,68.64]
+    attempt 2:  73.82% (784/1,062) W95% [71.10,76.38]
+    attempt 3:  76.36% (126/165) W95% [69.33,82.20]
+  chi-square attempt_no × passed: χ²=21.70 dof=2 p=1.936e-05 min_exp=51.68
+  pairwise two-proportion z-tests (Bonferroni α=0.05/3=0.01667):
+    attempt 1 vs 2: Δ=+6.46pp  z=-4.12 p=3.749e-05  sig Bonferroni
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+    attempt 2 vs 3: Δ=+2.54pp  z=-0.69 p=0.4879  not sig
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+    attempt 1 vs 3: Δ=+9.00pp  z=-2.43 p=0.01501  sig Bonferroni
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+  among attempt-1 failures n=1,669: took attempt 2:  63.63% (1,062/1,669) W95% [61.29,65.91]; passed attempt 2 | retried:  73.82% (784/1,062) W95% [71.10,76.38]
+
+----------------------------------------------------------------------------------------------------
+ATTEMPT-LEVEL PASS RATES — FITNESS (mature ∩ has-doc_events captains)
+----------------------------------------------------------------------------------------------------
+  unit = (captain, attempt_no) with a verification outcome.
+  attempt 2/3 are conditional on still not having passed; this is not a randomized retry.
+    attempt 1:  74.40% (6,363/8,552) W95% [73.47,75.32]
+    attempt 2:  80.57% (1,157/1,436) W95% [78.44,82.53]
+    attempt 3:  82.67% (124/150) W95% [75.81,87.89]
+  chi-square attempt_no × passed: χ²=29.55 dof=2 p=3.834e-07 min_exp=36.90
+  pairwise two-proportion z-tests (Bonferroni α=0.05/3=0.01667):
+    attempt 1 vs 2: Δ=+6.17pp  z=-5.01 p=5.336e-07  sig Bonferroni
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+    attempt 2 vs 3: Δ=+2.10pp  z=-0.62 p=0.5355  not sig
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+    attempt 1 vs 3: Δ=+8.26pp  z=-2.30 p=0.02127  raw p<0.05 only
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+  among attempt-1 failures n=2,189: took attempt 2:  65.60% (1,436/2,189) W95% [63.58,67.56]; passed attempt 2 | retried:  80.57% (1,157/1,436) W95% [78.44,82.53]
+
+----------------------------------------------------------------------------------------------------
+ATTEMPT-LEVEL PASS RATES — PERMIT (mature ∩ has-doc_events captains)
+----------------------------------------------------------------------------------------------------
+  unit = (captain, attempt_no) with a verification outcome.
+  attempt 2/3 are conditional on still not having passed; this is not a randomized retry.
+    attempt 1:  81.36% (6,875/8,450) W95% [80.52,82.18]
+    attempt 2:  86.95% (886/1,019) W95% [84.74,88.88]
+    attempt 3:  76.81% (53/69) W95% [65.60,85.19]  [n<100, directional only]
+  chi-square attempt_no × passed: χ²=20.40 dof=2 p=3.725e-05 min_exp=12.47
+  pairwise two-proportion z-tests (Bonferroni α=0.05/3=0.01667):
+    attempt 1 vs 2: Δ=+5.59pp  z=-4.38 p=1.177e-05  sig Bonferroni
+      later attempt HIGHER — consistent with capture/UX (retry can work)
+    attempt 2 vs 3: Δ=-10.14pp  z=2.37 p=0.01778  raw p<0.05 only
+      later attempt LOWER — mix of selection (harder remainder) and/or eligibility
+    attempt 1 vs 3: Δ=-4.55pp  z=0.97 p=0.3342  not sig
+      later attempt LOWER — mix of selection (harder remainder) and/or eligibility
+  among attempt-1 failures n=1,575: took attempt 2:  64.70% (1,019/1,575) W95% [62.30,67.02]; passed attempt 2 | retried:  86.95% (886/1,019) W95% [84.74,88.88]
+
+====================================================================================================
+2. CONFOUND CHECK — ERickshaw vs Auto/Cab approval, controlling for city
+====================================================================================================
+  sample: mature ∩ has-doc_events n=21,024; approved=3,946
+
+  univariate approved | vehicle_type:
+    Auto          17.19% (1,637/9,521) W95% [16.45,17.96]
+    Cab           17.29% (1,297/7,501) W95% [16.45,18.16]
+    ERickshaw     25.29% (1,012/4,002) W95% [23.96,26.66]
+
+  ERickshaw vs Auto+Cab pooled:  25.29% (1,012/4,002) W95% [23.96,26.66] vs  17.24% (2,934/17,022) W95% [16.68,17.81]
+    two-proportion z=11.74 p=8.266e-32  Δ=+8.05pp
+
+  univariate approved | city:
+    Hyderabad     18.31% (1,177/6,429) W95% [17.38,19.27]
+    Delhi         20.67% (1,121/5,423) W95% [19.61,21.77]
+    Pune          17.38% (798/4,591) W95% [16.31,18.51]
+    Bangalore     18.55% (850/4,581) W95% [17.46,19.71]
+
+  city × vehicle_type (counts) — ERickshaw concentration:
+vehicle_type  Auto   Cab  ERickshaw    All
+city                                      
+Bangalore     1796  2330        455   4581
+Delhi         1868  1064       2491   5423
+Hyderabad     2856  2964        609   6429
+Pune          3001  1143        447   4591
+All           9521  7501       4002  21024
+
+  city × vehicle_type approval rate (k/n):
+    Pune         Auto          16.29% (489/3,001) W95% [15.02,17.66]
+    Pune         Cab           17.32% (198/1,143) W95% [15.24,19.63]
+    Pune         ERickshaw     24.83% (111/447) W95% [21.05,29.04]
+    Hyderabad    Auto          17.16% (490/2,856) W95% [15.82,18.58]
+    Hyderabad    Cab           17.85% (529/2,964) W95% [16.51,19.27]
+    Hyderabad    ERickshaw     25.94% (158/609) W95% [22.62,29.57]
+    Bangalore    Auto          18.49% (332/1,796) W95% [16.76,20.35]
+    Bangalore    Cab           16.95% (395/2,330) W95% [15.48,18.53]
+    Bangalore    ERickshaw     27.03% (123/455) W95% [23.16,31.29]
+    Delhi        Auto          17.45% (326/1,868) W95% [15.80,19.24]
+    Delhi        Cab           16.45% (175/1,064) W95% [14.34,18.79]
+    Delhi        ERickshaw     24.89% (620/2,491) W95% [23.23,26.63]
+
+  association city × vehicle_type: χ²=4399.5 p=0 (confounding is plausible if this is large)
+
+  logistic regression: approved ~ C(vehicle_type) + C(city)
+  reference levels = first categorical in pandas (shown in model).
+                           Logit Regression Results                           
+==============================================================================
+Dep. Variable:               approved   No. Observations:                21024
+Model:                          Logit   Df Residuals:                    21018
+Method:                           MLE   Df Model:                            5
+Date:                Thu, 10 Sep 2026   Pseudo R-squ.:                0.006541
+Time:                        07:44:04   Log-Likelihood:                -10085.
+converged:                       True   LL-Null:                       -10152.
+Covariance Type:            nonrobust   LLR p-value:                 6.057e-27
+================================================================================================
+                                   coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------------------------
+Intercept                       -1.5456      0.039    -39.822      0.000      -1.622      -1.470
+C(vehicle_type)[T.Cab]          -0.0080      0.042     -0.192      0.848      -0.090       0.074
+C(vehicle_type)[T.ERickshaw]     0.4946      0.049     10.053      0.000       0.398       0.591
+C(city)[T.Delhi]                -0.0429      0.051     -0.848      0.396      -0.142       0.056
+C(city)[T.Bangalore]             0.0143      0.050      0.286      0.775      -0.084       0.112
+C(city)[T.Pune]                 -0.0665      0.051     -1.295      0.195      -0.167       0.034
+================================================================================================
+
+  odds ratios and 95% CI:
+    Intercept                                OR= 0.213  95%CI [0.198, 0.230]  p=0  logit=-1.5456
+    C(vehicle_type)[T.Cab]                   OR= 0.992  95%CI [0.914, 1.077]  p=0.8481  logit=-0.0080
+    C(vehicle_type)[T.ERickshaw]             OR= 1.640  95%CI [1.489, 1.806]  p=8.926e-24  logit=0.4946
+    C(city)[T.Delhi]                         OR= 0.958  95%CI [0.868, 1.058]  p=0.3962  logit=-0.0429
+    C(city)[T.Bangalore]                     OR= 1.014  95%CI [0.920, 1.119]  p=0.7746  logit=0.0143
+    C(city)[T.Pune]                          OR= 0.936  95%CI [0.846, 1.035]  p=0.1953  logit=-0.0665
+
+  sensitivity: approved ~ C(vehicle_type) + C(city) + C(device_tier) + C(acquisition_channel)
+    C(vehicle_type)[T.Cab]: OR=0.995  95%CI [0.916, 1.081]  p=0.9117
+    C(vehicle_type)[T.ERickshaw]: OR=1.682  95%CI [1.525, 1.856]  p=2.916e-25
+
+  READ-OUT (not a recommendation):
+  If ERickshaw OR vs Auto stays >1 with p below 0.05 after city is in the model,
+  the vehicle_type association is not fully explained by Delhi concentration.
+  Observed: ERickshaw vs Auto OR=1.640, p=8.926e-24 (city-adjusted).
+
+  additional confound check (rigor bar): device_tier vs channel on RC and Insurance pass
+  device_tier × acquisition_channel in funnel: χ²=10.9 p=0.2053
+acquisition_channel  fos_field  gc_telecalling  organic_app  paid_digital  referral
+device_tier                                                                        
+high                       862             171         1097           428       745
+low                       2529             549         3289          1243      2070
+mid                       2091             472         2588          1097      1793
+
+  logit P(pass RC | at-risk) ~ device + channel + city + vehicle
+    C(device_tier)[T.mid]                         OR=1.598  95%CI [1.492, 1.712]  p=1.631e-40
+    C(device_tier)[T.high]                        OR=1.911  95%CI [1.732, 2.109]  p=4.285e-38
+    C(acquisition_channel)[T.gc_telecalling]      OR=0.694  95%CI [0.599, 0.805]  p=1.195e-06
+    C(acquisition_channel)[T.organic_app]         OR=0.706  95%CI [0.648, 0.769]  p=2.016e-15
+    C(acquisition_channel)[T.paid_digital]        OR=0.547  95%CI [0.492, 0.608]  p=5.797e-29
+    C(acquisition_channel)[T.referral]            OR=0.678  95%CI [0.618, 0.745]  p=5.306e-16
+    C(city)[T.Delhi]                              OR=1.022  95%CI [0.927, 1.126]  p=0.6682
+    C(city)[T.Hyderabad]                          OR=1.001  95%CI [0.916, 1.093]  p=0.9852
+    C(city)[T.Pune]                               OR=1.044  95%CI [0.947, 1.151]  p=0.3866
+    C(vehicle_type)[T.Cab]                        OR=0.978  95%CI [0.910, 1.051]  p=0.5477
+    C(vehicle_type)[T.ERickshaw]                  OR=1.028  95%CI [0.936, 1.128]  p=0.5666
+
+  logit P(pass INSURANCE | at-risk) ~ device + channel + city + vehicle
+    C(device_tier)[T.mid]                         OR=1.337  95%CI [1.208, 1.479]  p=1.725e-08
+    C(device_tier)[T.high]                        OR=1.610  95%CI [1.413, 1.834]  p=8.491e-13
+    C(acquisition_channel)[T.gc_telecalling]      OR=0.779  95%CI [0.629, 0.966]  p=0.02258
+    C(acquisition_channel)[T.organic_app]         OR=0.688  95%CI [0.613, 0.771]  p=1.593e-10
+    C(acquisition_channel)[T.paid_digital]        OR=0.494  95%CI [0.417, 0.584]  p=1.667e-16
+    C(acquisition_channel)[T.referral]            OR=0.713  95%CI [0.627, 0.810]  p=2.107e-07
+    C(city)[T.Delhi]                              OR=0.852  95%CI [0.740, 0.981]  p=0.0264
+    C(city)[T.Hyderabad]                          OR=0.966  95%CI [0.848, 1.101]  p=0.6075
+    C(city)[T.Pune]                               OR=0.931  95%CI [0.806, 1.075]  p=0.3308
+    C(vehicle_type)[T.Cab]                        OR=0.964  95%CI [0.866, 1.074]  p=0.5098
+    C(vehicle_type)[T.ERickshaw]                  OR=1.223  95%CI [1.076, 1.389]  p=0.001977
+
+====================================================================================================
+3. MATURE ZERO-DOC_EVENTS (n expected 1,416) — never-attempted, not capture-failure
+====================================================================================================
+This cohort signed up, reached a terminal dropped_in_docs status, and has zero rows
+in doc_events. That is a different failure mode from RC/Insurance verification fail.
+They are NOT merged into the stage segmentation above.
+  mature zero-doc n=1,416  mature with events n=21,024  mature total=22,440
+  final_status: {'dropped_in_docs': 1416}
+  docs_cleared value counts: {0: 1416}
+  last_stage_reached: {'DL': 1416}
+
+  share of mature signups who never produce a doc_event, by segment:
+  (k = zero-doc captains, n = all mature signups in that level — includes both modes)
+
+  city:
+    χ²=7.00 p=0.07177 n=22,440
+      Hyderabad          never-attempted   6.54% (450/6,879) W95% [ 5.98, 7.15]  vs Hyderabad: z=0.00 p=1
+      Delhi              never-attempted   6.58% (382/5,805) W95% [ 5.97, 7.25]  vs Hyderabad: z=0.09 p=0.9298
+      Bangalore          never-attempted   6.47% (317/4,898) W95% [ 5.82, 7.20]  vs Hyderabad: z=-0.15 p=0.88
+      Pune               never-attempted   5.50% (267/4,858) W95% [ 4.89, 6.17]  vs Hyderabad: z=-2.33 p=0.01983
+
+  vehicle_type:
+    χ²=2.07 p=0.3544 n=22,440
+      Auto               never-attempted   6.41% (652/10,173) W95% [ 5.95, 6.90]  vs Auto: z=0.00 p=1
+      Cab                never-attempted   6.01% (480/7,981) W95% [ 5.51, 6.56]  vs Auto: z=-1.09 p=0.2748
+      ERickshaw          never-attempted   6.63% (284/4,286) W95% [ 5.92, 7.41]  vs Auto: z=0.48 p=0.628
+
+  device_tier:
+    χ²=0.14 p=0.9321 n=22,440
+      low                never-attempted   6.34% (655/10,335) W95% [ 5.88, 6.82]  vs low: z=0.00 p=1
+      mid                never-attempted   6.24% (535/8,576) W95% [ 5.75, 6.77]  vs low: z=-0.28 p=0.7794
+      high               never-attempted   6.40% (226/3,529) W95% [ 5.64, 7.26]  vs low: z=0.14 p=0.889
+
+  acquisition_channel:
+    χ²=418.27 p=3.131e-89 n=22,440  ** sig vs Bonferroni α=0.01 **
+      organic_app        never-attempted   7.35% (553/7,527) W95% [ 6.78, 7.96]  vs organic_app: z=0.00 p=1
+      fos_field          never-attempted   1.08% (60/5,542) W95% [ 0.84, 1.39]  vs organic_app: z=-16.74 p=6.879e-63
+      referral           never-attempted   6.93% (343/4,951) W95% [ 6.25, 7.67]  vs organic_app: z=-0.89 p=0.3751
+      paid_digital       never-attempted  11.45% (358/3,126) W95% [10.38,12.62]  vs organic_app: z=6.90 p=5.218e-12
+      gc_telecalling     never-attempted   7.88% (102/1,294) W95% [ 6.54, 9.48]  vs organic_app: z=0.68 p=0.4972
+
+  app_language:
+    χ²=1.81 p=0.7705 n=22,440
+      te                 never-attempted   5.96% (272/4,567) W95% [ 5.31, 6.68]  vs te: z=0.00 p=1
+      kn                 never-attempted   6.22% (282/4,537) W95% [ 5.55, 6.96]  vs te: z=0.52 p=0.6041
+      mr                 never-attempted   6.60% (295/4,467) W95% [ 5.91, 7.37]  vs te: z=1.27 p=0.2041
+      hi                 never-attempted   6.43% (285/4,435) W95% [ 5.74, 7.19]  vs te: z=0.93 p=0.3544
+      en                 never-attempted   6.36% (282/4,434) W95% [ 5.68, 7.12]  vs te: z=0.80 p=0.4251
+
+  composition of the 1,416 vs the 21,024 (column %):
+
+    city  χ²=7.00 p=0.07177
+           n_zero  n_events   pct_zero  pct_events
+city                                              
+Hyderabad     450      6429  31.779661   30.579338
+Delhi         382      5423  26.977401   25.794330
+Bangalore     317      4581  22.387006   21.789384
+Pune          267      4591  18.855932   21.836948
+
+    vehicle_type  χ²=2.07 p=0.3544
+              n_zero  n_events   pct_zero  pct_events
+vehicle_type                                         
+Auto             652      9521  46.045198   45.286339
+Cab              480      7501  33.898305   35.678272
+ERickshaw        284      4002  20.056497   19.035388
+
+    device_tier  χ²=0.14 p=0.9321
+             n_zero  n_events   pct_zero  pct_events
+device_tier                                         
+low             655      9680  46.257062   46.042618
+mid             535      8041  37.782486   38.246766
+high            226      3303  15.960452   15.710616
+
+    acquisition_channel  χ²=418.27 p=3.131e-89
+                     n_zero  n_events   pct_zero  pct_events
+acquisition_channel                                         
+organic_app             553      6974  39.053672   33.171613
+paid_digital            358      2768  25.282486   13.165906
+referral                343      4608  24.223164   21.917808
+gc_telecalling          102      1192   7.203390    5.669711
+fos_field                60      5482   4.237288   26.074962
+
+    app_language  χ²=1.81 p=0.7705
+              n_zero  n_events   pct_zero  pct_events
+app_language                                         
+mr               295      4172  20.833333   19.843988
+hi               285      4150  20.127119   19.739346
+en               282      4152  19.915254   19.748858
+kn               282      4255  19.915254   20.238775
+te               272      4295  19.209040   20.429033
+
+  time from signup to abandonment: NOT inferable.
+    dropped_in_docs has null decision_ts; zero-doc captains have no event_ts.
+    signup_age is time from signup to EXTRACT, not time-to-abandon.
+    signup_age_days among zero-doc mature:
+count    1416.000000
+mean       93.678383
+std        48.593204
+min        15.716667
+10%        27.710417
+25%        50.685417
+50%        93.191667
+75%       136.581597
+90%       161.668750
+max       180.636806
+    signup calendar month:
+signup_ts
+2026-01    242
+2026-02    234
+2026-03    251
+2026-04    237
+2026-05    284
+2026-06    168
+Freq: M
+
+  nudge coverage: zero-doc captains with ≥1 nudge  29.94% (424/1,416) W95% [27.61,32.38]; event captains  56.98% (11,979/21,024) W95% [56.31,57.65]
+    two-proportion z (nudge coverage zero vs events): z=-19.80 p=2.758e-87
+    days signup → first nudge among zero-doc who were nudged:
+count    424.000000
+mean       0.984796
+std        0.564280
+min        0.097509
+25%        0.574953
+50%        0.854915
+75%        1.304996
+max        3.466217
+    this is time-to-first-touch, not time-to-abandon.
+
+Step 3 complete. No recommendations, no campaign evaluation.
