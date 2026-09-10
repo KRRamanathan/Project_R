@@ -1,0 +1,1395 @@
+
+========================================================================================
+DATA AUDIT — STEP 1
+========================================================================================
+data dir: /workspace
+extraction timestamp (brief): 2026-06-30 23:59 IST
+This script only describes contents. No funnel. No recommendations.
+  loaded captains.csv: shape=(25000, 9)
+  loaded doc_events.csv: shape=(186282, 7)
+  loaded approvals.csv: shape=(25000, 5)
+  loaded activation.csv: shape=(4206, 5)
+  loaded nudges.csv: shape=(16314, 6)
+  loaded airport_hourly.csv: shape=(10248, 9)
+  loaded airport_trips.csv: shape=(60000, 9)
+
+========================================================================================
+FILE: captains.csv
+========================================================================================
+rows=25,000  cols=9
+expected columns: ['captain_id', 'signup_ts', 'city', 'vehicle_type', 'acquisition_channel', 'signup_zone_id', 'device_tier', 'app_language', 'age_band']
+actual columns:   ['captain_id', 'signup_ts', 'city', 'vehicle_type', 'acquisition_channel', 'signup_zone_id', 'device_tier', 'app_language', 'age_band']
+missing vs brief: none
+extra vs brief:   none
+
+dtypes:
+captain_id             str
+signup_ts              str
+city                   str
+vehicle_type           str
+acquisition_channel    str
+signup_zone_id         str
+device_tier            str
+app_language           str
+age_band               str
+
+memory (approx): 12.69 MB
+
+----------------------------------------------------------------------------------------
+nulls / emptiness / cardinality
+----------------------------------------------------------------------------------------
+             column  nulls  null_pct  empty_string  nunique
+         captain_id      0       0.0             0    25000
+          signup_ts      0       0.0             0    23245
+               city      0       0.0             0        4
+       vehicle_type      0       0.0             0        3
+acquisition_channel      0       0.0             0        5
+     signup_zone_id      0       0.0             0       96
+        device_tier      0       0.0             0        3
+       app_language      0       0.0             0        5
+           age_band      0       0.0             0        4
+
+----------------------------------------------------------------------------------------
+duplicates
+----------------------------------------------------------------------------------------
+full-row duplicates: 0
+declared key ['captain_id']: duplicate extra rows = 0
+unique key combinations: 25,000 / 25,000 rows
+
+----------------------------------------------------------------------------------------
+timestamps
+----------------------------------------------------------------------------------------
+
+signup_ts:
+  nulls=0  unparseable_non_null=0
+  min=2026-01-01 06:08:00  max=2026-06-30 21:57:00
+  < 2026-01-01: 0
+  > extraction (2026-06-30 23:59 IST): 0
+  by calendar month (valid timestamps):
+signup_ts
+2026-01    3716
+2026-02    3600
+2026-03    4188
+2026-04    4123
+2026-05    4580
+2026-06    4793
+Freq: M
+  sample values: ['2026-01-01 06:08:00', '2026-01-01 06:52:00', '2026-01-01 07:02:00']
+  values that look timezone-aware: 0 / 25,000
+
+----------------------------------------------------------------------------------------
+categorical value counts
+----------------------------------------------------------------------------------------
+
+city  (nunique=4, shown up to 30):
+city
+Hyderabad    7663
+Delhi        6452
+Pune         5448
+Bangalore    5437
+
+vehicle_type  (nunique=3, shown up to 30):
+vehicle_type
+Auto         11363
+Cab           8881
+ERickshaw     4756
+
+acquisition_channel  (nunique=5, shown up to 30):
+acquisition_channel
+organic_app       8418
+fos_field         6122
+referral          5518
+paid_digital      3483
+gc_telecalling    1459
+
+device_tier  (nunique=3, shown up to 30):
+device_tier
+low     11565
+mid      9533
+high     3902
+
+app_language  (nunique=5, shown up to 30):
+app_language
+kn    5081
+te    5064
+mr    4956
+en    4952
+hi    4947
+
+age_band  (nunique=4, shown up to 30):
+age_band
+25-34    10397
+35-44     7086
+18-24     4540
+45+       2977
+
+signup_zone_id: nunique= 96
+zone prefix x city (first token before '-'):
+signup_zone_id   BAN   DEL   HYD   PUN    All
+city                                         
+Bangalore       5437     0     0     0   5437
+Delhi              0  6452     0     0   6452
+Hyderabad          0     0  7663     0   7663
+Pune               0     0     0  5448   5448
+All             5437  6452  7663  5448  25000
+
+----------------------------------------------------------------------------------------
+city x vehicle_type
+----------------------------------------------------------------------------------------
+
+crosstab: city x vehicle_type  (counts; n=25,000)
+vehicle_type   Auto   Cab  ERickshaw    All
+city                                       
+Bangalore      2152  2749        536   5437
+Delhi          2221  1270       2961   6452
+Hyderabad      3425  3522        716   7663
+Pune           3565  1340        543   5448
+All           11363  8881       4756  25000
+
+----------------------------------------------------------------------------------------
+city x acquisition_channel
+----------------------------------------------------------------------------------------
+
+crosstab: city x acquisition_channel  (counts; n=25,000)
+acquisition_channel  fos_field  gc_telecalling  organic_app  paid_digital  referral    All
+city                                                                                      
+Bangalore                 1296             306         1881           757      1197   5437
+Delhi                     1571             382         2159           922      1418   6452
+Hyderabad                 1906             469         2575          1063      1650   7663
+Pune                      1349             302         1803           741      1253   5448
+All                       6122            1459         8418          3483      5518  25000
+
+----------------------------------------------------------------------------------------
+city x device_tier
+----------------------------------------------------------------------------------------
+
+crosstab: city x device_tier  (counts; n=25,000)
+device_tier  high    low   mid    All
+city                                 
+Bangalore     880   2498  2059   5437
+Delhi         995   2951  2506   6452
+Hyderabad    1207   3598  2858   7663
+Pune          820   2518  2110   5448
+All          3902  11565  9533  25000
+
+----------------------------------------------------------------------------------------
+vehicle_type x device_tier
+----------------------------------------------------------------------------------------
+
+crosstab: vehicle_type x device_tier  (counts; n=25,000)
+device_tier   high    low   mid    All
+vehicle_type                          
+Auto          1767   5318  4278  11363
+Cab           1410   4054  3417   8881
+ERickshaw      725   2193  1838   4756
+All           3902  11565  9533  25000
+
+----------------------------------------------------------------------------------------
+acquisition_channel x device_tier
+----------------------------------------------------------------------------------------
+
+crosstab: acquisition_channel x device_tier  (counts; n=25,000)
+device_tier          high    low   mid    All
+acquisition_channel                          
+fos_field             962   2821  2339   6122
+gc_telecalling        212    672   575   1459
+organic_app          1317   3962  3139   8418
+paid_digital          538   1584  1361   3483
+referral              873   2526  2119   5518
+All                  3902  11565  9533  25000
+
+----------------------------------------------------------------------------------------
+age_band x vehicle_type
+----------------------------------------------------------------------------------------
+
+crosstab: age_band x vehicle_type  (counts; n=25,000)
+vehicle_type   Auto   Cab  ERickshaw    All
+age_band                                   
+18-24          2030  1669        841   4540
+25-34          4714  3703       1980  10397
+35-44          3277  2449       1360   7086
+45+            1342  1060        575   2977
+All           11363  8881       4756  25000
+
+========================================================================================
+FILE: doc_events.csv
+========================================================================================
+rows=186,282  cols=7
+expected columns: ['event_id', 'captain_id', 'doc_type', 'attempt_no', 'event_type', 'event_ts', 'failure_reason']
+actual columns:   ['event_id', 'captain_id', 'doc_type', 'attempt_no', 'event_type', 'event_ts', 'failure_reason']
+missing vs brief: none
+extra vs brief:   none
+
+dtypes:
+event_id            str
+captain_id          str
+doc_type            str
+attempt_no        int64
+event_type          str
+event_ts            str
+failure_reason      str
+
+memory (approx): 66.57 MB
+
+----------------------------------------------------------------------------------------
+nulls / emptiness / cardinality
+----------------------------------------------------------------------------------------
+        column  nulls  null_pct  empty_string  nunique
+      event_id      0     0.000             0   186282
+    captain_id      0     0.000             0    23303
+      doc_type      0     0.000             0        6
+    attempt_no      0     0.000             0        3
+    event_type      0     0.000             0        3
+      event_ts      0     0.000             0   186282
+failure_reason 166510    89.386             0        7
+
+----------------------------------------------------------------------------------------
+duplicates
+----------------------------------------------------------------------------------------
+full-row duplicates: 0
+declared key ['event_id']: duplicate extra rows = 0
+unique key combinations: 186,282 / 186,282 rows
+
+----------------------------------------------------------------------------------------
+timestamps
+----------------------------------------------------------------------------------------
+
+event_ts:
+  nulls=0  unparseable_non_null=0
+  min=2026-01-01 13:30:50.795752785  max=2026-06-30 23:56:42.723769018
+  < 2026-01-01: 0
+  > extraction (2026-06-30 23:59 IST): 0
+  by calendar month (valid timestamps):
+event_ts
+2026-01    25671
+2026-02    26985
+2026-03    31982
+2026-04    30850
+2026-05    34944
+2026-06    35850
+Freq: M
+  sample values: ['2026-01-01 20:30:06.229672479', '2026-01-01 23:26:54.472703731', '2026-01-02 09:36:49.336302871']
+  values that look timezone-aware: 0 / 186,282
+
+----------------------------------------------------------------------------------------
+categorical value counts
+----------------------------------------------------------------------------------------
+
+doc_type  (nunique=6, shown up to 30):
+doc_type
+DL           50780
+RC           48099
+AADHAAR      31117
+FITNESS      21884
+PERMIT       20807
+INSURANCE    13595
+
+event_type  (nunique=3, shown up to 30):
+event_type
+upload_success       93236
+verification_pass    73274
+verification_fail    19772
+
+failure_reason  (nunique=7, shown up to 30):
+failure_reason
+NaN                    166510
+image_blurred            4767
+ocr_low_confidence       3696
+name_mismatch            3173
+document_expired         2686
+details_not_legible      2171
+wrong_document_type      2083
+duplicate_document       1196
+
+attempt_no  (nunique=3, shown up to 30):
+attempt_no
+1    162176
+2     21863
+3      2243
+
+----------------------------------------------------------------------------------------
+event_type x doc_type
+----------------------------------------------------------------------------------------
+
+crosstab: doc_type x event_type  (counts; n=186,282)
+event_type  upload_success  verification_fail  verification_pass     All
+doc_type                                                                
+AADHAAR              15572               1450              14095   31117
+DL                   25418               3408              21954   50780
+FITNESS              10950               2693               8241   21884
+INSURANCE             6805               2126               4664   13595
+PERMIT               10418               1921               8468   20807
+RC                   24073               8174              15852   48099
+All                  93236              19772              73274  186282
+
+----------------------------------------------------------------------------------------
+failure_reason x event_type
+----------------------------------------------------------------------------------------
+
+crosstab: failure_reason x event_type  (counts; n=186,282)
+event_type           upload_success  verification_fail  verification_pass     All
+failure_reason                                                                   
+<NA>                          93236                  0              73274  166510
+details_not_legible               0               2171                  0    2171
+document_expired                  0               2686                  0    2686
+duplicate_document                0               1196                  0    1196
+image_blurred                     0               4767                  0    4767
+name_mismatch                     0               3173                  0    3173
+ocr_low_confidence                0               3696                  0    3696
+wrong_document_type               0               2083                  0    2083
+All                           93236              19772              73274  186282
+
+----------------------------------------------------------------------------------------
+failure_reason x doc_type (verification_fail only)
+----------------------------------------------------------------------------------------
+verification_fail rows n=19,772
+
+crosstab: doc_type x failure_reason  (counts; n=19,772)
+failure_reason  details_not_legible  document_expired  duplicate_document  image_blurred  name_mismatch  ocr_low_confidence  wrong_document_type    All
+doc_type                                                                                                                                               
+AADHAAR                         164               233                 107            266            304                 196                  180   1450
+DL                              428               531                 239            624            693                 497                  396   3408
+FITNESS                         281               301                 150            750            386                 574                  251   2693
+INSURANCE                       272               244                 106            569            304                 417                  214   2126
+PERMIT                          189               467                 141            270            362                 239                  253   1921
+RC                              837               910                 453           2288           1124                1773                  789   8174
+All                            2171              2686                1196           4767           3173                3696                 2083  19772
+verification_fail with null failure_reason: 0
+non-fail events with non-null failure_reason: 0
+
+----------------------------------------------------------------------------------------
+attempt_no distribution by event_type
+----------------------------------------------------------------------------------------
+
+crosstab: attempt_no x event_type  (counts; n=186,282)
+event_type  upload_success  verification_fail  verification_pass     All
+attempt_no                                                              
+1                    81173              17340              63663  162176
+2                    10940               2173               8750   21863
+3                     1123                259                861    2243
+All                  93236              19772              73274  186282
+
+attempt_no describe: count    186282.000000
+mean          1.141447
+std           0.381474
+min           1.000000
+25%           1.000000
+50%           1.000000
+75%           1.000000
+max           3.000000
+attempt_no > 3 (brief says up to 3 attempts): 0
+attempt_no < 1: 0
+
+----------------------------------------------------------------------------------------
+per (captain, doc, attempt) event mix
+----------------------------------------------------------------------------------------
+(captain_id, doc_type, attempt_no) groups: 93,236
+groups with both pass and fail: 0
+groups with duplicate event_type in list: 0
+groups with no upload_success: 0
+groups with verify event but no upload_success: 0
+
+----------------------------------------------------------------------------------------
+events per captain
+----------------------------------------------------------------------------------------
+count    23303.000000
+mean         7.993906
+std          4.347933
+min          1.000000
+1%           2.000000
+5%           2.000000
+25%          4.000000
+50%          8.000000
+75%         12.000000
+95%         16.000000
+99%         18.000000
+max         26.000000
+captains with 0 events in this file: n/a here; see cross-file section
+
+========================================================================================
+FILE: approvals.csv
+========================================================================================
+rows=25,000  cols=5
+expected columns: ['captain_id', 'decision_ts', 'final_status', 'last_stage_reached', 'docs_cleared']
+actual columns:   ['captain_id', 'decision_ts', 'final_status', 'last_stage_reached', 'docs_cleared']
+missing vs brief: none
+extra vs brief:   none
+
+dtypes:
+captain_id              str
+decision_ts             str
+final_status            str
+last_stage_reached      str
+docs_cleared          int64
+
+memory (approx): 5.48 MB
+
+----------------------------------------------------------------------------------------
+nulls / emptiness / cardinality
+----------------------------------------------------------------------------------------
+            column  nulls  null_pct  empty_string  nunique
+        captain_id      0     0.000             0    25000
+       decision_ts  20359    81.436             0     4641
+      final_status      0     0.000             0        4
+last_stage_reached   4393    17.572             0       10
+      docs_cleared      0     0.000             0        7
+
+----------------------------------------------------------------------------------------
+duplicates
+----------------------------------------------------------------------------------------
+full-row duplicates: 0
+declared key ['captain_id']: duplicate extra rows = 0
+unique key combinations: 25,000 / 25,000 rows
+
+----------------------------------------------------------------------------------------
+timestamps
+----------------------------------------------------------------------------------------
+
+decision_ts:
+  nulls=20,359  unparseable_non_null=0
+  min=2026-01-05 21:40:24.347261353  max=2026-06-30 22:26:04.692838376
+  < 2026-01-01: 0
+  > extraction (2026-06-30 23:59 IST): 0
+  by calendar month (valid timestamps):
+decision_ts
+2026-01    548
+2026-02    713
+2026-03    818
+2026-04    786
+2026-05    846
+2026-06    930
+Freq: M
+  sample values: ['2026-01-06 08:11:48.775157583', '2026-01-07 09:40:02.632133424', '2026-01-08 21:10:39.912791885']
+  values that look timezone-aware: 0 / 4,641
+
+----------------------------------------------------------------------------------------
+categorical / outcome value counts
+----------------------------------------------------------------------------------------
+
+final_status  (nunique=4, shown up to 30):
+final_status
+dropped_in_docs    19062
+approved            4206
+in_progress         1297
+rejected             435
+
+last_stage_reached  (nunique=10, shown up to 30):
+last_stage_reached
+RC                         6031
+NaN                        4393
+PERMIT                     3609
+FITNESS                    3126
+DL                         2892
+INSURANCE                  2801
+AADHAAR                    1713
+background_check_failed     113
+vehicle_age_policy          111
+doc_authenticity_flag       109
+duplicate_captain           102
+
+docs_cleared  (nunique=7, shown up to 30):
+docs_cleared
+1    6031
+5    4027
+3    3609
+6    3602
+4    3126
+0    2892
+2    1713
+
+----------------------------------------------------------------------------------------
+final_status x last_stage_reached
+----------------------------------------------------------------------------------------
+
+crosstab: final_status x last_stage_reached  (counts; n=25,000)
+last_stage_reached  <NA>  AADHAAR    DL  FITNESS  INSURANCE  PERMIT    RC  background_check_failed  doc_authenticity_flag  duplicate_captain  vehicle_age_policy    All
+final_status                                                                                                                                                           
+approved            4206        0     0        0          0       0     0                        0                      0                  0                   0   4206
+dropped_in_docs        0     1614  2823     2908       2612    3385  5720                        0                      0                  0                   0  19062
+in_progress          187       99    69      218        189     224   311                        0                      0                  0                   0   1297
+rejected               0        0     0        0          0       0     0                      113                    109                102                 111    435
+All                 4393     1713  2892     3126       2801    3609  6031                      113                    109                102                 111  25000
+
+----------------------------------------------------------------------------------------
+final_status x docs_cleared
+----------------------------------------------------------------------------------------
+
+crosstab: final_status x docs_cleared  (counts; n=25,000)
+docs_cleared        0     1     2     3     4     5     6    All
+final_status                                                    
+approved            0     0     0     0     0  1081  3125   4206
+dropped_in_docs  2823  5720  1614  3385  2908  2612     0  19062
+in_progress        69   311    99   224   218   229   147   1297
+rejected            0     0     0     0     0   105   330    435
+All              2892  6031  1713  3609  3126  4027  3602  25000
+
+----------------------------------------------------------------------------------------
+decision_ts nulls by final_status
+----------------------------------------------------------------------------------------
+
+crosstab: final_status x decision_ts_null  (counts; n=25,000)
+decision_ts_null  False   True    All
+final_status                         
+approved           4206      0   4206
+dropped_in_docs       0  19062  19062
+in_progress           0   1297   1297
+rejected            435      0    435
+All                4641  20359  25000
+
+----------------------------------------------------------------------------------------
+last_stage_reached nulls by final_status
+----------------------------------------------------------------------------------------
+
+crosstab: final_status x last_stage_null  (counts; n=25,000)
+last_stage_null  False  True    All
+final_status                       
+approved             0  4206   4206
+dropped_in_docs  19062     0  19062
+in_progress       1110   187   1297
+rejected           435     0    435
+All              20607  4393  25000
+
+numeric describe:
+                count    mean       std  min   1%   5%  25%  50%  75%  95%  99%  max
+docs_cleared  25000.0  2.9814  2.034822  0.0  0.0  0.0  1.0  3.0  5.0  6.0  6.0  6.0
+  docs_cleared: negatives=0
+
+docs_cleared value counts:
+docs_cleared
+0    2892
+1    6031
+2    1713
+3    3609
+4    3126
+5    4027
+6    3602
+
+========================================================================================
+FILE: activation.csv
+========================================================================================
+rows=4,206  cols=5
+expected columns: ['captain_id', 'first_order_ts', 'orders_d7', 'orders_d30', 'online_hours_d30']
+actual columns:   ['captain_id', 'first_order_ts', 'orders_d7', 'orders_d30', 'online_hours_d30']
+missing vs brief: none
+extra vs brief:   none
+
+dtypes:
+captain_id              str
+first_order_ts          str
+orders_d7           float64
+orders_d30          float64
+online_hours_d30    float64
+
+memory (approx): 0.67 MB
+
+----------------------------------------------------------------------------------------
+nulls / emptiness / cardinality
+----------------------------------------------------------------------------------------
+          column  nulls  null_pct  empty_string  nunique
+      captain_id      0     0.000             0     4206
+  first_order_ts    102     2.425             0     4104
+       orders_d7    187     4.446             0       33
+      orders_d30    834    19.829             0      109
+online_hours_d30    834    19.829             0      555
+
+----------------------------------------------------------------------------------------
+duplicates
+----------------------------------------------------------------------------------------
+full-row duplicates: 0
+declared key ['captain_id']: duplicate extra rows = 0
+unique key combinations: 4,206 / 4,206 rows
+
+----------------------------------------------------------------------------------------
+timestamps
+----------------------------------------------------------------------------------------
+
+first_order_ts:
+  nulls=102  unparseable_non_null=0
+  min=2026-01-06 11:57:58.804450784  max=2026-06-30 21:36:06.089121524
+  < 2026-01-01: 0
+  > extraction (2026-06-30 23:59 IST): 0
+  by calendar month (valid timestamps):
+first_order_ts
+2026-01    463
+2026-02    626
+2026-03    729
+2026-04    705
+2026-05    753
+2026-06    828
+Freq: M
+  sample values: ['2026-01-11 12:11:54.524199600', '2026-01-08 04:16:11.743250188', '2026-01-10 11:14:57.939110321']
+  values that look timezone-aware: 0 / 4,104
+
+numeric describe:
+                   count       mean        std  min   1%   5%   25%   50%     75%   95%     99%    max
+orders_d7         4019.0   7.068674   4.508138  0.0  0.0  1.0   4.0   6.0   9.000  16.0  22.000   37.0
+orders_d30        3372.0  27.531435  17.011344  0.0  0.0  8.0  16.0  24.0  35.000  60.0  85.000  161.0
+online_hours_d30  3372.0  20.731346  13.395880  0.0  0.0  5.3  11.7  18.2  26.225  45.8  66.903  117.8
+  orders_d7: negatives=0
+  orders_d30: negatives=0
+  online_hours_d30: negatives=0
+
+----------------------------------------------------------------------------------------
+first_order_ts presence
+----------------------------------------------------------------------------------------
+rows with null first_order_ts: 102 / 4,206
+
+----------------------------------------------------------------------------------------
+orders / hours vs first_order presence
+----------------------------------------------------------------------------------------
+                orders_d7                             orders_d30                               online_hours_d30                              
+                    count      mean median  min   max      count       mean median  min    max            count       mean median  min    max
+has_first_order                                                                                                                              
+False                  52  0.000000    0.0  0.0   0.0         45   0.000000    0.0  0.0    0.0               45   0.000000    0.0  0.0    0.0
+True                 3967  7.161331    6.0  1.0  37.0       3327  27.903817   25.0  1.0  161.0             3327  21.011752   18.3  0.6  117.8
+null first_order AND orders_d7>0: 0
+null first_order AND orders_d30>0: 0
+orders_d7 > orders_d30: 7
+has first_order AND orders_d30==0: 0
+
+========================================================================================
+FILE: nudges.csv
+========================================================================================
+rows=16,314  cols=6
+expected columns: ['captain_id', 'campaign_id', 'channel', 'sent_ts', 'delivered', 'clicked']
+actual columns:   ['captain_id', 'campaign_id', 'channel', 'sent_ts', 'delivered', 'clicked']
+missing vs brief: none
+extra vs brief:   none
+
+dtypes:
+captain_id       str
+campaign_id      str
+channel          str
+sent_ts          str
+delivered      int64
+clicked        int64
+
+memory (approx): 4.39 MB
+
+----------------------------------------------------------------------------------------
+nulls / emptiness / cardinality
+----------------------------------------------------------------------------------------
+     column  nulls  null_pct  empty_string  nunique
+ captain_id      0       0.0             0    13667
+campaign_id      0       0.0             0        4
+    channel      0       0.0             0        3
+    sent_ts      0       0.0             0    16314
+  delivered      0       0.0             0        2
+    clicked      0       0.0             0        2
+
+----------------------------------------------------------------------------------------
+duplicates
+----------------------------------------------------------------------------------------
+full-row duplicates: 0
+declared primary key: none (event-level / multi-row per captain expected)
+unique captain_id: 13,667
+rows per captain: min=1 p50=1.0 max=2
+
+----------------------------------------------------------------------------------------
+timestamps
+----------------------------------------------------------------------------------------
+
+sent_ts:
+  nulls=0  unparseable_non_null=0
+  min=2026-01-01 23:10:49.644254087  max=2026-06-30 23:37:42.004031897
+  < 2026-01-01: 0
+  > extraction (2026-06-30 23:59 IST): 0
+  by calendar month (valid timestamps):
+sent_ts
+2026-01    2305
+2026-02    2366
+2026-03    2792
+2026-04    2683
+2026-05    3008
+2026-06    3160
+Freq: M
+  sample values: ['2026-01-02 01:31:34.373244464', '2026-01-02 20:02:31.634258914', '2026-01-03 11:32:05.154545929']
+  values that look timezone-aware: 0 / 16,314
+
+----------------------------------------------------------------------------------------
+categorical / outcome value counts
+----------------------------------------------------------------------------------------
+
+campaign_id  (nunique=4, shown up to 30):
+campaign_id
+CAMP_WA_002      8673
+CAMP_WA_001      3807
+CAMP_SMS_004     2661
+CAMP_CALL_009    1173
+
+channel  (nunique=3, shown up to 30):
+channel
+whatsapp         12480
+sms               2661
+outbound_call     1173
+
+delivered  (nunique=2, shown up to 30):
+delivered
+1    14947
+0     1367
+
+clicked  (nunique=2, shown up to 30):
+clicked
+0    10833
+1     5481
+
+----------------------------------------------------------------------------------------
+campaign_id x channel
+----------------------------------------------------------------------------------------
+
+crosstab: campaign_id x channel  (counts; n=16,314)
+channel        outbound_call   sms  whatsapp    All
+campaign_id                                        
+CAMP_CALL_009           1173     0         0   1173
+CAMP_SMS_004               0  2661         0   2661
+CAMP_WA_001                0     0      3807   3807
+CAMP_WA_002                0     0      8673   8673
+All                     1173  2661     12480  16314
+
+----------------------------------------------------------------------------------------
+campaign_id x delivered
+----------------------------------------------------------------------------------------
+
+crosstab: campaign_id x delivered  (counts; n=16,314)
+delivered         0      1    All
+campaign_id                      
+CAMP_CALL_009   113   1060   1173
+CAMP_SMS_004    257   2404   2661
+CAMP_WA_001     382   3425   3807
+CAMP_WA_002     615   8058   8673
+All            1367  14947  16314
+
+----------------------------------------------------------------------------------------
+campaign_id x clicked
+----------------------------------------------------------------------------------------
+
+crosstab: campaign_id x clicked  (counts; n=16,314)
+clicked            0     1    All
+campaign_id                      
+CAMP_CALL_009    888   285   1173
+CAMP_SMS_004    1997   664   2661
+CAMP_WA_001     2844   963   3807
+CAMP_WA_002     5104  3569   8673
+All            10833  5481  16314
+
+----------------------------------------------------------------------------------------
+delivered x clicked
+----------------------------------------------------------------------------------------
+
+crosstab: delivered x clicked  (counts; n=16,314)
+clicked        0     1    All
+delivered                    
+0            910   457   1367
+1           9923  5024  14947
+All        10833  5481  16314
+
+----------------------------------------------------------------------------------------
+channel x delivered
+----------------------------------------------------------------------------------------
+
+crosstab: channel x delivered  (counts; n=16,314)
+delivered         0      1    All
+channel                          
+outbound_call   113   1060   1173
+sms             257   2404   2661
+whatsapp        997  11483  12480
+All            1367  14947  16314
+
+----------------------------------------------------------------------------------------
+channel x clicked
+----------------------------------------------------------------------------------------
+
+crosstab: channel x clicked  (counts; n=16,314)
+clicked            0     1    All
+channel                          
+outbound_call    888   285   1173
+sms             1997   664   2661
+whatsapp        7948  4532  12480
+All            10833  5481  16314
+clicked=1 and delivered=0: 457
+
+========================================================================================
+FILE: airport_hourly.csv
+========================================================================================
+rows=10,248  cols=9
+expected columns: ['zone_id', 'zone_type', 'hour_ts', 'requests', 'fulfilled_requests', 'unfulfilled_requests', 'online_captains', 'avg_eta_min', 'avg_surge_multiplier']
+actual columns:   ['zone_id', 'zone_type', 'hour_ts', 'requests', 'fulfilled_requests', 'unfulfilled_requests', 'online_captains', 'avg_eta_min', 'avg_surge_multiplier']
+missing vs brief: none
+extra vs brief:   none
+
+dtypes:
+zone_id                     str
+zone_type                   str
+hour_ts                     str
+requests                  int64
+fulfilled_requests        int64
+unfulfilled_requests      int64
+online_captains           int64
+avg_eta_min             float64
+avg_surge_multiplier    float64
+
+memory (approx): 2.37 MB
+
+----------------------------------------------------------------------------------------
+nulls / emptiness / cardinality
+----------------------------------------------------------------------------------------
+              column  nulls  null_pct  empty_string  nunique
+             zone_id      0       0.0             0        7
+           zone_type      0       0.0             0        4
+             hour_ts      0       0.0             0     1464
+            requests      0       0.0             0      125
+  fulfilled_requests      0       0.0             0      107
+unfulfilled_requests      0       0.0             0       99
+     online_captains      0       0.0             0       97
+         avg_eta_min      0       0.0             0      886
+avg_surge_multiplier      0       0.0             0      137
+
+----------------------------------------------------------------------------------------
+duplicates
+----------------------------------------------------------------------------------------
+full-row duplicates: 0
+declared key ['zone_id', 'hour_ts']: duplicate extra rows = 0
+unique key combinations: 10,248 / 10,248 rows
+
+----------------------------------------------------------------------------------------
+timestamps
+----------------------------------------------------------------------------------------
+
+hour_ts:
+  nulls=0  unparseable_non_null=0
+  min=2026-05-01 00:00:00  max=2026-06-30 23:00:00
+  < 2026-01-01: 0
+  > extraction (2026-06-30 23:59 IST): 0
+  by calendar month (valid timestamps):
+hour_ts
+2026-05    5208
+2026-06    5040
+Freq: M
+  sample values: ['2026-05-01 00:00:00', '2026-05-01 01:00:00', '2026-05-01 02:00:00']
+  values that look timezone-aware: 0 / 10,248
+
+----------------------------------------------------------------------------------------
+categorical value counts
+----------------------------------------------------------------------------------------
+
+zone_id  (nunique=7, shown up to 30):
+zone_id
+APT-T1     1464
+APT-T2     1464
+CBD-01     1464
+CBD-02     1464
+SUB-07     1464
+SUB-11     1464
+TECH-03    1464
+
+zone_type  (nunique=4, shown up to 30):
+zone_type
+airport_terminal    2928
+city_core           2928
+suburban            2928
+tech_park           1464
+
+----------------------------------------------------------------------------------------
+zone_id x zone_type
+----------------------------------------------------------------------------------------
+
+crosstab: zone_id x zone_type  (counts; n=10,248)
+zone_type  airport_terminal  city_core  suburban  tech_park    All
+zone_id                                                           
+APT-T1                 1464          0         0          0   1464
+APT-T2                 1464          0         0          0   1464
+CBD-01                    0       1464         0          0   1464
+CBD-02                    0       1464         0          0   1464
+SUB-07                    0          0      1464          0   1464
+SUB-11                    0          0      1464          0   1464
+TECH-03                   0          0         0       1464   1464
+All                    2928       2928      2928       1464  10248
+
+numeric describe:
+                        count       mean        std  min    1%     5%   25%    50%    75%    95%       99%     max
+requests              10248.0  44.653591  21.222099  3.0  14.0  18.00  29.0  40.00  55.00  88.00  106.0000  132.00
+fulfilled_requests    10248.0  38.375195  17.750041  2.0  12.0  17.00  25.0  35.00  47.00  76.00   92.0000  119.00
+unfulfilled_requests  10248.0   6.278396  15.866283  1.0   1.0   1.00   1.0   1.00   1.00  50.00   78.0000   99.00
+online_captains       10248.0  36.251756  16.593118  2.0   8.0  13.00  25.0  34.00  46.00  69.00   81.0000  106.00
+avg_eta_min           10248.0   4.267979   1.869872  2.0   2.0   2.41   3.2   3.80   4.53   9.34   10.7953   12.60
+avg_surge_multiplier  10248.0   1.145376   0.302356  1.0   1.0   1.00   1.0   1.04   1.09   2.06    2.2400    2.36
+  requests: negatives=0
+  fulfilled_requests: negatives=0
+  unfulfilled_requests: negatives=0
+  online_captains: negatives=0
+  avg_eta_min: negatives=0
+  avg_surge_multiplier: negatives=0
+
+fulfilled + unfulfilled != requests: 0 / 10,248
+fulfilled > requests: 0
+hour_ts unique values: 1,464
+rows per zone_id:
+zone_id
+APT-T1     1464
+APT-T2     1464
+CBD-01     1464
+CBD-02     1464
+SUB-07     1464
+SUB-11     1464
+TECH-03    1464
+
+========================================================================================
+FILE: airport_trips.csv
+========================================================================================
+rows=60,000  cols=9
+expected columns: ['trip_id', 'pickup_zone_id', 'drop_zone_id', 'drop_zone_type', 'request_ts', 'trip_distance_km', 'captain_cancelled', 'got_return_fare_within_20min', 'fare_inr']
+actual columns:   ['trip_id', 'pickup_zone_id', 'drop_zone_id', 'drop_zone_type', 'request_ts', 'trip_distance_km', 'captain_cancelled', 'got_return_fare_within_20min', 'fare_inr']
+missing vs brief: none
+extra vs brief:   none
+
+dtypes:
+trip_id                             str
+pickup_zone_id                      str
+drop_zone_id                        str
+drop_zone_type                      str
+request_ts                          str
+trip_distance_km                float64
+captain_cancelled                 int64
+got_return_fare_within_20min      int64
+fare_inr                        float64
+
+memory (approx): 19.67 MB
+
+----------------------------------------------------------------------------------------
+nulls / emptiness / cardinality
+----------------------------------------------------------------------------------------
+                      column  nulls  null_pct  empty_string  nunique
+                     trip_id      0       0.0             0    60000
+              pickup_zone_id      0       0.0             0        2
+                drop_zone_id      0       0.0             0        5
+              drop_zone_type      0       0.0             0        3
+                  request_ts      0       0.0             0     1464
+            trip_distance_km      0       0.0             0     4249
+           captain_cancelled      0       0.0             0        2
+got_return_fare_within_20min      0       0.0             0        2
+                    fare_inr      0       0.0             0      726
+
+----------------------------------------------------------------------------------------
+duplicates
+----------------------------------------------------------------------------------------
+full-row duplicates: 0
+declared key ['trip_id']: duplicate extra rows = 0
+unique key combinations: 60,000 / 60,000 rows
+
+----------------------------------------------------------------------------------------
+timestamps
+----------------------------------------------------------------------------------------
+
+request_ts:
+  nulls=0  unparseable_non_null=0
+  min=2026-05-01 00:00:00  max=2026-06-30 23:00:00
+  < 2026-01-01: 0
+  > extraction (2026-06-30 23:59 IST): 0
+  by calendar month (valid timestamps):
+request_ts
+2026-05    30481
+2026-06    29519
+Freq: M
+  sample values: ['2026-05-01 00:00:00', '2026-05-01 00:00:00', '2026-05-01 00:00:00']
+  values that look timezone-aware: 0 / 60,000
+
+----------------------------------------------------------------------------------------
+categorical / outcome value counts
+----------------------------------------------------------------------------------------
+
+pickup_zone_id  (nunique=2, shown up to 30):
+pickup_zone_id
+APT-T1    30084
+APT-T2    29916
+
+drop_zone_id  (nunique=5, shown up to 30):
+drop_zone_id
+CBD-01     12724
+CBD-02     12558
+SUB-11     12341
+SUB-07     12302
+TECH-03    10075
+
+drop_zone_type  (nunique=3, shown up to 30):
+drop_zone_type
+city_core    25282
+suburban     24643
+tech_park    10075
+
+captain_cancelled  (nunique=2, shown up to 30):
+captain_cancelled
+0    51740
+1     8260
+
+got_return_fare_within_20min  (nunique=2, shown up to 30):
+got_return_fare_within_20min
+0    38424
+1    21576
+
+----------------------------------------------------------------------------------------
+pickup_zone_id x drop_zone_type
+----------------------------------------------------------------------------------------
+
+crosstab: pickup_zone_id x drop_zone_type  (counts; n=60,000)
+drop_zone_type  city_core  suburban  tech_park    All
+pickup_zone_id                                       
+APT-T1              12656     12350       5078  30084
+APT-T2              12626     12293       4997  29916
+All                 25282     24643      10075  60000
+
+----------------------------------------------------------------------------------------
+captain_cancelled x got_return_fare_within_20min
+----------------------------------------------------------------------------------------
+
+crosstab: captain_cancelled x got_return_fare_within_20min  (counts; n=60,000)
+got_return_fare_within_20min      0      1    All
+captain_cancelled                                
+0                             32485  19255  51740
+1                              5939   2321   8260
+All                           38424  21576  60000
+
+----------------------------------------------------------------------------------------
+drop_zone_type x captain_cancelled
+----------------------------------------------------------------------------------------
+
+crosstab: drop_zone_type x captain_cancelled  (counts; n=60,000)
+captain_cancelled      0     1    All
+drop_zone_type                       
+city_core          23101  2181  25282
+suburban           19467  5176  24643
+tech_park           9172   903  10075
+All                51740  8260  60000
+
+----------------------------------------------------------------------------------------
+drop_zone_type x got_return_fare_within_20min
+----------------------------------------------------------------------------------------
+
+crosstab: drop_zone_type x got_return_fare_within_20min  (counts; n=60,000)
+got_return_fare_within_20min      0      1    All
+drop_zone_type                                   
+city_core                     11953  13329  25282
+suburban                      20570   4073  24643
+tech_park                      5901   4174  10075
+All                           38424  21576  60000
+
+numeric describe:
+                    count        mean         std    min     1%      5%     25%     50%     75%     95%     99%     max
+trip_distance_km  60000.0   17.883161    8.117206   1.54   4.77    6.99   11.82   16.62   22.66   33.12   41.55   66.73
+fare_inr          60000.0  279.349983  111.685797  50.00  91.00  127.00  197.00  263.00  345.00  487.00  600.00  931.00
+  trip_distance_km: negatives=0
+  fare_inr: negatives=0
+
+pickup == drop zone: 0
+
+========================================================================================
+CROSS-FILE CONSISTENCY
+========================================================================================
+captains unique ids: 25,000
+doc_events unique captain_id: 23,303
+approvals unique ids: 25,000
+activation unique ids: 4,206
+nudges unique captain_id: 13,667
+
+set overlaps (captain_id):
+  captains ∩ approvals = 25,000; only captains=0; only approvals=0
+  captains ∩ doc_events = 23,303; only captains=1,697; only doc_events=0
+  approvals ∩ doc_events = 23,303; only approvals=1,697; only doc_events=0
+  captains ∩ activation = 4,206; only captains=20,794; only activation=0
+  approvals ∩ activation = 4,206; only approvals=20,794; only activation=0
+  captains ∩ nudges = 13,667; only captains=11,333; only nudges=0
+  approvals ∩ nudges = 13,667; only approvals=11,333; only nudges=0
+
+----------------------------------------------------------------------------------------
+activation vs approvals.final_status
+----------------------------------------------------------------------------------------
+activation rows by approvals.final_status (NA = not in approvals):
+final_status
+approved    4206
+approved in approvals: 4,206
+approved missing from activation: 0
+activation not approved: 0
+
+----------------------------------------------------------------------------------------
+doc coverage vs captains / approvals
+----------------------------------------------------------------------------------------
+captains with zero doc_events: 1,697
+final_status for captains with zero doc_events:
+final_status
+dropped_in_docs    1669
+in_progress          28
+last_stage_reached for captains with zero doc_events:
+last_stage_reached
+DL           1600
+NaN            28
+RC             24
+PERMIT         15
+INSURANCE      14
+FITNESS         9
+AADHAAR         7
+docs_cleared for captains with zero doc_events:
+docs_cleared
+0    1600
+1      24
+5      21
+6      21
+3      15
+4       9
+2       7
+
+----------------------------------------------------------------------------------------
+approvals.docs_cleared vs doc_events verification_pass uniqueness
+----------------------------------------------------------------------------------------
+docs_cleared vs nunique verification_pass doc_types:
+n_unique_docs_passed     0     1     2     3     4     5     6    All
+docs_cleared                                                         
+0                     2892     0     0     0     0     0     0   2892
+1                       37  5994     0     0     0     0     0   6031
+2                       16     9  1688     0     0     0     0   1713
+3                       26    25    16  3542     0     0     0   3609
+4                       18    23    21    19  3045     0     0   3126
+5                       30    27     9    22    24  3915     0   4027
+6                       27    24    23    20    15    20  3473   3602
+All                   3046  6102  1757  3603  3084  3935  3473  25000
+rows where docs_cleared != nunique passed docs: 451
+mismatch by final_status:
+final_status
+in_progress        382
+dropped_in_docs     69
+sample of mismatches (up to 10):
+captain_id final_status  docs_cleared  n_unique_docs_passed last_stage_reached
+ CPT103708  in_progress             6                     4                NaN
+ CPT122454  in_progress             5                     4          INSURANCE
+ CPT116264  in_progress             6                     5                NaN
+ CPT112307  in_progress             6                     4                NaN
+ CPT122393  in_progress             4                     3            FITNESS
+ CPT107668  in_progress             5                     4                NaN
+ CPT111723  in_progress             6                     5                NaN
+ CPT107156  in_progress             6                     5                NaN
+ CPT117819  in_progress             5                     4          INSURANCE
+ CPT116136  in_progress             3                     2             PERMIT
+
+----------------------------------------------------------------------------------------
+signup_ts vs first event / decision / first_order / nudge
+----------------------------------------------------------------------------------------
+captains with signup and at least one event: 23,303
+first_event_ts < signup_ts: 0
+captains with signup and decision_ts: 4,641
+decision_ts < signup_ts: 0
+captains with decision_ts and last_event_ts: 4,641
+decision_ts < last_event_ts: 0
+captains with signup and first_order_ts: 4,104
+first_order_ts < signup_ts: 0
+captains with decision_ts and first_order_ts: 4,104
+first_order_ts < decision_ts: 0
+captains with signup and at least one nudge: 13,667
+first_nudge_ts < signup_ts: 0
+
+----------------------------------------------------------------------------------------
+captains attributes vs final_status (counts only)
+----------------------------------------------------------------------------------------
+merge indicator captains vs approvals:
+_merge
+both          25000
+left_only         0
+right_only        0
+
+crosstab: city x final_status  (counts; n=25,000)
+final_status  approved  dropped_in_docs  in_progress  rejected    All
+city                                                                 
+Bangalore          897             4174          271        95   5437
+Delhi             1206             4806          319       121   6452
+Hyderabad         1264             5870          397       132   7663
+Pune               839             4212          310        87   5448
+All               4206            19062         1297       435  25000
+
+crosstab: vehicle_type x final_status  (counts; n=25,000)
+final_status  approved  dropped_in_docs  in_progress  rejected    All
+vehicle_type                                                         
+Auto              1739             8800          631       193  11363
+Cab               1386             6920          438       137   8881
+ERickshaw         1081             3342          228       105   4756
+All               4206            19062         1297       435  25000
+
+crosstab: acquisition_channel x final_status  (counts; n=25,000)
+final_status         approved  dropped_in_docs  in_progress  rejected    All
+acquisition_channel                                                         
+fos_field                1586             4074          304       158   6122
+gc_telecalling            206             1133           79        41   1459
+organic_app              1220             6618          453       127   8418
+paid_digital              341             2943          173        26   3483
+referral                  853             4294          288        83   5518
+All                      4206            19062         1297       435  25000
+
+crosstab: device_tier x final_status  (counts; n=25,000)
+final_status  approved  dropped_in_docs  in_progress  rejected    All
+device_tier                                                          
+high               851             2782          174        95   3902
+low               1552             9212          649       152  11565
+mid               1803             7068          474       188   9533
+All               4206            19062         1297       435  25000
+
+crosstab: app_language x final_status  (counts; n=25,000)
+final_status  approved  dropped_in_docs  in_progress  rejected    All
+app_language                                                         
+en                 867             3728          262        95   4952
+hi                 852             3736          269        90   4947
+kn                 834             3868          289        90   5081
+mr                 801             3835          239        81   4956
+te                 852             3895          238        79   5064
+All               4206            19062         1297       435  25000
+
+crosstab: age_band x final_status  (counts; n=25,000)
+final_status  approved  dropped_in_docs  in_progress  rejected    All
+age_band                                                             
+18-24              757             3469          234        80   4540
+25-34             1722             7933          560       182  10397
+35-44             1228             5381          358       119   7086
+45+                499             2279          145        54   2977
+All               4206            19062         1297       435  25000
+
+----------------------------------------------------------------------------------------
+Permit applicability vs vehicle_type (from brief: Permit applies to Auto, Cab)
+----------------------------------------------------------------------------------------
+vehicle_type among captains who have any PERMIT event:
+vehicle_type
+Auto    5248
+Cab     3965
+Bike captains with any PERMIT event: 0
+Auto/Cab captains with zero PERMIT events: 11,031 / 20,244
+final_status for Auto/Cab with zero PERMIT events:
+final_status
+dropped_in_docs    10344
+in_progress          687
+
+----------------------------------------------------------------------------------------
+doc_type inventory vs brief sequence
+----------------------------------------------------------------------------------------
+doc_type levels in data:
+doc_type
+DL           50780
+RC           48099
+AADHAAR      31117
+FITNESS      21884
+PERMIT       20807
+INSURANCE    13595
+last_stage_reached levels in approvals:
+last_stage_reached
+RC                         6031
+NaN                        4393
+PERMIT                     3609
+FITNESS                    3126
+DL                         2892
+INSURANCE                  2801
+AADHAAR                    1713
+background_check_failed     113
+vehicle_age_policy          111
+doc_authenticity_flag       109
+duplicate_captain           102
+
+----------------------------------------------------------------------------------------
+airport_hourly vs airport_trips zone ids / time window
+----------------------------------------------------------------------------------------
+hourly zone_id: ['APT-T1', 'APT-T2', 'CBD-01', 'CBD-02', 'SUB-07', 'SUB-11', 'TECH-03']
+trip pickup_zone_id: ['APT-T1', 'APT-T2']
+trip drop_zone_id nunique=5 sample=['CBD-01', 'CBD-02', 'SUB-07', 'SUB-11', 'TECH-03']
+pickup zones not in hourly: []
+hourly zones never used as pickup: ['CBD-01', 'CBD-02', 'SUB-07', 'SUB-11', 'TECH-03']
+drop zones that appear in hourly: ['CBD-01', 'CBD-02', 'SUB-07', 'SUB-11', 'TECH-03']
+hourly hour_ts range: 2026-05-01 00:00:00 -> 2026-06-30 23:00:00  n=10,248
+trips request_ts range: 2026-05-01 00:00:00 -> 2026-06-30 23:00:00  n=60,000
+
+Note from brief: airport_trips is sampled. Compare volume only as a sanity check.
+sampled_trips vs fulfilled_requests (hourly grain) describe of sampled/fulfilled where fulfilled>0:
+count    10248.000000
+mean         0.237771
+std          0.418587
+min          0.000000
+25%          0.000000
+50%          0.000000
+75%          0.461538
+max          2.750000
+hours with sampled_trips > fulfilled_requests: 723
+hours with sampled_trips > requests: 380
+
+----------------------------------------------------------------------------------------
+signup_zone_id vs airport zone ids
+----------------------------------------------------------------------------------------
+captain signup_zone_id overlapping hourly zones: []
+n captains whose signup_zone_id is an hourly airport zone: 0
+
+----------------------------------------------------------------------------------------
+nudge targeting vs final_status
+----------------------------------------------------------------------------------------
+nudge rows by final_status:
+final_status
+dropped_in_docs    11371
+approved            3786
+in_progress          766
+rejected             391
+unique captains nudged by final_status:
+final_status
+dropped_in_docs    9682
+approved           3031
+in_progress         639
+rejected            315
+
+crosstab: campaign_id x final_status  (counts; n=16,314)
+final_status   approved  dropped_in_docs  in_progress  rejected    All
+campaign_id                                                           
+CAMP_CALL_009       212              887           57        17   1173
+CAMP_SMS_004        453             2008          146        54   2661
+CAMP_WA_001         648             2903          190        66   3807
+CAMP_WA_002        2473             5573          373       254   8673
+All                3786            11371          766       391  16314
+
+----------------------------------------------------------------------------------------
+in_progress / right-censoring vs extraction timestamp
+----------------------------------------------------------------------------------------
+extraction timestamp (brief): 2026-06-30 23:59 IST
+final_status counts:
+final_status
+dropped_in_docs    19062
+approved            4206
+in_progress         1297
+rejected             435
+
+signup recency (days before extraction) by final_status:
+                   count       mean        std       min        10%        25%        50%         75%         90%         max
+final_status                                                                                                                 
+approved          4206.0  89.228644  50.235083  3.726389  21.542708  44.400174  88.198958  132.440972  160.313889  180.743750
+dropped_in_docs  19062.0  90.130624  49.855308  0.084722  23.198125  46.627257  88.476736  132.363542  161.129375  180.713194
+in_progress       1297.0   5.126265   2.937373  0.096528   1.302500   2.604861   5.125694    7.304861    8.678056   15.602778
+rejected           435.0  88.823772  50.847958  6.139583  21.094167  41.612153  89.352083  131.319792  159.290833  180.649306
+
+signups in last 14 days before extraction by final_status:
+n signups with days_before_extract <= 14: 2,243
+final_status
+in_progress        1295
+dropped_in_docs     719
+approved            208
+rejected             21
+
+========================================================================================
+ITEMS THAT LOOK INCONSISTENT OR WORTH A CLOSER LOOK (no conclusions)
+========================================================================================
+Each bullet is a description of a pattern in the files, not an explanation.
+
+01. activation.csv has 4,206 rows; approved captains=4,206; approved missing from activation=0; activation not in approved=0
+02. captains n=25,000 unique=25,000; approvals n=25,000 unique=25,000; id overlap=25,000
+03. decision_ts null by final_status: {'approved': 0, 'dropped_in_docs': 19062, 'in_progress': 1297, 'rejected': 0}
+04. last_stage_reached null by final_status: {'approved': 4206, 'dropped_in_docs': 0, 'in_progress': 187, 'rejected': 0}
+05. captains with zero rows in doc_events: 1,697
+06. nudges with clicked=1 and delivered=0: 457
+07. airport_hourly rows where fulfilled+unfulfilled != requests: 0
+08. doc_events attempt_no > 3: 0
+09. failure_reason non-null on non-verification_fail: 0; failure_reason null on verification_fail: 0
+10. All inspected timestamp columns are timezone-naive strings (no Z / offset). Brief extraction clock is labelled IST; files do not declare timezone.
+11. activation first_order_ts null: 102 / 4,206
+12. Bike captains with PERMIT events (brief: Permit applies to Auto, Cab): 0
+13. approvals.docs_cleared != nunique verification_pass doc_types: 451 (by final_status: {'in_progress': 382, 'dropped_in_docs': 69})
+14. activation orders_d7 > orders_d30 (both non-null): 7; orders_d7 null=187; orders_d30 null=834 (same count as online_hours_d30 null=834)
+15. rejected last_stage_reached values (not in the 6-doc sequence): {'background_check_failed': 113, 'vehicle_age_policy': 111, 'doc_authenticity_flag': 109, 'duplicate_captain': 102}
+16. approved with docs_cleared=5: 1,081; approved with docs_cleared=6: 3,125 (Bike vs Auto/Cab may explain 5 vs 6; not tested here)
+17. captain signup_zone_id overlap with airport_hourly zone_id: 0 / 25,000
+
+Audit complete. Funnel construction was not run.
