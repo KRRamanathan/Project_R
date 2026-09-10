@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Memo — Head of Supply</title>
+<style>
+  @page { size: A4; margin: 14mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0 auto;
+    max-width: 820px;
+    font: 11px/1.45 Calibri, "Segoe UI", sans-serif;
+    color: #1E2761;
+    background: #FFF8E1;
+    padding: 28px 36px 40px;
+  }
+  .banner {
+    background: #FFC400;
+    color: #1E2761;
+    padding: 10px 16px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    font-size: 11px;
+  }
+  .sub { color: #5c4a12; font-size: 11px; margin: 8px 0 14px; }
+  h1 { font: 700 22px/1.2 Cambria, Georgia, serif; margin: 0 0 10px; }
+  h2 {
+    font: 700 13px/1.2 Cambria, Georgia, serif;
+    color: #1C7293;
+    border-bottom: 2px solid #FFC400;
+    padding-bottom: 4px;
+    margin: 18px 0 8px;
+  }
+  .ask {
+    background: #fffdf6;
+    border-left: 5px solid #FFC400;
+    padding: 10px 14px;
+    margin: 0 0 14px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+  th { background: #1E2761; color: #fff; text-align: left; padding: 6px 8px; }
+  td { padding: 7px 8px; vertical-align: top; border-bottom: 1px solid #F0E0A8; background: #fffdf6; }
+  tr:nth-child(even) td { background: #FFF8E1; }
+  .muted { color: #5c4a12; }
+  ul { margin: 6px 0 0 18px; padding: 0; }
+  li { margin: 4px 0; }
+</style>
+</head>
+<body>
+<div class="banner">RAPIDO · MEMO TO THE HEAD OF SUPPLY</div>
+<p class="sub">Ramanathan K R · 10 Sep 2026 · extract 30 Jun 2026, 23:59 IST</p>
+<h1>~180 more approved captains a month — two photo fixes, not a hiring push</h1>
+<div class="ask">
+  <strong>The ask.</strong> Ship Insurance camera UX this week, then a 10-day RC grace after Legal.
+  Do <strong>not</strong> hire the airport catchment. Stop scaling CAMP_WA_002.
+  Medium confidence on 180; the campaign call is a hard no.
+  These approvals are not hollow: <strong>98.7%</strong> of mature approved captains already take a first trip (3,895 / 3,946).
+</div>
+
+<h2>What to do this week</h2>
+<table>
+  <tr><th>#</th><th>Do this</th><th>Impact</th><th>Cost / risk</th><th>Watch</th></tr>
+  <tr>
+    <td><strong>1</strong></td>
+    <td><strong>C1b this week</strong> — Insurance camera (411). Then <strong>C1a</strong> after Legal: 10-day in-person RC (1,637). Same camera on other docs is a free rider — not in the 180.</td>
+    <td>~180/mo (~50 + ~134). Disjoint.</td>
+    <td>C1b: engineering. C1a: Legal/T&amp;S + ~1 FTE ₹40–60k (assumed).</td>
+    <td>Approved by cohort</td>
+  </tr>
+  <tr>
+    <td><strong>2</strong></td>
+    <td><strong>Airport Return Assurance</strong> at ₹35.4 per unpaid night-suburban leg. Do not hire near the airport.</td>
+    <td>Rest-suburban economics. Sample ~₹69–103k/mo.</td>
+    <td>Trips file is sampled. Not city-core.</td>
+    <td>Return in 20m, cancels, falling 4-week run-rate</td>
+  </tr>
+  <tr>
+    <td><strong>3</strong></td>
+    <td>Kill the 5× WhatsApp. Send vs no-send on RC-cleared app/paid captains only.</td>
+    <td>Cost avoided + answer in 4–6 weeks</td>
+    <td>Near zero</td>
+    <td>Aadhaar pass and approved</td>
+  </tr>
+</table>
+<p><strong>Airport, plainly.</strong> ~40% unfulfilled at terminals vs ~3% elsewhere. <strong>84%</strong> of that pain is 21:00–03:59 (~13 captains vs ~37 by day). Suburban backhaul and overnight return-collapse compound. Mix does not shift after dark (χ² p=0.12). New hires inherit both penalties. Price the deadhead.</p>
+<p><strong>CAMP_WA_002 is 0 pp.</strong> Clicked vs not (delivered): −1.5pp (CI −3.6 to +0.6). The 29% vs 11% recipient gap is targeting after RC, not lift. Do not fund 5×.</p>
+
+<h2>Why these two stages — leftover queue — ARA</h2>
+<p><strong>RC and Insurance fail as photographs.</strong> RC loses 5,405; only <strong>1,637</strong> are blur / OCR / illegible. Retry pass rates rise (65% → 74%). RC is vehicle identity, so a 10-day grace is scoped. Insurance loses 3,289 but ~2,530 never uploaded after Fitness; C1b is the <strong>411</strong> photo fails and cannot defer. DL cannot be deferred. Aadhaar / Permit / Fitness are mostly never-upload or eligibility. Rejected 409 already cleared docs — a gate.</p>
+<table>
+  <tr><th>Fix</th><th>Flow</th><th>Maths</th><th>Bank</th></tr>
+  <tr><td>C1a RC grace</td><td>~300/mo capture-only</td><td>× 60% show-up × 74% pass</td><td><strong>~134/mo</strong></td></tr>
+  <tr><td>C1b Insurance UX</td><td>411 capture-only</td><td>67→76% × 91% approved-if-cleared</td><td><strong>~46–52/mo</strong></td></tr>
+</table>
+<p class="muted">Show-up unobserved (40–80% → ~89–188). If Legal will not treat deferred RC as activation, C1a shrinks toward ~36/month.</p>
+<p><strong>ARA.</strong> Gap ₹31.6 (₹24.9 vs ₹56.5) ÷ 0.8931 eligible share ≈ <strong>₹35.4/leg</strong>. 80/100/120% → ~₹69–103k sample. 30% of fare (₹105) overpays.</p>
+<p><strong>Not banked.</strong> Other-doc camera after C1b — measure, not +180. Never-upload is an assist RCT, not WhatsApp. Field 128–256 overlaps 726 C1a captains — do not add.</p>
+<p><strong>Assumptions that would change the answer.</strong> 15.6-day cutoff; <code>doc_events</code> not <code>docs_cleared</code>; field gap not banked; ARA vs rest-suburban not city-core; re-derive ₹35.4 if night returns rise; C1a FTE ₹40–60k assumed. No CAC. Trips file sampled. <code>signup_zone_id</code> does not join airport zones.</p>
+</body>
+</html>
