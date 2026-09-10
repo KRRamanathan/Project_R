@@ -42,7 +42,9 @@
   td { padding: 7px 8px; vertical-align: top; border-bottom: 1px solid #F0E0A8; background: #fffdf6; }
   tr:nth-child(even) td { background: #FFF8E1; }
   .muted { color: #5c4a12; }
-  ul { margin: 6px 0 0 18px; padding: 0; }
+  .charts { display: flex; gap: 12px; justify-content: center; margin: 10px 0 14px; }
+  .charts img { width: 48%; max-width: 360px; background: #FFF8E1; }
+  .bar { display: block; width: 92%; max-width: 640px; margin: 8px auto 14px; }
   li { margin: 4px 0; }
 </style>
 </head>
@@ -55,6 +57,10 @@
   Do <strong>not</strong> hire the airport catchment. Stop scaling CAMP_WA_002.
   Medium confidence on 180; the campaign call is a hard no.
   These approvals are not hollow: <strong>98.7%</strong> of mature approved captains already take a first trip (3,895 / 3,946).
+</div>
+<div class="charts">
+  <img src="figures/pie_c1.png" alt="Split of the ~180 extra approved per month"/>
+  <img src="figures/pie_airport_night.png" alt="Airport unfulfilled volume by clock"/>
 </div>
 
 <h2>What to do this week</h2>
@@ -86,7 +92,13 @@
 <p><strong>CAMP_WA_002 is 0 pp.</strong> Clicked vs not (delivered): −1.5pp (CI −3.6 to +0.6). The 29% vs 11% recipient gap is targeting after RC, not lift. Do not fund 5×.</p>
 
 <h2>Why these two stages — leftover queue — ARA</h2>
-<p><strong>RC and Insurance fail as photographs.</strong> RC loses 5,405; only <strong>1,637</strong> are blur / OCR / illegible. Retry pass rates rise (65% → 74%). RC is vehicle identity, so a 10-day grace is scoped. Insurance loses 3,289 but ~2,530 never uploaded after Fitness; C1b is the <strong>411</strong> photo fails and cannot defer. DL cannot be deferred. Aadhaar / Permit / Fitness are mostly never-upload or eligibility. Rejected 409 already cleared docs — a gate.</p>
+<p><strong>RC and Insurance fail as photographs.</strong> RC loses 5,405; only <strong>1,637</strong> are blur / OCR / illegible.</p>
+<div class="charts">
+  <img src="figures/pie_rc_capture.png" alt="RC capture-only slice"/>
+  <img src="figures/pie_c1b.png" alt="Insurance C1b slice"/>
+</div>
+<img class="bar" src="figures/bar_volume_lost.png" alt="Volume lost by stage"/>
+<p>Retry pass rates rise (65% → 74%). RC is vehicle identity, so a 10-day grace is scoped. Insurance loses 3,289 but ~2,530 never uploaded after Fitness; C1b is the <strong>411</strong> photo fails and cannot defer. DL cannot be deferred. Aadhaar / Permit / Fitness are mostly never-upload or eligibility. Rejected 409 already cleared docs — a gate.</p>
 <table>
   <tr><th>Fix</th><th>Flow</th><th>Maths</th><th>Bank</th></tr>
   <tr><td>C1a RC grace</td><td>~300/mo capture-only</td><td>× 60% show-up × 74% pass</td><td><strong>~134/mo</strong></td></tr>

@@ -12,9 +12,8 @@ python3 -m pip install -r requirements.txt
 ./run_all.sh
 ```
 
-Rebuild the deck (optional): `node generate_deck.js`
-
-Print the memo from `MEMO.html` (cream page, same numbers as `MEMO.md`).
+Rebuild the deck (optional): `node generate_deck.js`  
+Pies for the memo: `python3 make_exec_charts.py`
 
 | File | Role |
 |---|---|
