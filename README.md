@@ -19,7 +19,9 @@ python3 -m pip install -r requirements.txt
 
 GitHub is the code. Colab cells are not a website. Open this file in a browser:
 
-**https://htmlpreview.github.io/?https://github.com/KRRamanathan/Project_R/blob/main/dashboard.html**
+**https://raw.githack.com/KRRamanathan/Project_R/main/dashboard.html**
+
+Yellow cards move with the sliders. C1b, 18.8% approved, and airport % stay put on purpose. `htmlpreview.github.io` often blocks the slider script — use the link above, or open `dashboard.html` from a clone.
 
 Same page as `dashboard.html` in the repo (double-click after clone). Streamlit is optional: `python3 -m streamlit run sensitivity_explorer.py` → `http://localhost:8501`.
 
