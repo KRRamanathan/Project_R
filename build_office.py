@@ -18,66 +18,172 @@ ORANGE = PptRGB(0xC4, 0x5C, 0x26)
 CREAM = PptRGB(0xF7, 0xF4, 0xEE)
 
 
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+import subprocess
+import sys
+
+import make_exec_charts
+
+
+def _shade(cell, hex_color: str) -> None:
+    tc = cell._tc
+    tcPr = tc.get_or_add_tcPr()
+    shd = OxmlElement("w:shd")
+    shd.set(qn("w:fill"), hex_color)
+    shd.set(qn("w:val"), "clear")
+    tcPr.append(shd)
+
+
+def _set_run(run, size=11, bold=False, color=None, name="Calibri"):
+    run.font.size = Pt(float(size))
+    run.font.bold = bold
+    run.font.name = name
+    if color:
+        run.font.color.rgb = RGBColor(*color)
+
+
 def build_memo() -> Path:
-    md = (ROOT / "MEMO.md").read_text()
+    make_exec_charts.main()
     doc = Document()
     section = doc.sections[0]
-    section.top_margin = Inches(0.7)
-    section.bottom_margin = Inches(0.7)
-    section.left_margin = Inches(0.85)
-    section.right_margin = Inches(0.85)
+    section.page_width = Inches(8.5)
+    section.page_height = Inches(11)
+    section.top_margin = Inches(0.55)
+    section.bottom_margin = Inches(0.55)
+    section.left_margin = Inches(0.7)
+    section.right_margin = Inches(0.7)
 
-    for raw in md.splitlines():
-        line = raw.rstrip()
-        if not line:
-            continue
-        if line.startswith("# "):
-            p = doc.add_paragraph()
-            r = p.add_run(line[2:])
-            r.bold = True
-            r.font.size = Pt(16)
-            r.font.color.rgb = RGBColor(0x1F, 0x3A, 0x5F)
-        elif line.startswith("## "):
-            p = doc.add_paragraph()
-            r = p.add_run(line[3:])
-            r.bold = True
-            r.font.size = Pt(13)
-            r.font.color.rgb = RGBColor(0xC4, 0x5C, 0x26)
-        elif line.startswith("### "):
-            p = doc.add_paragraph()
-            r = p.add_run(line[4:])
-            r.bold = True
-            r.font.size = Pt(12)
-        elif line.startswith("|") and "---" not in line:
-            # skip markdown tables as tables — collect later; simple paragraph
-            p = doc.add_paragraph(line.strip("|").replace("|", " · "))
-            p.runs[0].font.size = Pt(9) if p.runs else None
-        elif line.startswith("|---"):
-            continue
-        elif line.startswith("- "):
-            p = doc.add_paragraph(line[2:], style="List Bullet")
-        elif line.startswith("---"):
-            continue
-        else:
-            p = doc.add_paragraph()
-            # very light **bold** handling
-            text = line
-            while "**" in text:
-                pre, rest = text.split("**", 1)
-                if pre:
-                    p.add_run(pre)
-                if "**" not in rest:
-                    p.add_run(rest)
-                    text = ""
-                    break
-                bold, text = rest.split("**", 1)
-                r = p.add_run(bold)
-                r.bold = True
-            if text:
-                p.add_run(text)
-            for r in p.runs:
-                r.font.size = Pt(10.5)
-                r.font.name = "Calibri"
+    banner = doc.add_table(rows=1, cols=1)
+    banner.autofit = True
+    cell = banner.cell(0, 0)
+    _shade(cell, "CADCFC")
+    p = cell.paragraphs[0]
+    r = p.add_run("RAPIDO  ·  MEMO TO THE HEAD OF SUPPLY")
+    _set_run(r, 10, True, (0x1E, 0x27, 0x61))
+    p2 = cell.add_paragraph()
+    r2 = p2.add_run("Onboarding leak and overnight airport  ·  10 Sep 2026  ·  extract 30 Jun 2026, 23:59 IST")
+    _set_run(r2, 9, False, (0x1C, 0x72, 0x93))
+
+    h = doc.add_paragraph()
+    r = h.add_run("~180 more approved captains a month — two photo fixes, not five programmes")
+    _set_run(r, 16, True, (0x1E, 0x27, 0x61), "Cambria")
+
+    lead = doc.add_paragraph()
+    r = lead.add_run(
+        "Central case is about 134 from a 10-day RC in-person grace (C1a) and ~50 from Insurance "
+        "upload UX (C1b). The groups do not overlap. 98.7% of mature approved captains already take a "
+        "first trip (3,895 / 3,946) — documents are the bottleneck. Show-up for RC is unobserved; if Legal "
+        "will not treat deferred RC as activation, C1a shrinks toward ~36/month."
+    )
+    _set_run(r, 10.5, False, (0x33, 0x33, 0x33))
+
+    pics = doc.add_paragraph()
+    pics.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    for fname in ("pie_c1.png", "pie_airport_night.png"):
+        pth = ROOT / "figures" / fname
+        if pth.exists():
+            pics.add_run().add_picture(str(pth), width=Inches(3.15))
+            pics.add_run("  ")
+
+    cap = doc.add_paragraph()
+    r = cap.add_run(
+        "Left: bank only C1a + C1b (~180). Right: 84% of airport unfulfilled volume sits in 21:00–03:59."
+    )
+    _set_run(r, 8.5, False, (0x8A, 0x8F, 0xA3))
+    cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    sub = doc.add_paragraph()
+    r = sub.add_run("What to do this week")
+    _set_run(r, 13, True, (0x1C, 0x72, 0x93), "Cambria")
+
+    tbl = doc.add_table(rows=4, cols=4)
+    tbl.style = "Table Grid"
+    tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+    headers = ["#", "Do this", "Impact", "Watch"]
+    data = [
+        [
+            "1",
+            "C1b Insurance camera this week, then C1a 10-day RC grace after Legal (1,637 + 411 capture-only). Same camera on other docs is a free rider — not added to 180.",
+            "~180/mo (~50 + ~134). C1a ops ~1 FTE ₹40–60k assumed.",
+            "Approved by cohort",
+        ],
+        [
+            "2",
+            "Airport Return Assurance at ₹35.4 per unpaid night-suburban leg. Do not hire the catchment.",
+            "Sample ~₹69–103k/mo. Restores rest-of-day suburban net, not city-core.",
+            "Return-in-20m, cancels, falling 4-week payout run-rate",
+        ],
+        [
+            "3",
+            "Stop CAMP_WA_002 5×. Send/no-send RCT on RC-cleared app/paid captains, no other campaign.",
+            "0 pp click lift. Cost avoided + answer in 4–6 weeks.",
+            "Aadhaar pass and approved",
+        ],
+    ]
+    for i, htxt in enumerate(headers):
+        cell = tbl.rows[0].cells[i]
+        _shade(cell, "1E2761")
+        p = cell.paragraphs[0]
+        r = p.add_run(htxt)
+        _set_run(r, 9, True, (0xFF, 0xFF, 0xFF))
+    for ri, row in enumerate(data):
+        for ci, val in enumerate(row):
+            cell = tbl.rows[ri + 1].cells[ci]
+            _shade(cell, "F7F8FC" if ri % 2 == 0 else "FFFFFF")
+            p = cell.paragraphs[0]
+            r = p.add_run(val)
+            _set_run(r, 8.5, ci == 0, (0x1E, 0x27, 0x61) if ci == 0 else (0x33, 0x33, 0x33))
+
+    p = doc.add_paragraph()
+    r = p.add_run(
+        "Stop scaling CAMP_WA_002. Clicked vs not is −1.5pp (CI −3.6 to +0.6) → 0 pp. The 29% vs 11% "
+        "recipient gap is targeting after RC. That same null is why never-upload is not another WhatsApp."
+    )
+    _set_run(r, 10.5)
+
+    p = doc.add_paragraph()
+    r = p.add_run("Why these two stages — leftover queue — ARA maths")
+    _set_run(r, 13, True, (0x1C, 0x72, 0x93), "Cambria")
+
+    pics2 = doc.add_paragraph()
+    pics2.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    for fname in ("pie_rc_capture.png", "pie_c1b.png"):
+        pth = ROOT / "figures" / fname
+        if pth.exists():
+            pics2.add_run().add_picture(str(pth), width=Inches(3.15))
+            pics2.add_run("  ")
+    cap2 = doc.add_paragraph()
+    r = cap2.add_run(
+        "Left: only 1,637 of 5,405 RC losses are C1a. Right: only 411 of 3,289 Insurance leftovers are C1b."
+    )
+    _set_run(r, 8.5, False, (0x8A, 0x8F, 0xA3))
+    cap2.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    if (ROOT / "figures" / "bar_volume_lost.png").exists():
+        bp = doc.add_paragraph()
+        bp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        bp.add_run().add_picture(str(ROOT / "figures" / "bar_volume_lost.png"), width=Inches(6.1))
+
+    p = doc.add_paragraph()
+    r = p.add_run(
+        "RC loses 5,405; only 1,637 are capture-only (C1a). Insurance loses 3,289 but ~2,530 never uploaded "
+        "after Fitness — C1b is the 411 photo fails. DL cannot be deferred. Mix does not shift overnight "
+        "(χ² p=0.12). ARA: gap ₹31.6 ÷ 0.8931 eligible share ≈ ₹35.4/leg. 30% of fare (₹105) overpays."
+    )
+    _set_run(r, 10.5)
+
+    p = doc.add_paragraph()
+    r = p.add_run("What I assumed, and what would change my answer. ")
+    _set_run(r, 11, True, (0x1E, 0x27, 0x61))
+    r = p.add_run(
+        "~15.6-day cutoff; doc_events not approvals.docs_cleared; field gap not banked; ARA vs rest-suburban "
+        "not city-core; C1a FTE ₹40–60k assumed; trips file is sampled so ₹/month is not a city P&L."
+    )
+    _set_run(r, 10)
+
     out = ROOT / "MEMO.docx"
     doc.save(out)
     print(f"wrote {out}")
@@ -287,7 +393,8 @@ def build_deck() -> Path:
 
 def main() -> None:
     build_memo()
-    build_deck()
+    subprocess.check_call(["node", str(ROOT / "generate_deck.js")], cwd=str(ROOT))
+    print("wrote DECK.pptx via generate_deck.js")
 
 
 if __name__ == "__main__":
