@@ -3,23 +3,32 @@
 Rapido take-home: captain onboarding (A2O) and overnight airport supply.  
 Extract clock: **2026-06-30 23:59 IST**.
 
-**Submit:** `MEMO.docx` · `DECK.pptx` · this repo.
+**Submit:** `MEMO.docx` · `DECK.pptx` · this repo (working = `Project_R.ipynb`).
 
-## Run
+## Run (easiest)
 
 ```bash
 python3 -m pip install -r requirements.txt
+python3 -m jupyter notebook Project_R.ipynb
+```
+
+Then **Run all**. The notebook runs steps 1–8 from the CSVs, prints the locked headlines, shows the pies, writes `MEMO.docx`, and checks the regression lock.
+
+Same working from the shell:
+
+```bash
 ./run_all.sh
 ```
 
-Rebuild the deck (optional): `node generate_deck.js`  
+Rebuild the deck: `node generate_deck.js`  
 Rebuild the Word memo: `python3 build_memo.py`
 
 | File | Role |
 |---|---|
-| `01`–`08_*.py` | Working, from the seven CSVs |
-| `metrics.py` | Shared maths (also used by `check_regression.py`) |
-| `MEMO.docx` | 2-page memo (cream/yellow; `MEMO.md` is the same text) |
+| `Project_R.ipynb` | Run-all working |
+| `01`–`08_*.py` | Same working as scripts |
+| `metrics.py` | Shared maths |
+| `MEMO.docx` | 2-page memo |
 | `DECK.pptx` | 6-slide deck (+ title) |
 | `CANDIDATE_BRIEF.md` | The assignment |
 
